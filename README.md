@@ -1,4 +1,4 @@
-# # EncyPass - Trình quản lý mật khẩu
+# EncyPass - Trình quản lý mật khẩu
 
 **EncyPass** là một ứng dụng web dạng PWA (Progressive Web App) giúp bạn lưu trữ và quản lý mật khẩu an toàn. Ứng dụng áp dụng kiến trúc **Zero-Knowledge**, mã hóa toàn bộ dữ liệu ngay trên thiết bị trước khi đồng bộ lên đám mây, đảm bảo không ai (kể cả nhà phát triển) có thể xem được dữ liệu của bạn.
 
