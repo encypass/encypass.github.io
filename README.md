@@ -8,23 +8,23 @@
 
 - 🔐 **Bảo mật cấp cao:** Mã hóa dữ liệu bằng chuẩn AES-GCM 256-bit với Data Encryption Key (DEK).
 - 📶 **Hoạt động ngoại tuyến (Offline):** Hỗ trợ xem, thêm, sửa, xóa dữ liệu ngay cả khi không có kết nối mạng. Tự động đồng bộ khi có mạng trở lại.
-- ☁️ **Đồng bộ đám mây:** Dữ liệu đã mã hóa được lưu trữ và đồng bộ an toàn qua Firebase.
-- 📱 **Ứng dụng PWA:** Cài đặt trực tiếp lên màn hình chính (Home Screen) trên iOS, Android và Desktop mang lại trải nghiệm như app Native.
-- 🛠 **Công cụ tiện ích:** Trình tạo mật khẩu ngẫu nhiên, sao lưu (Export) và khôi phục (Import) dữ liệu dưới dạng file JSON.
-- 🛡 **Chống truy cập trái phép:** Tự động khóa bảo vệ hệ thống nếu nhập sai mật khẩu chính nhiều lần.
+- ☁️ **Đồng bộ & Quản lý đám mây:** Dữ liệu đã mã hóa được lưu trữ và đồng bộ an toàn qua Firebase. Tích hợp không gian dùng chung giúp bạn dễ dàng quản lý, tải xuống hoặc khôi phục chéo các bản sao lưu giữa các thiết bị cá nhân.
+- 📱 **Ứng dụng PWA:** Cài đặt trực tiếp lên màn hình chính (Home Screen) trên iOS, Android và Desktop mang lại trải nghiệm mượt mà như app Native.
+- 🛠 **Công cụ tiện ích:** Trình tạo mật khẩu ngẫu nhiên, sao lưu (Export) và khôi phục (Import) dữ liệu cục bộ dưới dạng file JSON với các siêu dữ liệu trực quan (phiên bản, tổng số tài khoản).
+- 🛡 **Chống truy cập trái phép:** Tự động khóa bảo vệ hệ thống và hiển thị đếm ngược nếu phát hiện nhập sai mật khẩu chính nhiều lần.
 
 ## 🛠 Công nghệ sử dụng
 
 - **Frontend:** HTML5, JavaScript (ES6+), Tailwind CSS
 - **Icons:** Lucide Icons
-- **Backend & Database:** Firebase Auth (Google Login), Firebase Firestore
+- **Backend & Database:** Firebase Auth (Google Login), Firebase Firestore, Firebase Cloud Storage
 - **PWA:** Service Worker (Offline Support), Web App Manifest
 - **Security:** Web Crypto API
 
 ## ⚠️ Lưu ý bảo mật quan trọng
 
 - Hệ thống **TUYỆT ĐỐI KHÔNG** lưu trữ *Mật khẩu chính (Master Password)* của bạn. 
-- Nếu bạn quên Mật khẩu chính, bạn sẽ **vĩnh viễn mất quyền truy cập** vào kho dữ liệu của mình. Vui lòng ghi nhớ Mật khẩu chính thật kỹ.
+- Nếu bạn quên Mật khẩu chính, bạn sẽ **vĩnh viễn mất quyền truy cập** vào kho dữ liệu của mình. Vui lòng ghi nhớ Mật khẩu chính thật kỹ trước khi sử dụng.
 
 ## 👨‍💻 Tác giả
 
