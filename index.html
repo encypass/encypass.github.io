@@ -1475,7 +1475,7 @@
 
         try {
             const labelType = type === 'account' ? 'Tên đăng nhập' : 'Mật khẩu';
-            const master = await showPrompt(`Nhập mật khẩu chính để copy ${labelType}.`, 'Nhập Mật Khẩu...', 'Xác thực Sao chép', 'password', 'info');
+            const master = await showPrompt(`Nhập mật khẩu chính để sao chép ${labelType}.`, 'Nhập Mật Khẩu...', 'Xác thực Sao chép', 'password', 'info');
             if(!master) return;
             
             if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], master) !== CHECK_VALUE){ 
