@@ -101,11 +101,8 @@
             <button id="btn-install" class="hidden header-btn !bg-amber-500 !border-amber-400 text-slate-950 animate-pulse" title="Cài đặt ứng dụng">
                 <i data-lucide="download" class="w-4 h-4"></i>
             </button>
-            <button id="btn-export" class="hidden header-btn" title="Sao lưu dữ liệu (JSON)">
-                <i data-lucide="save" class="w-4 h-4"></i>
-            </button>
-            <button id="btn-import" class="hidden header-btn" title="Khôi phục dữ liệu (JSON)">
-                <i data-lucide="folder-open" class="w-4 h-4"></i>
+            <button id="btn-lock" class="hidden header-btn transition-all duration-300" title="Khóa/Mở khóa kho dữ liệu">
+                <i data-lucide="lock" class="w-4 h-4"></i>
             </button>
             <button id="btn-logout" class="header-btn" title="Đăng xuất khỏi thiết bị">
                 <i data-lucide="log-out" class="w-4 h-4"></i>
@@ -282,7 +279,7 @@
             </div>
             
             <p class="mb-4 text-[14px] text-slate-600 leading-relaxed">
-              EncyPass cam kết bảo vệ tuyệt đối quyền riêng tư của bạn. Toàn bộ dữ liệu đều được <strong>mã hóa cục bộ ngay trên thiết bị</strong> trước khi đồng bộ lên đám mây. Không một ai (kể cả nhà phát triển) có thể giải mã và xem được thông tin này.
+              EncyPass là ứng dụng giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc Zero-Knowledge, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên đám mây. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông tin của bạn.
             </p>
 
             <ul class="about-features">
@@ -496,7 +493,7 @@
     }
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, setDoc, getDoc, deleteDoc, onSnapshot, getDocs, writeBatch, clearIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, setDoc, getDoc, deleteDoc, onSnapshot, getDocs, writeBatch, clearIndexedDbPersistence, terminate } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getStorage, ref, uploadString, getDownloadURL, listAll, deleteObject, getMetadata } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
@@ -525,10 +522,10 @@
     let unsubVerify = null;
     let activeDEKKey = null;
 
-    const LOCK_TIMEOUT = 5 * 60 * 1000; // 5 phút
+    const LOCK_TIMEOUT = 3 * 60 * 1000; // 3 phút
     let inactivityTimer = null;
 
-    function lockVault() {
+    function lockVault(isManual = false) {
         activeDEKKey = null; 
         if (inactivityTimer) clearTimeout(inactivityTimer);
         
@@ -551,14 +548,16 @@
             }
         });
         
-        if (document.hasFocus() && data.length > 0) {
-            showAlert("Kho dữ liệu đã tự động khóa để bảo vệ an toàn do bạn không hoạt động.", {title: 'Đã khóa', type: 'info'});
+        if (!isManual && document.hasFocus() && data.length > 0) {
+            showToast("Kho dữ liệu đã tự động khóa để bảo vệ an toàn.", 'info');
         }
+        
+        if (typeof updateLockUI === 'function') updateLockUI();
     }
 
     function resetInactivityTimer() {
         if (inactivityTimer) clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(lockVault, LOCK_TIMEOUT);
+        inactivityTimer = setTimeout(() => lockVault(false), LOCK_TIMEOUT);
     }
 
     ['click', 'keypress', 'mousemove', 'scroll', 'touchstart'].forEach(evt => {
@@ -736,6 +735,7 @@
 
         activeDEKKey = dekKey;
         resetInactivityTimer();
+        if (typeof updateLockUI === 'function') updateLockUI();
         return activeDEKKey;
     }
 
@@ -850,7 +850,7 @@
       ckModal: $('#changeKeyModal'), ckX: $('#ckX'), ckOld: $('#ckOld'), ckNew: $('#ckNew'), ckConfirm: $('#ckConfirm'), ckStrength: $('#ckStrength'), ckHint: $('#ckHint'), ckOk: $('#ckOk'), ckCancel: $('#ckCancel'),
       errCkOld: $('#errCkOld'), errCkNew: $('#errCkNew'), errCkConfirm: $('#errCkConfirm'),
       installModal: $('#installModal'), installX: $('#installX'), installNow: $('#installNow'), installLater: $('#installLater'), iosTip: $('#iosTip'),
-      btnInstallHeader: $('#btn-install'), btnInstallLogin: $('#btn-install-login'), btnExportHeader: $('#btn-export'), btnImportHeader: $('#btn-import'), btnLogout: $('#btn-logout'),
+      btnInstallHeader: $('#btn-install'), btnInstallLogin: $('#btn-install-login'), btnLock: $('#btn-lock'), btnLogout: $('#btn-logout'),
       latestVersion: $('#latestVersion'), aboutCheckUpdate: $('#aboutCheckUpdate')
     };
     el.appVersion.textContent = APP_VERSION; $('#splashVersion').textContent = APP_VERSION;
@@ -1219,6 +1219,46 @@
     const showConfirm = (msg, title='Xác nhận', type='warning') => openModal({title, message: msg, okText: 'Đồng ý', cancelText: 'Hủy', cancelVisible: true, type});
     const showPrompt = (msg, placeholder='', title='Xác thực', inputType='text', type='info') => openModal({title, message: msg, showInput: true, inputType, placeholder, okText: 'Xác nhận', cancelText: 'Hủy', cancelVisible: true, type});
 
+    function showToast(msg, type = 'info') {
+      const containerId = 'toast-container';
+      let container = document.getElementById(containerId);
+
+      if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        container.style.cssText = 'position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 999999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 384px; pointer-events: none;';
+        document.body.appendChild(container);
+      }
+
+      const icons = {
+        success: '<i data-lucide="check-circle-2" style="width:20px; height:20px; color:#10b981;"></i>',
+        error: '<i data-lucide="x-circle" style="width:20px; height:20px; color:#f43f5e;"></i>',
+        warning: '<i data-lucide="alert-triangle" style="width:20px; height:20px; color:#f59e0b;"></i>',
+        info: '<i data-lucide="info" style="width:20px; height:20px; color:#14b8a6;"></i>'
+      };
+
+      const toast = document.createElement('div');
+      toast.style.cssText = 'display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid #f1f5f9; transform: translateY(-20px); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: auto;';
+      
+      toast.innerHTML = `<div style="flex-shrink:0; margin-top:2px;">${icons[type] || icons.info}</div><span style="font-size: 14px; font-weight: 500; color: #334155; line-height: 1.5;">${msg}</span>`;
+      
+      container.appendChild(toast);
+      lucide.createIcons({root: toast});
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          toast.style.transform = 'translateY(0)';
+          toast.style.opacity = '1';
+        });
+      });
+
+      setTimeout(() => {
+        toast.style.transform = 'translateY(-20px)';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
     let lockoutInterval = null;
     function showLockoutAlert() {
       if (!isMasterLocked()) return null;
@@ -1381,9 +1421,10 @@
         await signOut(auth);
 
         try {
+          await terminate(db);
           await clearIndexedDbPersistence(db);
         } catch (dbError) {
-          console.warn("Bỏ qua lỗi khóa IndexedDB của Firebase:", dbError);
+          console.warn("Lỗi khi xóa bộ nhớ đệm Firestore:", dbError);
         }
 
       } catch (e) {
@@ -1393,6 +1434,40 @@
         window.location.reload();
       }
     };
+
+    function updateLockUI() {
+      if (!el.btnLock) return;
+      
+      const hasVerify = data.some(e => e[CHECK_KEY]);
+      if (!currentUserUid || !hasVerify) {
+          el.btnLock.classList.add('hidden');
+          return;
+      }
+      
+      el.btnLock.classList.remove('hidden');
+      if (activeDEKKey) {
+          el.btnLock.innerHTML = '<i data-lucide="unlock" class="w-4 h-4"></i>';
+          el.btnLock.title = "Đang mở khóa - Nhấn để khóa lại";
+          el.btnLock.classList.add('!bg-amber-500', '!border-amber-400', 'text-slate-950', 'animate-pulse');
+          el.btnLock.style.cssText = "";
+      } else {
+          el.btnLock.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i>';
+          el.btnLock.title = "Đang khóa - Nhấn để mở khóa";     
+          el.btnLock.classList.remove('!bg-amber-500', '!border-amber-400', 'text-slate-950', 'animate-pulse');
+      }
+      lucide.createIcons({root: el.btnLock});
+    }
+    
+    if (el.btnLock) {
+      el.btnLock.onclick = async () => {
+        if (activeDEKKey) {
+            lockVault(true);
+        } else {
+            const dek = await requireDEK('mở khóa toàn bộ kho dữ liệu');
+            if (dek) showToast('Kho dữ liệu đã được mở khóa!', 'success');
+        }
+      };
+    }
 
     function startRealtimeSync() {
       if (!currentUserUid || !systemEncryptKey) return;
@@ -1443,13 +1518,9 @@
       const items = []; data.forEach((e, idx)=>{ if(e[CHECK_KEY] || (q && !String(e.display||'').toLowerCase().includes(q))) return; items.push({ entry: e, idx }); });
       el.statCount.textContent = items.length;
       
-      const hasReal = data.some(e => !e[CHECK_KEY]);
-      el.btnExportHeader.classList.toggle('hidden', !hasReal); 
-      el.btnImportHeader.classList.remove('hidden');
-
       if (items.length === 0) {
-        let t = hasReal ? (q ? 'Không tìm thấy kết quả' : 'Chưa có dữ liệu') : 'Chưa có dữ liệu';
-        let sub = hasReal ? (q ? 'Vui lòng thử lại với từ khóa khác.' : '') : 'Nhấn nút (+) để thêm tài khoản mới.';
+        let t = data.some(e => !e[CHECK_KEY]) ? (q ? 'Không tìm thấy kết quả' : 'Chưa có dữ liệu') : 'Chưa có dữ liệu';
+        let sub = data.some(e => !e[CHECK_KEY]) ? (q ? 'Vui lòng thử lại với từ khóa khác.' : '') : 'Nhấn nút (+) để thêm tài khoản mới.';
         el.list.innerHTML = `<div class="empty-state"><i data-lucide="inbox" class="w-10 h-10 text-slate-300 mb-1"></i><div class="empty-title">${t}</div><div class="empty-title" style="font-size: 13px;">${sub}</div></div>`;
       } else {
         const totalItems = items.length;
@@ -1497,6 +1568,7 @@
         el.list.appendChild(fragment);
       }
       lucide.createIcons({root: el.list});
+      if (typeof updateLockUI === 'function') updateLockUI();
     }
 
     let searchT;
@@ -1761,6 +1833,7 @@
               }
               
               activeDEKKey = dekKeyToUse;
+              if (typeof updateLockUI === 'function') updateLockUI();
           }
           
           resetInactivityTimer();
@@ -1776,6 +1849,7 @@
 
           dekKeyToUse = await SecureCrypto.importDEK(newRawDEK);
           activeDEKKey = dekKeyToUse;
+          if (typeof updateLockUI === 'function') updateLockUI();
           resetInactivityTimer();
         }
 
@@ -1799,7 +1873,7 @@
 
         toggleLoader(false, 'save'); 
         openEdit(false); 
-        await showAlert(navigator.onLine ? 'Dữ liệu đã được lưu thành công.' : 'Đã lưu nháp ngoại tuyến (sẽ tự đồng bộ khi có mạng).', {type: 'success'}); 
+        showToast(navigator.onLine ? 'Dữ liệu đã được lưu thành công.' : 'Đã lưu nháp ngoại tuyến (sẽ tự đồng bộ khi có mạng).', 'success'); 
         
       } catch(err) {
         toggleLoader(false, 'save');
@@ -1842,7 +1916,7 @@
           try {
               await deleteDoc(doc(db, "account", record_id)); 
               toggleLoader(false, 'delete'); 
-              await showAlert(navigator.onLine ? 'Tài khoản đã được xóa.' : 'Đã xóa ngoại tuyến (sẽ tự đồng bộ khi có mạng).', {type: 'success'}); 
+              showToast(navigator.onLine ? 'Tài khoản đã được xóa.' : 'Đã xóa ngoại tuyến (sẽ tự đồng bộ khi có mạng).', 'success'); 
           } catch(e) {
               toggleLoader(false, 'delete');
               await showAlert(getFriendlyErrorMessage(e), { title: 'Lỗi khi xóa', type:'error' });
@@ -1925,6 +1999,7 @@
         });
         
         activeDEKKey = null;
+        if (typeof updateLockUI === 'function') updateLockUI();
         
         toggleLoader(false, 'ck');
         openCK(false); 
@@ -2029,7 +2104,7 @@
                           total_accounts: String(backupContent.metadata.total_accounts)
                       }
                   });
-                  await showAlert('Dữ liệu đã được sao lưu an toàn lên Cloud Storage!', {type: 'success'});
+                  showToast('Dữ liệu đã được sao lưu an toàn lên Cloud Storage!', 'success');
               } catch (cloudErr) {
                   console.error("Lỗi khi upload lên Cloud:", cloudErr);
                   downloadLocalFile();
@@ -2037,7 +2112,7 @@
               }
           } else {
               downloadLocalFile();
-              await showAlert('Dữ liệu đã được tải xuống máy.\n(Đang ngoại tuyến, không thể đẩy lên Cloud)', {type: 'success'});
+              showToast('Dữ liệu đã được tải xuống thiết bị dự phòng.', 'success');
           }
       } catch (err) {
           console.error("Lỗi khi sao lưu:", err);
@@ -2047,10 +2122,8 @@
       }
     };
 
-    el.btnExportHeader.addEventListener('click', exportData);
     el.miExport.onclick = () => { closeMenuModal(); exportData(); };
     
-    el.btnImportHeader.addEventListener('click', () => el.fileImport.click());
     el.miImport.onclick = () => { closeMenuModal(); el.fileImport.click(); };
     
     el.fileImport.onchange = (e) => {
@@ -2170,9 +2243,10 @@
           }
           await batch.commit(); 
           activeDEKKey = null;
+          if (typeof updateLockUI === 'function') updateLockUI();
           
           toggleLoader(false, 'import');
-          await showAlert('Dữ liệu đã được khôi phục thành công.', {type: 'success'});
+          showToast('Dữ liệu đã được khôi phục thành công.', 'success');
         } catch(err) { 
           toggleLoader(false, 'import');
           await showAlert(getFriendlyErrorMessage(err), { title: 'Lỗi khôi phục dữ liệu', type:'error' }); 
@@ -2342,10 +2416,11 @@
               }
               await batch.commit(); 
               activeDEKKey = null;
+              if (typeof updateLockUI === 'function') updateLockUI();
               
               toggleLoader(false, 'import_cloud');
               elCloud.modal.classList.remove('open');
-              await showAlert('Dữ liệu từ đám mây đã được khôi phục thành công!', {type: 'success'});
+              showToast('Dữ liệu từ đám mây đã được khôi phục thành công!', 'success');
               
             } catch(err) {
               toggleLoader(false, 'restore_cloud');
@@ -2372,9 +2447,27 @@
           };
 
           itemDiv.querySelector('.btn-delete').onclick = async () => {
-            if (!await showConfirm(`Xóa bản sao lưu ngày:\n${displayTitle}?`, 'Xóa bản sao lưu', 'warning')) return;
-            
-            toggleLoader(true, 'del_cloud', 'Đang xóa...');
+            const verify = data.find(e => e[CHECK_KEY]);
+            if (!verify) {
+                return showAlert('Hệ thống chưa thiết lập khóa bảo mật.', {type: 'error'});
+            }
+
+            const m = await showPrompt(
+                `Bạn đang yêu cầu XÓA VĨNH VIỄN bản sao lưu ngày:\n${displayTitle}\n\nVui lòng nhập mật khẩu chính để xác nhận hành động này.`, 
+                'Nhập mật khẩu chính...', 
+                'Xác thực xóa sao lưu', 
+                'password', 
+                'warning'
+            );
+            if (!m) return;
+
+            if (await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE) { 
+                registerMasterFail(); 
+                return showAlert('Mật khẩu chính không chính xác. Đã hủy thao tác xóa.', {type: 'error'}); 
+            } 
+            resetMasterFail();
+
+            toggleLoader(true, 'del_cloud', 'Đang xóa bản sao lưu...');
             try {
               await deleteObject(itemRef);
               itemDiv.remove(); 
@@ -2383,7 +2476,7 @@
                   elCloud.list.innerHTML = '<div class="text-center py-6 text-slate-400">Chưa có bản sao lưu nào.</div>';
               }
             } catch (error) {
-              showAlert('Lỗi khi xóa file.', {type: 'error'});
+              showAlert('Lỗi khi xóa file. Vui lòng thử lại sau.', {type: 'error'});
             } finally {
               toggleLoader(false, 'del_cloud');
             }
@@ -2421,9 +2514,10 @@
           batch.delete(doc(db, "system", "verify")); 
           await batch.commit(); 
           activeDEKKey = null;
+          if (typeof updateLockUI === 'function') updateLockUI();
           
           toggleLoader(false, 'reset');
-          await showAlert('Toàn bộ dữ liệu đã được xóa khỏi hệ thống.', {type: 'success'});
+          showToast('Toàn bộ dữ liệu đã được xóa khỏi hệ thống.', 'success');
       } catch (e) {
           toggleLoader(false, 'reset');
           await showAlert(getFriendlyErrorMessage(e), { title: 'Không thể xóa', type:'error' });
@@ -2590,7 +2684,7 @@
       }
     });
 
-    window.addEventListener('appinstalled', () => showAlert('Ứng dụng đã được thêm vào màn hình chính thành công.', {type: 'success'}));
+    window.addEventListener('appinstalled', () => showToast('Ứng dụng đã được thêm vào màn hình chính thành công.', 'success'));
     
     setTimeout(()=>{
       const s = document.getElementById('splash');
