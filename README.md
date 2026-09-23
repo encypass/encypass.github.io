@@ -1,30 +1,29 @@
-# EncyPass - Trình quản lý mật khẩu
+# EncyPass – Trình quản lý mật khẩu
 
-**EncyPass** là một ứng dụng web dạng PWA (Progressive Web App) giúp bạn lưu trữ và quản lý mật khẩu an toàn. Ứng dụng áp dụng kiến trúc **Zero-Knowledge**, mã hóa toàn bộ dữ liệu ngay trên thiết bị trước khi đồng bộ lên đám mây, đảm bảo không ai (kể cả nhà phát triển) có thể xem được dữ liệu của bạn.
+**EncyPass** là ứng dụng web hiện đại (PWA) giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc **Zero-Knowledge**, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên đám mây. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông tin của bạn.
 
 🌐 **Trải nghiệm ngay tại:** [https://encypass.github.io/](https://encypass.github.io/)
 
 ## ✨ Tính năng nổi bật
 
-- 🔐 **Bảo mật cấp cao:** Mã hóa dữ liệu bằng chuẩn AES-GCM 256-bit với Data Encryption Key (DEK).
-- 📶 **Hoạt động ngoại tuyến (Offline):** Hỗ trợ xem, thêm, sửa, xóa dữ liệu ngay cả khi không có kết nối mạng. Tự động đồng bộ khi có mạng trở lại.
-- ☁️ **Đồng bộ & Quản lý đám mây:** Dữ liệu đã mã hóa được lưu trữ và đồng bộ an toàn qua Firebase. Tích hợp không gian dùng chung giúp bạn dễ dàng quản lý, tải xuống hoặc khôi phục chéo các bản sao lưu giữa các thiết bị cá nhân.
-- 📱 **Ứng dụng PWA:** Cài đặt trực tiếp lên màn hình chính (Home Screen) trên iOS, Android và Desktop mang lại trải nghiệm mượt mà như app Native.
-- 🛠 **Công cụ tiện ích:** Trình tạo mật khẩu ngẫu nhiên, sao lưu (Export) và khôi phục (Import) dữ liệu cục bộ dưới dạng file JSON với các siêu dữ liệu trực quan (phiên bản, tổng số tài khoản).
-- 🛡 **Chống truy cập trái phép:** Tự động khóa bảo vệ hệ thống và hiển thị đếm ngược nếu phát hiện nhập sai mật khẩu chính nhiều lần.
+- 🔐 **Bảo mật tối đa:** Dữ liệu được mã hóa bằng thuật toán AES-GCM 256-bit kết hợp với Khóa bảo vệ dữ liệu (DEK).
+- 📶 **Hoạt động ngoại tuyến (Offline):** Thoải mái xem, thêm, sửa hoặc xóa mật khẩu ngay cả khi mất kết nối mạng. Ứng dụng sẽ tự động đồng bộ mọi thay đổi ngay khi có mạng trở lại.
+- ☁️ **Đồng bộ đám mây thông minh:** Dữ liệu mã hóa được lưu trữ an toàn qua hệ thống Firebase. Bạn có thể dễ dàng quản lý, tải về hoặc khôi phục các bản sao lưu đồng bộ xuyên suốt các thiết bị cá nhân.
+- 📱 **Trải nghiệm liền mạch (PWA):** Cài đặt trực tiếp lên màn hình chính của iOS, Android và Desktop để sử dụng mượt mà, tiện lợi như một ứng dụng gốc (native app).
+- 🛠 **Bộ công cụ tích hợp:** Hỗ trợ tạo mật khẩu ngẫu nhiên có độ khó cao. Sao lưu và khôi phục dữ liệu cục bộ (file JSON) được đính kèm các thông tin trực quan như phiên bản và tổng số tài khoản.
+- 🛡 **Chống truy cập trái phép:** Hệ thống sẽ tự động khóa và hiển thị đếm ngược thời gian chờ nếu phát hiện người lạ cố tình nhập sai Mật khẩu chính nhiều lần.
 
 ## 🛠 Công nghệ sử dụng
 
-- **Frontend:** HTML5, JavaScript (ES6+), Tailwind CSS
-- **Icons:** Lucide Icons
-- **Backend & Database:** Firebase Auth (Google Login), Firebase Firestore, Firebase Cloud Storage
-- **PWA:** Service Worker (Offline Support), Web App Manifest
-- **Security:** Web Crypto API
+- **Giao diện (Frontend):** HTML5, JavaScript (ES6+), Tailwind CSS, Lucide Icons
+- **Hệ thống (Backend & DB):** Firebase Auth (Đăng nhập Google), Firebase Firestore, Firebase Cloud Storage
+- **Nền tảng (PWA):** Service Worker (Xử lý Offline), Web App Manifest
+- **Bảo mật:** Web Crypto API
 
 ## ⚠️ Lưu ý bảo mật quan trọng
 
 - Hệ thống **TUYỆT ĐỐI KHÔNG** lưu trữ *Mật khẩu chính (Master Password)* của bạn. 
-- Nếu bạn quên Mật khẩu chính, bạn sẽ **vĩnh viễn mất quyền truy cập** vào kho dữ liệu của mình. Vui lòng ghi nhớ Mật khẩu chính thật kỹ trước khi sử dụng.
+- Nếu quên Mật khẩu chính, bạn sẽ **mất vĩnh viễn quyền truy cập** vào kho dữ liệu của mình. Hãy chắc chắn rằng bạn đã ghi nhớ thật kỹ hoặc lưu giữ mật khẩu này ở một nơi an toàn trước khi sử dụng.
 
 ## 👨‍💻 Tác giả
 

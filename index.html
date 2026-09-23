@@ -5,7 +5,7 @@
   <title>EncyPass | Trình quản lý mật khẩu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   
-  <meta name="description" content="Ứng dụng lưu trữ và quản lý mật khẩu an toàn. Mọi thông tin đều được khóa bảo mật bằng một mật khẩu duy nhất, tự động sao lưu và dùng được ngay cả khi không có mạng.">
+  <meta name="description" content="Ứng dụng lưu trữ và quản lý mật khẩu an toàn. Mọi thông tin đều được khóa bảo mật bằng một mật khẩu duy nhất, tự động đồng bộ và hoạt động mượt mà ngay cả khi ngoại tuyến.">
   <meta name="keywords" content="trình quản lý mật khẩu, EncyPass, ứng dụng lưu mật khẩu, bảo vệ dữ liệu, sao lưu an toàn, quản lý tài khoản, khóa bảo mật, không cần mạng">
   <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
   <link rel="canonical" href="https://encypass.github.io/">
@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://encypass.github.io/icons/icon-512.png">
 
   <meta name="theme-color" content="#0d9488">
-  <meta name="version" content="v1.0.5">
+  <meta name="version" content="v1.0.6">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -39,9 +39,6 @@
 </head>
 <body>
 
-  <!-- ===============================
-       LOADING VÀ SPLASH SCREEN
-  =============================== -->
   <div id="global-loader" role="status" aria-live="polite" aria-atomic="true" class="fixed inset-0 z-[9998] bg-teal-900/60 backdrop-blur-sm flex flex-col items-center justify-center transition-all duration-300 opacity-0 pointer-events-none">
     <div id="loader-card" class="bg-white/10 border border-white/20 p-7 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] backdrop-blur-md flex flex-col items-center transform transition-transform duration-300 scale-95">
       <div class="relative w-16 h-16 flex items-center justify-center mb-5">
@@ -65,7 +62,7 @@
         </div>
       </div>
       <h2 class="text-2xl font-bold mb-2">EncyPass</h2>
-      <p class="text-sm text-slate-300 mb-8">Hệ thống yêu cầu đăng nhập bằng tài khoản Google đã được cấp quyền.</p>
+      <p class="text-sm text-slate-300 mb-8">Vui lòng đăng nhập bằng tài khoản Google đã được cấp quyền truy cập.</p>
       
       <button id="btnGoogleLogin" class="w-full py-3.5 bg-white text-slate-900 rounded-xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-transform">
         <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
@@ -84,13 +81,10 @@
 		  <img src="/icons/icon-192.png" alt="EncyPass Logo" class="w-full h-full block rounded-[24%] drop-shadow-md">
 	</div>
     <div class="font-black text-[20px] mt-3 tracking-wide">EncyPass</div>
-    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.0.5</b></div>
+    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.0.6</b></div>
   </div>
 
   <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 relative shadow-2xl overflow-hidden">
-    <!-- ===============================
-         HEADER APP
-    =============================== -->
     <div class="relative z-10 px-6 pt-5 pb-6 overflow-hidden text-white bg-gradient-to-br from-teal-500 via-teal-600 to-teal-800 rounded-b-[2.2rem] shadow-xl shadow-teal-900/15">
       <div class="absolute top-0 right-0 w-40 h-40 transition-transform duration-700 rounded-full pointer-events-none bg-white/5 blur-3xl -mr-10 -mt-10"></div>
       <div class="absolute bottom-0 left-0 w-32 h-32 rounded-full pointer-events-none bg-teal-900/20 blur-2xl -ml-10 -mb-10"></div>
@@ -134,9 +128,6 @@
       </div>
     </div>
 
-    <!-- ===============================
-         MAIN CONTENT (LIST & SEARCH)
-    =============================== -->
     <main id="app" class="wrap invisible [.ready_&]:visible" aria-live="polite">
       <section class="card" aria-label="Tìm kiếm và thống kê">
         <div class="search">
@@ -152,18 +143,12 @@
 
     <input type="file" id="fileImport" accept=".json" hidden>
 
-    <!-- ===============================
-         BOTTOM NAVIGATION
-    =============================== -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/20 backdrop-blur border-t-[2px] border-t-teal-600 border-x-0 border-b-0 px-6 py-2.5 flex justify-between items-center z-40 rounded-t-[24px]">
       <button id="nav-home" class="text-teal-600 p-2 transition-all hover:scale-110 active:scale-95" title="Trang chính"><i data-lucide="clipboard-list"></i></button>
       <button id="miAdd" class="bg-teal-600 p-4 rounded-2xl -mt-10 shadow-xl shadow-teal-300 border-2 border-white text-white active:scale-90 transition-all hover:bg-teal-700" title="Thêm tài khoản"><i data-lucide="plus" class="w-6 h-6"></i></button>
-      <button id="btnOpenMenu" class="text-slate-400 hover:text-teal-600 p-2 transition-all hover:scale-110 active:scale-95" title="Danh mục"><i data-lucide="layout-grid"></i></button>
+      <button id="btnOpenMenu" class="text-slate-400 hover:text-teal-600 p-2 transition-all hover:scale-110 active:scale-95" title="Công cụ"><i data-lucide="layout-grid"></i></button>
     </nav>
 
-  <!-- ===============================
-       MENU & MODALS
-  =============================== -->
   <div id="fab-menu-modal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-drag-handle"></div>
@@ -197,7 +182,7 @@
           </button>
           <button id="miInstall" class="menu-btn" style="display:none">
             <div class="p-3 rounded-2xl bg-purple-100/50 text-purple-600"><i data-lucide="smartphone" class="w-6 h-6"></i></div>
-            <span>Cài đặt App</span>
+            <span>Cài đặt ứng dụng</span>
           </button>
           <button id="miAbout" class="menu-btn">
             <div class="p-3 rounded-2xl bg-slate-200/50 text-slate-600"><i data-lucide="info" class="w-6 h-6"></i></div>
@@ -213,7 +198,6 @@
     </div>
   </div>
 
-  <!-- MODAL: TẠO/SỬA TÀI KHOẢN -->
   <div id="editModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editTitle">
       <div class="modal-drag-handle"></div>
@@ -235,21 +219,34 @@
           </div>
           <div class="form-row">
             <label>Mật khẩu đăng nhập</label>
-            <input id="fPassword" class="modal-input" type="password" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="••••••••">
+            <div class="row" style="position: relative;">
+              <input id="fPassword" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="••••••••">
+              <button type="button" class="toggle-password flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+                <i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>
+              </button>
+            </div>
             <small id="errPassword" class="text-rose-500 font-medium text-[12px] mt-1 hidden items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Vui lòng nhập mật khẩu</small>
           </div>
           <div class="form-row">
             <label>Mật khẩu chính</label>
-            <input id="fMaster" class="modal-input" type="password"
-                   autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other"
-                   placeholder="Dùng để khóa bảo vệ tài khoản này">
+            <div class="row" style="position: relative;">
+              <input id="fMaster" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Dùng để mã hóa và bảo vệ tài khoản này">
+              <button type="button" class="toggle-password flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+                <i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>
+              </button>
+            </div>
             <small id="strengthMsg" class="small mt-1" style="display:none"></small>
             <small id="errMaster" class="text-rose-500 font-medium text-[12px] mt-1 hidden items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Vui lòng nhập mật khẩu chính</small>
           </div>
 
           <div class="form-row" id="masterConfirmRow" style="display:none">
             <label>Xác nhận mật khẩu chính</label>
-            <input id="fMasterConfirm" class="modal-input" type="password" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Nhập lại mật khẩu chính">
+            <div class="row" style="position: relative;">
+              <input id="fMasterConfirm" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Nhập lại mật khẩu chính">
+              <button type="button" class="toggle-password flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+                <i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>
+              </button>
+            </div>
             <small id="masterConfirmHint" class="small mt-1" style="display:none"></small>
           </div>
         </div>
@@ -262,7 +259,6 @@
     </div>
   </div>
 
-  <!-- MODAL: GIỚI THIỆU -->
   <div id="aboutModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-card !max-w-[620px] !min-h-[95svh]" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
       <div class="modal-drag-handle"></div>
@@ -286,7 +282,7 @@
             </div>
             
             <p class="mb-4 text-[14px] text-slate-600 leading-relaxed">
-              EncyPass cam kết bảo vệ tuyệt đối quyền riêng tư của bạn. Toàn bộ dữ liệu đều được <strong>mã hóa cục bộ ngay trên thiết bị</strong> trước khi đồng bộ lên đám mây. Không một ai (kể cả nhà phát triển) đều không thể giải mã và xem được thông tin này.
+              EncyPass cam kết bảo vệ tuyệt đối quyền riêng tư của bạn. Toàn bộ dữ liệu đều được <strong>mã hóa cục bộ ngay trên thiết bị</strong> trước khi đồng bộ lên đám mây. Không một ai (kể cả nhà phát triển) có thể giải mã và xem được thông tin này.
             </p>
 
             <ul class="about-features">
@@ -337,7 +333,6 @@
     </div>
   </div>
 
-  <!-- MODAL: ĐỔI MẬT KHẨU CHÍNH -->
   <div id="changeKeyModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="ckTitle">
       <div class="modal-drag-handle"></div>
@@ -349,18 +344,33 @@
         <div class="form-grid">
           <div class="form-row sm:col-span-2">
             <label>Mật khẩu hiện tại</label>
-            <input id="ckOld" class="modal-input" type="password" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Nhập mật khẩu chính hiện tại">
+            <div class="row" style="position: relative;">
+              <input id="ckOld" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Nhập mật khẩu chính hiện tại">
+              <button type="button" class="toggle-password flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+                <i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>
+              </button>
+            </div>
             <small id="errCkOld" class="text-rose-500 font-medium text-[12px] mt-1 hidden items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Vui lòng nhập mật khẩu hiện tại</small>
           </div>
           <div class="form-row">
-            <label>Mật khẩu mới</label>
-            <input id="ckNew" class="modal-input" type="password" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Tối thiểu 12 ký tự">
+            <label>Mật khẩu mới (Áp dụng cho toàn bộ dữ liệu)</label>
+            <div class="row" style="position: relative;">
+              <input id="ckNew" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Tối thiểu 12 ký tự">
+              <button type="button" class="toggle-password flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+                <i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>
+              </button>
+            </div>
             <small id="ckStrength" class="small mt-1" style="display:none"></small>
             <small id="errCkNew" class="text-rose-500 font-medium text-[12px] mt-1 hidden items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Vui lòng nhập mật khẩu mới</small>
           </div>
           <div class="form-row">
             <label>Xác nhận mật khẩu mới</label>
-            <input id="ckConfirm" class="modal-input" type="password" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Nhập lại mật khẩu mới">
+            <div class="row" style="position: relative;">
+              <input id="ckConfirm" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Nhập lại mật khẩu mới">
+              <button type="button" class="toggle-password flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+                <i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>
+              </button>
+            </div>
             <small id="ckHint" class="small mt-1" style="display:none"></small>
             <small id="errCkConfirm" class="text-rose-500 font-medium text-[12px] mt-1 hidden items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Vui lòng xác nhận mật khẩu</small>
           </div>
@@ -374,7 +384,6 @@
     </div>
   </div>
 
-  <!-- MODAL: CÀI ĐẶT ỨNG DỤNG PWA -->
   <div id="installModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="installTitle">
       <div class="modal-drag-handle"></div>
@@ -404,7 +413,6 @@
     </div>
   </div>
 
-  <!-- MODAL: TRÌNH TẠO MẬT KHẨU (GENERATOR) -->
   <div id="genModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-drag-handle"></div>
@@ -430,7 +438,12 @@
         
         <div class="gen-result-box">
           <label class="text-[12px] font-extrabold text-slate-500 uppercase ml-1">Kết quả</label>
-          <input id="genResult" class="modal-input gen-result" readonly placeholder="...">
+          <div class="row" style="position: relative;">
+            <input id="genResult" class="modal-input gen-result" type="text" style="width: 100%; padding-right: 44px; box-sizing: border-box;" readonly placeholder="...">
+            <button type="button" id="btnCopyGen" class="flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" title="Sao chép mật khẩu" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+              <i data-lucide="copy" style="width: 18px; height: 18px; pointer-events: none;"></i>
+            </button>
+          </div>
           <div id="genStrength" class="gen-strength mt-1"></div>
         </div>
         
@@ -439,7 +452,6 @@
     </div>
   </div>
 
-  <!-- MODAL: ALERT THÔNG BÁO CHUNG -->
   <div id="modal" class="modal-backdrop !z-[100000]" aria-hidden="true">
     <div class="alert-card flex flex-col items-center text-center" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div id="modalIconContainer" class="w-20 h-20 rounded-full flex items-center justify-center mb-5 border-[4px] transition-all duration-500 scale-0 opacity-0"></div>
@@ -454,9 +466,6 @@
     </div>
   </div>
 
-  <!-- ===============================
-       MODAL: QUẢN LÝ ĐÁM MÂY (CLOUD MANAGER)
-  =============================== -->
   <div id="cloudBackupModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true">
       <div class="modal-drag-handle"></div>
@@ -465,7 +474,7 @@
         <button id="cloudBackupX" class="modal-close" aria-label="Đóng"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <div class="modal-body !overflow-y-auto max-h-[60vh]">
-        <p class="text-sm text-slate-500 mb-4">Danh sách các bản sao lưu trên Firebase Cloud Storage.</p>
+        <p class="text-sm text-slate-500 mb-4">Danh sách các bản sao lưu trên Cloud Storage.</p>
         
         <div id="cloudBackupList" class="flex flex-col gap-2"></div>
         
@@ -479,9 +488,6 @@
   <footer class="text-center text-slate-400 text-[13px] my-6 mb-3">© 2026 - Hoàng Đợi</footer>
   </div>
 
-  <!-- ===============================
-       JAVASCRIPT CHÍNH (APP LOGIC)
-  =============================== -->
   <script type="module">
     function getTimestamp() {
       const now = new Date();
@@ -517,16 +523,59 @@
     let systemEncryptKey = null;
     let unsubSnapshot = null;
     let unsubVerify = null;
+    let activeDEKKey = null;
+
+    const LOCK_TIMEOUT = 5 * 60 * 1000; // 5 phút
+    let inactivityTimer = null;
+
+    function lockVault() {
+        activeDEKKey = null; 
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        
+        Object.keys(visible).forEach(id => {
+            if (visible[id]) {
+                visible[id] = false;
+                if (autoHideTimers[id]) {
+                    clearInterval(autoHideTimers[id].interval);
+                    delete autoHideTimers[id];
+                }
+                const btn = document.querySelector(`.action-toggle[data-id="${id}"]`);
+                if (btn) {
+                    btn.innerHTML = '<i data-lucide="eye" style="width: 12px; height: 12px; pointer-events: none;"></i> Giải mã';
+                    lucide.createIcons({root: btn});
+                }
+                const accInp = document.getElementById(`acc-${id}`);
+                const passInp = document.getElementById(`pass-${id}`);
+                if(accInp) accInp.value = 'Tài khoản: •••••••';
+                if(passInp) passInp.value = 'Mật khẩu: •••••••';
+            }
+        });
+        
+        if (document.hasFocus() && data.length > 0) {
+            showAlert("Kho dữ liệu đã tự động khóa để bảo vệ an toàn do bạn không hoạt động.", {title: 'Đã khóa', type: 'info'});
+        }
+    }
+
+    function resetInactivityTimer() {
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(lockVault, LOCK_TIMEOUT);
+    }
+
+    ['click', 'keypress', 'mousemove', 'scroll', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, () => {
+            if (activeDEKKey) resetInactivityTimer();
+        }, { passive: true });
+    });
 
     lucide.createIcons();
-    const APP_VERSION = 'v1.0.5';
+    const APP_VERSION = 'v1.0.6';
     const CHECK_KEY = "_verify";
     const CHECK_VALUE = "EncyPass";
     const MAX_MASTER_FAIL = 5;
     const MASTER_LOCK_MS = 3 * 60 * 1000;
 
     const $ = s => document.querySelector(s);
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+    function escapeHtml(s){ return String(s??'').replace(/&/g,'&lt;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
     function getFriendlyErrorMessage(err) {
       if (!err) return "Đã xảy ra lỗi không xác định.";
@@ -534,11 +583,11 @@
       const msg = err.message || "";
 
       if (code === 'auth/popup-closed-by-user') return "Bạn đã đóng cửa sổ trước khi hoàn tất đăng nhập.";
-      if (code === 'auth/popup-blocked') return "Cửa sổ đăng nhập bị trình duyệt chặn. Vui lòng cấp quyền mở popup cho trang web.";
-      if (code === 'auth/network-request-failed') return "Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại WiFi/4G.";
+      if (code === 'auth/popup-blocked') return "Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép trang web mở popup (cửa sổ bật lên).";
+      if (code === 'auth/network-request-failed') return "Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại kết nối mạng (WiFi/4G).";
       
       if (code === 'permission-denied') return "Bạn không có quyền thực hiện thao tác này (Truy cập bị từ chối).";
-      if (code === 'unavailable') return "Dịch vụ đang gián đoạn hoặc bạn đang mất mạng. Vui lòng thử lại sau.";
+      if (code === 'unavailable') return "Dịch vụ đang gián đoạn hoặc bạn đang mất kết nối mạng. Vui lòng thử lại sau.";
       if (code === 'resource-exhausted') return "Máy chủ đang quá tải. Vui lòng thử lại sau ít phút.";
 
       if (code === 'OperationError' || msg.includes('decrypt')) return "Mật khẩu giải mã không chính xác hoặc dữ liệu đã bị hỏng.";
@@ -584,8 +633,6 @@
         if (loaderCard) loaderCard.classList.add('scale-95');
       }
     };
-
-    let activeDEKKey = null;
 
     const SecureCrypto = {
       ITERATIONS: 600000, SALT_LEN: 16, IV_LEN: 12,
@@ -651,13 +698,50 @@
         if (!verifyObj || !verifyObj.encrypted_dek) return null;
         const rawDEK = await SecureCrypto.decryptSafe(verifyObj.encrypted_dek, masterPassword);
         if (!rawDEK) return null;
-        activeDEKKey = await SecureCrypto.importDEK(rawDEK);
+        return await SecureCrypto.importDEK(rawDEK);
+    }
+
+    async function requireDEK(actionName) {
+        if (activeDEKKey) {
+            resetInactivityTimer();
+            return activeDEKKey;
+        }
+
+        if (isMasterLocked()) {
+            showLockoutAlert();
+            return null;
+        }
+
+        const verify = data.find(e => e[CHECK_KEY]);
+        if (!verify) {
+            showAlert('Hệ thống chưa thiết lập mật khẩu chính.', {type: 'warning'});
+            return null;
+        }
+
+        const m = await showPrompt(`Kho dữ liệu đang bị khóa. Vui lòng nhập mật khẩu chính để ${actionName}.`, 'Nhập mật khẩu...', 'Mở khóa an toàn', 'password', 'info');
+        if (!m) return null;
+
+        if (await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE) {
+            registerMasterFail();
+            showAlert(getWrongMasterMessage(), {type: 'error'});
+            return null;
+        }
+        
+        resetMasterFail();
+        const dekKey = await getDEKKey(m, verify);
+        if (!dekKey) {
+            showAlert('Lỗi: Không thể tải khóa dữ liệu hệ thống.', {type: 'error'});
+            return null;
+        }
+
+        activeDEKKey = dekKey;
+        resetInactivityTimer();
         return activeDEKKey;
     }
 
     function validateImportSchema(importedArray) {
       if (!Array.isArray(importedArray)) {
-        throw new Error("Tệp không đúng định dạng. Dữ liệu phải là một danh sách (Array).");
+        throw new Error("Tệp không đúng định dạng (dữ liệu phải là một mảng/danh sách).");
       }
       
       if (importedArray.length === 0) {
@@ -665,7 +749,8 @@
       }
 
       let hasVerifyKey = false;
-      const maxStringLength = 10000;
+      const maxDisplayLength = 255;
+      const maxEncryptedLength = 3000;
 
       for (let i = 0; i < importedArray.length; i++) {
         const item = importedArray[i];
@@ -684,16 +769,16 @@
 
         const displayVal = item.rawDisplay || item.display;
         
-        if (!displayVal || typeof displayVal !== 'string' || displayVal.length > maxStringLength) {
-          throw new Error(`Bản ghi thứ ${i + 1} bị lỗi: Tên dịch vụ (display) không hợp lệ hoặc quá dài.`);
+        if (!displayVal || typeof displayVal !== 'string' || displayVal.length > maxDisplayLength) {
+          throw new Error(`Bản ghi thứ ${i + 1} bị lỗi: Tên dịch vụ không hợp lệ hoặc dài quá ${maxDisplayLength} ký tự.`);
         }
 
-        if (item.account && (typeof item.account !== 'string' || item.account.length > maxStringLength)) {
-          throw new Error(`Bản ghi thứ ${i + 1} (${displayVal}) bị lỗi: Trường 'account' phải là chuỗi hợp lệ.`);
+        if (item.account && (typeof item.account !== 'string' || item.account.length > maxEncryptedLength)) {
+          throw new Error(`Bản ghi thứ ${i + 1} (${displayVal}): Dữ liệu account vượt quá giới hạn.`);
         }
         
-        if (item.password && (typeof item.password !== 'string' || item.password.length > maxStringLength)) {
-          throw new Error(`Bản ghi thứ ${i + 1} (${displayVal}) bị lỗi: Trường 'password' phải là chuỗi hợp lệ.`);
+        if (item.password && (typeof item.password !== 'string' || item.password.length > maxEncryptedLength)) {
+          throw new Error(`Bản ghi thứ ${i + 1} (${displayVal}): Dữ liệu password vượt quá giới hạn.`);
         }
         
         if (item.record_id && typeof item.record_id !== 'string' && typeof item.record_id !== 'number') {
@@ -754,7 +839,7 @@
     function getWrongMasterMessage(base = 'Mật khẩu chính không chính xác') { if (isMasterLocked()) return getMasterLockMessage(); const remain = Math.max(0, MAX_MASTER_FAIL - masterFailCount); return remain > 0 ? `${base} (còn ${remain} lần thử).` : base; }
 
     const el = {
-      miGenerate: $('#miGenerate'), genModal: $('#genModal'), genLength: $('#genLength'), genLower: $('#genLower'), genUpper: $('#genUpper'), genNumber: $('#genNumber'), genSymbol: $('#genSymbol'), genBtn: $('#genBtn'), genResult: $('#genResult'), genStrength: $('#genStrength'), genClose: $('#genClose'), genX: $('#genX'),
+      miGenerate: $('#miGenerate'), genModal: $('#genModal'), genLength: $('#genLength'), genLower: $('#genLower'), genUpper: $('#genUpper'), genNumber: $('#genNumber'), genSymbol: $('#genSymbol'), genBtn: $('#genBtn'), genResult: $('#genResult'), btnCopyGen: $('#btnCopyGen'), genStrength: $('#genStrength'), genClose: $('#genClose'), genX: $('#genX'),
       search: $('#search'), list: $('#passwordList'), statCount: $('#statCount'),
       miAdd: $('#miAdd'), miExport: $('#miExport'), miImport: $('#miImport'), miChangeKey: $('#miChangeKey'), miReset: $('#miReset'), miAbout: $('#miAbout'), miInstall: $('#miInstall'), fileImport: $('#fileImport'),
       modal: $('#modal'), modalTitle: $('#modalTitle'), modalMsg: $('#modalMsg'), modalInput: $('#modalInput'), modalCancel: $('#modalCancel'), modalOk: $('#modalOk'),
@@ -1054,6 +1139,7 @@
       let resolved = false; 
 
       const onOk = () => {
+        if(resolved) return;
         if (showInput) {
           const val = el.modalInput.value.trim();
           if (!val) {
@@ -1065,21 +1151,25 @@
           finish(true);
         }
       };
-      const onCancel = () => finish(false);
+      
+      const onCancel = () => {
+        if(!resolved) finish(false);
+      };
+      
       const onKeydown = (e) => { 
-        if(!el.modal.classList.contains('open')) return; 
+        if(resolved || !el.modal.classList.contains('open')) return; 
         if(e.key === 'Enter') { e.preventDefault(); onOk(); } 
         if(e.key === 'Escape') { e.preventDefault(); onCancel(); } 
       };
 
       const cleanup = () => { 
+        window.removeEventListener('keydown', onKeydown, true); 
+        el.modalOk.removeEventListener('click', onOk);
+        el.modalCancel.removeEventListener('click', onCancel);
+        
         el.modal.classList.remove('open'); 
         el.modal.setAttribute('aria-hidden', 'true'); 
         el.modalInput.value = ''; 
-        
-        el.modalOk.removeEventListener('click', onOk);
-        el.modalCancel.removeEventListener('click', onCancel);
-        window.removeEventListener('keydown', onKeydown, true); 
         
         setTimeout(() => {
           isModalActive = false;
@@ -1087,7 +1177,12 @@
         }, 300);
       };
 
-      const finish = (val) => { if(resolved) return; resolved = true; cleanup(); resolve(val); };
+      const finish = (val) => { 
+          if(resolved) return; 
+          resolved = true; 
+          cleanup(); 
+          resolve(val); 
+      };
       
       el.modalOk.addEventListener('click', onOk);
       el.modalCancel.addEventListener('click', onCancel);
@@ -1355,9 +1450,10 @@
       if (items.length === 0) {
         let t = hasReal ? (q ? 'Không tìm thấy kết quả' : 'Chưa có dữ liệu') : 'Chưa có dữ liệu';
         let sub = hasReal ? (q ? 'Vui lòng thử lại với từ khóa khác.' : '') : 'Nhấn nút (+) để thêm tài khoản mới.';
-        el.list.innerHTML = `<div class="empty-state"><i data-lucide="inbox" class="w-10 h-10 text-slate-300 mb-1"></i><div class="empty-title">${t}</div><div class="empty-sub">${sub}</div></div>`;
+        el.list.innerHTML = `<div class="empty-state"><i data-lucide="inbox" class="w-10 h-10 text-slate-300 mb-1"></i><div class="empty-title">${t}</div><div class="empty-title" style="font-size: 13px;">${sub}</div></div>`;
       } else {
         const totalItems = items.length;
+        const fragment = document.createDocumentFragment();
 
         items.sort((a,b)=>b.idx-a.idx).forEach(({entry}, index)=>{
           const syncIcon = entry.pending ? '<i data-lucide="cloud-off" class="w-[18px] h-[18px] text-amber-500 flex-shrink-0" title="Đang lưu nháp (offline)"></i>' : '<i data-lucide="cloud-check" class="w-[18px] h-[18px] text-teal-500 flex-shrink-0" title="Đã đồng bộ"></i>';
@@ -1396,8 +1492,9 @@
               <button class="btn text sm action-edit" data-id="${entry.record_id}"><i data-lucide="edit-2" style="width: 12px; height: 12px; pointer-events: none;"></i> Sửa</button>
               <button class="btn danger sm action-delete" data-id="${entry.record_id}"><i data-lucide="trash-2" style="width: 12px; height: 12px; pointer-events: none;"></i> Xóa</button>
             </div>`;
-          el.list.appendChild(div);
+          fragment.appendChild(div);
         });
+        el.list.appendChild(fragment);
       }
       lucide.createIcons({root: el.list});
     }
@@ -1408,23 +1505,47 @@
 
     const toggleShow = async (record_id, btn) => {
       if (btn.disabled) return;
-      const accInp = $(`#acc-${record_id}`), passInp = $(`#pass-${record_id}`);
+      const accInp = document.getElementById(`acc-${record_id}`);
+      const passInp = document.getElementById(`pass-${record_id}`);
+      
       if (visible[record_id]) { 
-        clearInterval(autoHideTimers[record_id]?.interval); delete autoHideTimers[record_id]; visible[record_id] = false;
-        accInp.value = 'Tài khoản: •••••••'; passInp.value = 'Mật khẩu: •••••••'; btn.innerHTML = '<i data-lucide="eye" class="w-[15px] h-[15px]"></i> Giải mã'; lucide.createIcons({root: btn}); return;
+        clearInterval(autoHideTimers[record_id]?.interval); 
+        delete autoHideTimers[record_id]; 
+        visible[record_id] = false;
+        accInp.value = 'Tài khoản: •••••••'; 
+        passInp.value = 'Mật khẩu: •••••••'; 
+        btn.innerHTML = '<i data-lucide="eye" class="w-[15px] h-[15px]"></i> Giải mã'; 
+        lucide.createIcons({root: btn}); 
+        return;
       }
-      const verify=data.find(e=>e[CHECK_KEY]); if(!verify) return showAlert('Bạn chưa thiết lập mật khẩu chính.', {type:'info'});
-      if (isMasterLocked()) return showLockoutAlert();
 
-      btn.disabled = true; const origHtml = btn.innerHTML; btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin w-3 h-3"></i>...'; lucide.createIcons({root:btn});
+      Object.keys(visible).forEach(id => {
+          if (id !== record_id && visible[id]) {
+              visible[id] = false;
+              if (autoHideTimers[id]) {
+                  clearInterval(autoHideTimers[id].interval);
+                  delete autoHideTimers[id];
+              }
+              const otherBtn = document.querySelector(`.action-toggle[data-id="${id}"]`);
+              if (otherBtn) {
+                  otherBtn.innerHTML = '<i data-lucide="eye" style="width: 12px; height: 12px; pointer-events: none;"></i> Giải mã';
+                  lucide.createIcons({root: otherBtn});
+              }
+              const otherAcc = document.getElementById(`acc-${id}`);
+              const otherPass = document.getElementById(`pass-${id}`);
+              if (otherAcc) otherAcc.value = 'Tài khoản: •••••••';
+              if (otherPass) otherPass.value = 'Mật khẩu: •••••••';
+          }
+      });
+
+      btn.disabled = true; 
+      const origHtml = btn.innerHTML; 
+      btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin w-3 h-3 pointer-events-none"></i>...'; 
+      lucide.createIcons({root:btn});
+      
       try {
-        const master = await showPrompt('Nhập mật khẩu chính.', 'Nhập Mật Khẩu...', 'Bảo Mật Tăng Cường', 'password', 'info');
-        if(!master) return;
-        if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], master) !== CHECK_VALUE){ registerMasterFail(); showAlert(getWrongMasterMessage(), {type:'error'}); return; }
-        resetMasterFail();
-
-        const dekKey = await getDEKKey(master, verify);
-        if(!dekKey) return showAlert('Không thể tải khóa dữ liệu hệ thống.', {type:'error'});
+        const dekKey = await requireDEK('giải mã tài khoản này');
+        if (!dekKey) return; 
 
         const entry = data.find(e => e.record_id === record_id);
         const decAcc = await SecureCrypto.decryptWithDEK(entry.account, dekKey);
@@ -1432,10 +1553,33 @@
         
         if(!decAcc || !decPass) return showAlert('Giải mã thất bại. Dữ liệu này có thể đã bị hỏng trong quá trình đồng bộ.', { title: 'Lỗi dữ liệu', type:'error' });
 
-        visible[record_id]=true; accInp.value=decAcc; passInp.value=decPass;
-        let rem = 15; btn.disabled = false; btn.innerHTML = `<i data-lucide="eye-off" class="w-3 h-3"></i> ${rem}s`; lucide.createIcons({root: btn});
-        autoHideTimers[record_id] = { interval: setInterval(()=>{ rem--; if(rem>0){ btn.innerHTML=`<i data-lucide="eye-off" class="w-3 h-3"></i> ${rem}s`; lucide.createIcons({root: btn}); } else { toggleShow(record_id, btn); } }, 1000) };
-      } finally { if(!visible[record_id]) { btn.disabled = false; btn.innerHTML = origHtml; lucide.createIcons({root:btn}); } }
+        visible[record_id] = true; 
+        accInp.value = decAcc; 
+        passInp.value = decPass;
+        
+        let rem = 15; 
+        btn.disabled = false; 
+        btn.innerHTML = `<i data-lucide="eye-off" class="w-3 h-3 pointer-events-none"></i> <span class="time-rem">${rem}s</span>`; 
+        lucide.createIcons({root: btn});
+        const timeSpan = btn.querySelector('.time-rem');
+        
+        autoHideTimers[record_id] = { 
+            interval: setInterval(()=>{ 
+                rem--; 
+                if(rem > 0){ 
+                    if (timeSpan) timeSpan.textContent = `${rem}s`; 
+                } else { 
+                    toggleShow(record_id, btn); 
+                } 
+            }, 1000) 
+        };
+      } finally { 
+        if(!visible[record_id]) { 
+            btn.disabled = false; 
+            btn.innerHTML = origHtml; 
+            lucide.createIcons({root:btn}); 
+        } 
+      }
     };
 
     const showCopySuccess = (btn) => {
@@ -1452,8 +1596,8 @@
         if (btn.disabled) return;
         
         if (visible[record_id]) {
-            const inp = type === 'account' ? $(`#acc-${record_id}`) : $(`#pass-${record_id}`);
-            if (inp.value && inp.value !== '•••••••') {
+            const inp = type === 'account' ? document.getElementById(`acc-${record_id}`) : document.getElementById(`pass-${record_id}`);
+            if (inp && inp.value && inp.value !== '•••••••') {
                 try {
                     await navigator.clipboard.writeText(inp.value);
                     showCopySuccess(btn);
@@ -1464,30 +1608,16 @@
             }
         }
 
-        const verify = data.find(e => e[CHECK_KEY]); 
-        if(!verify) return showAlert('Bạn chưa thiết lập mật khẩu chính.', {type:'info'});
-        if (isMasterLocked()) return showLockoutAlert();
-
         btn.disabled = true;
         const origHtml = btn.innerHTML;
         btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin w-[16px] h-[16px] pointer-events-none"></i>';
         lucide.createIcons({root: btn});
 
         try {
-            const labelType = type === 'account' ? 'Tên đăng nhập' : 'Mật khẩu';
-            const master = await showPrompt(`Nhập mật khẩu chính để sao chép ${labelType}.`, 'Nhập Mật Khẩu...', 'Xác thực Sao chép', 'password', 'info');
-            if(!master) return;
+            const actionLabel = type === 'account' ? 'sao chép tên đăng nhập' : 'sao chép mật khẩu';
+            const dekKey = await requireDEK(actionLabel);
+            if (!dekKey) return;
             
-            if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], master) !== CHECK_VALUE){ 
-                registerMasterFail(); 
-                showAlert(getWrongMasterMessage(), {type:'error'}); 
-                return; 
-            }
-            resetMasterFail();
-
-            const dekKey = await getDEKKey(master, verify);
-            if(!dekKey) return showAlert('Không thể tải khóa dữ liệu hệ thống.', {type:'error'});
-
             const entry = data.find(e => e.record_id === record_id);
             const cipherText = type === 'account' ? entry.account : entry.password;
             const decText = await SecureCrypto.decryptWithDEK(cipherText, dekKey);
@@ -1498,7 +1628,7 @@
             showCopySuccess(btn);
 
         } catch (e) {
-            showAlert('Trình duyệt của bạn chặn tự động sao chép. Vui lòng bấm Giải mã và copy thủ công.', {type: 'error'});
+            showAlert('Trình duyệt của bạn chặn tự động sao chép. Vui lòng bấm Giải mã và sao chép thủ công.', {type: 'error'});
         } finally {
             btn.disabled = false;
             if (!btn.innerHTML.includes('check')) {
@@ -1516,6 +1646,11 @@
         
         if(open) {
             setTimeout(()=>el.fDisplay.focus(),0); 
+            
+            let verify = data.find(e => e[CHECK_KEY]);
+            let isUnlocked = !!(verify && activeDEKKey);
+            
+            el.fMaster.closest('.form-row').style.display = isUnlocked ? 'none' : 'flex';
         } else { 
             editingId=null; 
             ['fDisplay','fAccount','fPassword','fMaster','fMasterConfirm'].forEach(id=>el[id].value=''); 
@@ -1543,7 +1678,10 @@
       el.masterConfirmHint.innerHTML = isMatch
         ? '<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Mật khẩu trùng khớp'
         : '<i data-lucide="x-circle" class="w-3.5 h-3.5"></i> Mật khẩu không khớp';
-      el.masterConfirmHint.style.color = isMatch ? '#0d9488' : '#dc3545';
+        
+      el.masterConfirmHint.classList.remove('text-teal-600', 'text-rose-600');
+      el.masterConfirmHint.classList.add(isMatch ? 'text-teal-600' : 'text-rose-600');
+      
       lucide.createIcons({ root: el.masterConfirmHint });
     };
 
@@ -1568,6 +1706,9 @@
       try {
         const d=el.fDisplay.value.trim(), a=el.fAccount.value.trim(), p=el.fPassword.value.trim(), m=el.fMaster.value;
         
+        let verify = data.find(e => e[CHECK_KEY]);
+        let isUnlocked = !!(verify && activeDEKKey);
+
         clearAllEditErrors();
         let isValid = true;
         let firstErrorInput = null;
@@ -1575,9 +1716,8 @@
         if(!d) { showInlineError(el.fDisplay, el.errDisplay, "Vui lòng nhập tên dịch vụ", false); isValid = false; firstErrorInput = firstErrorInput || el.fDisplay; }
         if(!a) { showInlineError(el.fAccount, el.errAccount, "Vui lòng nhập tài khoản", false); isValid = false; firstErrorInput = firstErrorInput || el.fAccount; }
         if(!p) { showInlineError(el.fPassword, el.errPassword, "Vui lòng nhập mật khẩu", false); isValid = false; firstErrorInput = firstErrorInput || el.fPassword; }
-        if(!m) { showInlineError(el.fMaster, el.errMaster, "Vui lòng nhập mật khẩu chính", false); isValid = false; firstErrorInput = firstErrorInput || el.fMaster; }
+        if(!isUnlocked && !m) { showInlineError(el.fMaster, el.errMaster, "Vui lòng nhập mật khẩu chính", false); isValid = false; firstErrorInput = firstErrorInput || el.fMaster; }
 
-        let verify=data.find(e=>e[CHECK_KEY]);
         let dekKeyToUse = activeDEKKey;
 
         if(!verify){
@@ -1601,23 +1741,29 @@
         }
 
         if (verify) {
-          if (isMasterLocked()) {
-             savingEdit = false; el.btnSaveEdit.disabled = false; el.btnSaveEdit.innerHTML='<i data-lucide="save" class="w-5 h-5"></i> Lưu dữ liệu'; lucide.createIcons({root: el.btnSaveEdit});
-             return showLockoutAlert();
-          }
-          if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE){ 
-            registerMasterFail(); 
-            showInlineError(el.fMaster, el.errMaster, getWrongMasterMessage());
-            savingEdit = false; el.btnSaveEdit.disabled = false; el.btnSaveEdit.innerHTML='<i data-lucide="save" class="w-5 h-5"></i> Lưu dữ liệu'; lucide.createIcons({root: el.btnSaveEdit});
-            return;
-          }
-          resetMasterFail();
+          if (!isUnlocked) {
+              if (isMasterLocked()) {
+                 savingEdit = false; el.btnSaveEdit.disabled = false; el.btnSaveEdit.innerHTML='<i data-lucide="save" class="w-5 h-5"></i> Lưu dữ liệu'; lucide.createIcons({root: el.btnSaveEdit});
+                 return showLockoutAlert();
+              }
+              if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE){ 
+                registerMasterFail(); 
+                showInlineError(el.fMaster, el.errMaster, getWrongMasterMessage());
+                savingEdit = false; el.btnSaveEdit.disabled = false; el.btnSaveEdit.innerHTML='<i data-lucide="save" class="w-5 h-5"></i> Lưu dữ liệu'; lucide.createIcons({root: el.btnSaveEdit});
+                return;
+              }
+              resetMasterFail();
 
-          dekKeyToUse = await getDEKKey(m, verify);
-          if (!dekKeyToUse) {
-             savingEdit = false; el.btnSaveEdit.disabled = false; el.btnSaveEdit.innerHTML='<i data-lucide="save" class="w-5 h-5"></i> Lưu dữ liệu'; lucide.createIcons({root: el.btnSaveEdit});
-             return showAlert('Không thể tải khóa dữ liệu. Dữ liệu bị lỗi.', {type:'error'});
+              dekKeyToUse = await getDEKKey(m, verify);
+              if (!dekKeyToUse) {
+                 savingEdit = false; el.btnSaveEdit.disabled = false; el.btnSaveEdit.innerHTML='<i data-lucide="save" class="w-5 h-5"></i> Lưu dữ liệu'; lucide.createIcons({root: el.btnSaveEdit});
+                 return showAlert('Không thể tải khóa dữ liệu. Dữ liệu bị lỗi.', {type:'error'});
+              }
+              
+              activeDEKKey = dekKeyToUse;
           }
+          
+          resetInactivityTimer();
         } else {
           const newRawDEK = SecureCrypto.generateDEK();
           const encryptedDEK = await SecureCrypto.encrypt(newRawDEK, m);
@@ -1630,6 +1776,7 @@
 
           dekKeyToUse = await SecureCrypto.importDEK(newRawDEK);
           activeDEKKey = dekKeyToUse;
+          resetInactivityTimer();
         }
 
         toggleLoader(true, 'save', 'Đang lưu dữ liệu...');
@@ -1668,37 +1815,32 @@
     el.btnCancelEdit.onclick = el.editX.onclick = () => openEdit(false);
 
     const editEntry = async (record_id) => {
-      const verify=data.find(e=>e[CHECK_KEY]); if(!verify) return;
-      if (isMasterLocked()) return showLockoutAlert();
+      const dekKey = await requireDEK('sửa tài khoản');
+      if (!dekKey) return;
 
-      const m = await showPrompt('Nhập mật khẩu chính.', 'Mật Khẩu Chính...', 'Xác thực', 'password', 'info'); if(!m) return;
-      if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE){ registerMasterFail(); return showAlert(getWrongMasterMessage(),{type:'error'}); } resetMasterFail();
-      
-      const dekKey = await getDEKKey(m, verify);
-      if(!dekKey) return showAlert('Không thể tải khóa dữ liệu hệ thống.', {type:'error'});
-
-      const cur = data.find(e=>e.record_id===record_id); 
+      const cur = data.find(e => e.record_id === record_id); 
       const decA = await SecureCrypto.decryptWithDEK(cur.account, dekKey);
       const decP = await SecureCrypto.decryptWithDEK(cur.password, dekKey);
       
-      if(!decA||!decP) return showAlert('Giải mã thất bại. Dữ liệu này có thể đã bị hỏng trong quá trình đồng bộ.', { title: 'Lỗi dữ liệu', type:'error' });
+      if(!decA || !decP) return showAlert('Giải mã thất bại. Dữ liệu này có thể đã bị hỏng trong quá trình đồng bộ.', { title: 'Lỗi dữ liệu', type:'error' });
       
-      editingId=record_id; 
-      el.editTitle.innerHTML='<i data-lucide="edit-3" class="w-5 h-5 text-teal-600"></i> Sửa'; lucide.createIcons({root:el.editTitle});
-      el.fDisplay.value=cur.display; el.fAccount.value=decA; el.fPassword.value=decP; openEdit(true);
+      editingId = record_id; 
+      el.editTitle.innerHTML = '<i data-lucide="edit-3" class="w-5 h-5 text-teal-600"></i> Sửa'; 
+      lucide.createIcons({root: el.editTitle});
+      el.fDisplay.value = cur.display; 
+      el.fAccount.value = decA; 
+      el.fPassword.value = decP; 
+      openEdit(true);
     };
 
     const deleteEntry = async (record_id) => {
-      const verify=data.find(e=>e[CHECK_KEY]); if(!verify) return;
-      if (isMasterLocked()) return showLockoutAlert();
-
-      const m = await showPrompt('Nhập mật khẩu chính để xóa.', 'Mật Khẩu Chính...', 'Xác thực Hành động', 'password', 'warning'); if(!m) return;
-      if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE){ registerMasterFail(); return showAlert(getWrongMasterMessage(),{type:'error'}); } resetMasterFail();
+      const dekKey = await requireDEK('xóa tài khoản');
+      if (!dekKey) return;
       
       if(await showConfirm('Bạn có chắc chắn muốn xóa tài khoản này? Hành động này không thể hoàn tác.', 'Cảnh báo', 'error')) { 
           toggleLoader(true, 'delete', 'Đang xóa...');
           try {
-              deleteDoc(doc(db, "account", record_id)); 
+              await deleteDoc(doc(db, "account", record_id)); 
               toggleLoader(false, 'delete'); 
               await showAlert(navigator.onLine ? 'Tài khoản đã được xóa.' : 'Đã xóa ngoại tuyến (sẽ tự đồng bộ khi có mạng).', {type: 'success'}); 
           } catch(e) {
@@ -1733,7 +1875,7 @@
     el.ckCancel.onclick = el.ckX.onclick = () => openCK(false);
     
     el.ckOk.onclick = async () => {
-      if (!navigator.onLine) return showAlert('Vui lòng bật mạng (WiFi/4G) để đổi mật khẩu chính!', {type: 'warning'});
+      if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (WiFi/4G) để đổi mật khẩu chính!', {type: 'warning'});
       
       if (isMasterLocked()) return showLockoutAlert();
       
@@ -1786,7 +1928,7 @@
         
         toggleLoader(false, 'ck');
         openCK(false); 
-        await showAlert('Đổi mật khẩu thành công. Mọi tài khoản đã được bảo vệ bằng mật khẩu mới!', {type:'success'});
+        await showAlert('Đổi mật khẩu thành công. LƯU Ý: Mật khẩu này được sử dụng chung cho toàn bộ kho lưu trữ, hãy ghi nhớ thật kỹ.', {type:'success', title: 'Đổi khóa thành công'});
       } catch(e) { 
         toggleLoader(false, 'ck');
         await showAlert(getFriendlyErrorMessage(e), { title: 'Đổi mật khẩu thất bại', type:'error' }); 
@@ -1806,7 +1948,9 @@
         el.ckHint.className = 'small mt-1 flex items-center gap-1.5';
         el.ckHint.style.display = el.ckConfirm.value ? 'inline-flex' : 'none'; 
         el.ckHint.innerHTML = el.ckConfirm.value === pw ? '<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Mật khẩu trùng khớp' : '<i data-lucide="x-circle" class="w-3.5 h-3.5"></i> Mật khẩu không khớp'; 
-        el.ckHint.style.color = el.ckConfirm.value === pw ? '#0d9488' : '#dc3545'; 
+        
+        el.ckHint.classList.remove('text-teal-600', 'text-rose-600');
+        el.ckHint.classList.add(el.ckConfirm.value === pw ? 'text-teal-600' : 'text-rose-600');
         
         lucide.createIcons({ root: el.ckNew.parentNode.parentNode }); 
     };
@@ -1823,22 +1967,13 @@
     const exportData = async () => {
       const verify = data.find(e => e[CHECK_KEY]); 
       if(!verify) return;
-    
-      if (isMasterLocked()) return showLockoutAlert();
-  
-      const m = await showPrompt('Nhập mật khẩu chính để xác thực sao lưu.', 'Nhập mật khẩu...', 'Bảo vệ Sao lưu', 'password', 'info'); 
-      if(!m) return;
-    
-      if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE){ 
-        registerMasterFail(); 
-        return showAlert('Mật khẩu không chính xác.', {type:'error'}); 
-      } 
-      resetMasterFail();
+
+      const dekKeyToUse = await requireDEK('xác thực sao lưu');
+      if (!dekKeyToUse) return;
   
       toggleLoader(true, 'export', 'Đang tạo bản sao lưu an toàn...');
 
       try {
-          const dekKeyToUse = await getDEKKey(m, verify);
           const encryptedDisplayKey = await SecureCrypto.encryptWithDEK(systemEncryptKey, dekKeyToUse);
 
           const exportList = data.map(item => {
@@ -1858,7 +1993,7 @@
               update: item.update
             };
           });
-      
+        
           const backupContent = {
             metadata: {
               app_name: "EncyPass",
@@ -1870,7 +2005,9 @@
           };
 
           const jsonString = JSON.stringify(backupContent, null, 2);
-          const fileName = `EncyPass_Backup_${getTimestamp()}.json`;
+          
+          const userEmailPrefix = auth.currentUser ? auth.currentUser.email.split('@')[0] : 'user';
+          const fileName = `EncyPass_${userEmailPrefix}_${getTimestamp()}.json`;
 
           const downloadLocalFile = () => {
               const b = new Blob([jsonString], {type:'application/json'});
@@ -1919,7 +2056,7 @@
     el.fileImport.onchange = (e) => {
       if (!navigator.onLine) {
         e.target.value = '';
-        return showAlert('Vui lòng bật mạng (WiFi/4G) để khôi phục dữ liệu!', {type: 'warning'});
+        return showAlert('Vui lòng kết nối mạng (WiFi/4G) để khôi phục dữ liệu!', {type: 'warning'});
       }
       const f = e.target.files?.[0]; 
       if(!f) return; 
@@ -1957,7 +2094,7 @@
 
           const verify = imported.find(x => x[CHECK_KEY]);
           
-          let promptMessage = 'Nhập mật khẩu của tệp dữ liệu (JSON) để khôi phục.'; 
+          let promptMessage = 'Vui lòng nhập mật khẩu của tệp dữ liệu (JSON) để khôi phục.'; 
           
           if (importedRaw && importedRaw.metadata) {
               const meta = importedRaw.metadata;
@@ -1972,7 +2109,7 @@
                   }
               } catch (e) {}
 
-              promptMessage = `Thông tin tệp sao lưu:\n• Phiên bản: ${meta.version || '---'}\n• Thời gian tạo: ${dateStr}\n• Tổng số tài khoản: ${meta.total_accounts}\n\nNhập mật khẩu để giải mã và khôi phục dữ liệu.`;
+              promptMessage = `Thông tin tệp sao lưu:\n• Phiên bản: ${meta.version || '---'}\n• Thời gian tạo: ${dateStr}\n• Tổng số tài khoản: ${meta.total_accounts}\n\nVui lòng nhập mật khẩu để giải mã và khôi phục dữ liệu.`;
           }
           
           const m = await showPrompt(promptMessage, 'Nhập mật khẩu...', 'Khôi phục Dữ liệu', 'password', 'info'); 
@@ -1986,7 +2123,7 @@
           } 
           resetMasterFail();
           
-          if(!await showConfirm('Hành động này sẽ xóa vĩnh viễn dữ liệu hiện tại và thay thế bằng dữ liệu mới. Bạn vẫn muốn tiếp tục?', 'Cảnh báo Nguy hiểm', 'error')) { 
+          if(!await showConfirm('Hành động này sẽ XÓA VĨNH VIỄN dữ liệu hiện tại và thay thế bằng dữ liệu mới khôi phục. Bạn có chắc chắn muốn tiếp tục?', 'Cảnh báo Nguy hiểm', 'error')) { 
               e.target.value = ''; 
               return; 
           }
@@ -2032,6 +2169,7 @@
             });
           }
           await batch.commit(); 
+          activeDEKKey = null;
           
           toggleLoader(false, 'import');
           await showAlert('Dữ liệu đã được khôi phục thành công.', {type: 'success'});
@@ -2058,7 +2196,7 @@
       
       if (!navigator.onLine) {
         elCloud.modal.classList.remove('open');
-        return showAlert('Vui lòng bật mạng để xem dữ liệu đám mây!', {type: 'warning'});
+        return showAlert('Vui lòng kết nối mạng để xem dữ liệu đám mây!', {type: 'warning'});
       }
 
       elCloud.list.innerHTML = '<div class="text-center py-6 text-slate-400"><i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i> Đang tải dữ liệu...</div>';
@@ -2145,9 +2283,9 @@
               
               toggleLoader(false, 'restore_cloud'); 
               
-              let promptMessage = 'Nhập mật khẩu của bản sao lưu này để khôi phục.'; 
+              let promptMessage = 'Vui lòng nhập mật khẩu của bản sao lưu này để khôi phục.'; 
               if (importedRaw && importedRaw.metadata) {
-                  promptMessage = `Thông tin bản sao lưu:\n• Thời gian: ${displayTitle}\n• Tổng số tài khoản: ${importedRaw.metadata.total_accounts}\n\nNhập mật khẩu để giải mã và khôi phục.`;
+                  promptMessage = `Thông tin bản sao lưu:\n• Thời gian: ${displayTitle}\n• Tổng số tài khoản: ${importedRaw.metadata.total_accounts}\n\nVui lòng nhập mật khẩu để giải mã và khôi phục.`;
               }
               
               const m = await showPrompt(promptMessage, 'Nhập mật khẩu...', 'Khôi phục Dữ liệu', 'password', 'info'); 
@@ -2159,7 +2297,7 @@
               } 
               resetMasterFail();
               
-              if(!await showConfirm('Hành động này sẽ XÓA VĨNH VIỄN dữ liệu hiện tại trên tất cả thiết bị và thay thế bằng dữ liệu từ bản sao lưu này. Bạn có chắc chắn?', 'Cảnh báo Nguy hiểm', 'error')) { 
+              if(!await showConfirm('Hành động này sẽ XÓA VĨNH VIỄN dữ liệu hiện tại trên tất cả thiết bị và thay thế bằng dữ liệu từ bản sao lưu này. Bạn có chắc chắn muốn tiếp tục?', 'Cảnh báo Nguy hiểm', 'error')) { 
                   return; 
               }
               
@@ -2203,6 +2341,7 @@
                 });
               }
               await batch.commit(); 
+              activeDEKKey = null;
               
               toggleLoader(false, 'import_cloud');
               elCloud.modal.classList.remove('open');
@@ -2268,13 +2407,10 @@
 
     el.miReset.onclick = async () => {
       closeMenuModal(); 
-      if (!navigator.onLine) return showAlert('Vui lòng bật mạng (WiFi/4G) để xóa toàn bộ dữ liệu!', {type: 'warning'});
+      if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (WiFi/4G) để xóa toàn bộ dữ liệu!', {type: 'warning'});
       
-      const verify=data.find(e=>e[CHECK_KEY]); if(!verify) return;
-      if (isMasterLocked()) return showLockoutAlert();
-
-      const m = await showPrompt('Bạn có chắc muốn xóa TOÀN BỘ dữ liệu trên hệ thống?', 'Mật Khẩu Chính...', 'Cảnh báo Nguy hiểm', 'password', 'error'); if(!m) return;
-      if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE){ registerMasterFail(); return showAlert('Mật khẩu không chính xác.', {type:'error'}); } resetMasterFail();
+      const dekKey = await requireDEK('xóa TOÀN BỘ dữ liệu');
+      if (!dekKey) return;
       
       if(!await showConfirm('Lưu ý: Dữ liệu sau khi xóa sẽ không thể khôi phục. Bạn vẫn muốn tiếp tục?', 'Bước cuối cùng', 'error')) return;
       
@@ -2290,7 +2426,7 @@
           await showAlert('Toàn bộ dữ liệu đã được xóa khỏi hệ thống.', {type: 'success'});
       } catch (e) {
           toggleLoader(false, 'reset');
-          await showAlert(getFriendlyErrorMessage(e), { title: 'Không thể reset', type:'error' });
+          await showAlert(getFriendlyErrorMessage(e), { title: 'Không thể xóa', type:'error' });
       }
     };
     
@@ -2370,6 +2506,26 @@
     el.miGenerate.onclick = ()=>{ closeMenuModal(); openGen(); }; 
     el.genBtn.onclick = generatePassword; 
     el.genClose.onclick = el.genX.onclick = closeGenModal; 
+    
+    if (el.btnCopyGen) {
+      el.btnCopyGen.onclick = async () => {
+        const val = el.genResult.value;
+        if (!val || val === '...') return;
+        try {
+          await navigator.clipboard.writeText(val);
+          const origHtml = el.btnCopyGen.innerHTML;
+          el.btnCopyGen.innerHTML = '<i data-lucide="check" style="width: 18px; height: 18px; color: #10b981; pointer-events: none;"></i>';
+          lucide.createIcons({ root: el.btnCopyGen });
+          setTimeout(() => {
+            el.btnCopyGen.innerHTML = origHtml;
+            lucide.createIcons({ root: el.btnCopyGen });
+          }, 2000);
+        } catch (e) {
+          showAlert('Trình duyệt không hỗ trợ sao chép tự động.', {type: 'error'});
+        }
+      };
+    }
+
     el.genResult.onclick = function(){ this.select(); };    
     
     el.aboutCheckUpdate.onclick = () => { if (appUpdater) appUpdater.check(); };
@@ -2516,6 +2672,19 @@
         }
       };
     }
+    
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const input = this.parentElement.querySelector('input');
+        if (!input) return;
+
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+
+        this.innerHTML = `<i data-lucide="${isPassword ? 'eye-off' : 'eye'}" style="width: 18px; height: 18px; pointer-events: none;"></i>`;
+        lucide.createIcons({ root: this });
+      });
+    });
     
   </script>
 </body>

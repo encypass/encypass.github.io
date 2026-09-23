@@ -4,11 +4,21 @@
   "website": "https://encypass.github.io/",
   "author": "Hoàng Đợi",
   "latest": {
-    "version": "v1.0.5",
-    "release_date": "2026-08-21",
-    "summary": "Ra mắt tính năng Quản lý đám mây. Hỗ trợ dùng chung bản sao lưu giữa các tài khoản và thiết bị cá nhân của bạn."
+    "version": "v1.0.6",
+    "release_date": "2026-09-23",
+    "summary": "Bản cập nhật tập trung vào tối ưu hóa hiệu năng cốt lõi, xử lý triệt để lỗi rò rỉ bộ nhớ và siết chặt bảo mật khi khôi phục dữ liệu dự phòng."
   },
   "changelog": [
+    {
+      "version": "v1.0.6",
+      "release_date": "2026-09-23",
+      "changes": [
+        "Tối ưu hiệu năng giải mã: Khắc phục tình trạng hao tốn CPU và giật lag trên thiết bị di động bằng cách tối ưu hóa thuật toán đếm ngược thời gian hiển thị mật khẩu.",
+        "Xử lý lỗi hộp thoại (Modal Queue): Giải quyết triệt để tình trạng rò rỉ bộ nhớ (memory leak) và xung đột sự kiện phím bấm (Enter/Escape) khi thao tác với các thông báo hệ thống.",
+        "Bảo mật khôi phục dữ liệu (JSON): Thiết lập cơ chế kiểm duyệt độ dài chuỗi nghiêm ngặt, ngăn chặn nguy cơ nhồi nhét dữ liệu rác hoặc mã độc làm hỏng cơ sở dữ liệu Firestore.",
+        "Đồng bộ thiết kế: Cải tiến cách hiển thị màu sắc cảnh báo trong phần Xác nhận mật khẩu chính, sử dụng chuẩn hệ thống giúp giao diện mượt mà và dễ mở rộng hơn."
+      ]
+    },
     {
       "version": "v1.0.5",
       "release_date": "2026-08-21",
