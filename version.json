@@ -4,11 +4,20 @@
   "website": "https://encypass.github.io/",
   "author": "Hoàng Đợi",
   "latest": {
-    "version": "v1.0.6",
-    "release_date": "2026-09-23",
-    "summary": "Bản cập nhật tập trung vào tối ưu hóa hiệu năng cốt lõi, xử lý triệt để lỗi rò rỉ bộ nhớ và siết chặt bảo mật khi khôi phục dữ liệu dự phòng."
+    "version": "v1.0.7",
+    "release_date": "2026-09-25",
+    "summary": "Bản cập nhật nâng cao trải nghiệm quản lý bảo mật với tính năng cảnh báo mật khẩu quá củ và tối ưu hóa giao diện di động."
   },
   "changelog": [
+    {
+      "version": "v1.0.7",
+      "release_date": "2026-09-24",
+      "changes": [
+        "Cảnh báo mật khẩu quá hạn: Bổ sung tính năng thông báo khi tài khoản không được thay đổi mật khẩu quá củ, giúp chủ động nâng cao mức độ an toàn.",
+        "Tối ưu hóa quản lý phiên: Nâng cấp cơ chế tự động khóa kho dữ liệu khi không hoạt động, đảm bảo an toàn tuyệt đối khi thiết bị bỏ quên.",
+        "Tinh chỉnh giao diện: Hoàn thiện trải nghiệm hiển thị trên các dòng điện thoại có màn hình nhỏ và hỗ trợ tốt hơn cho thanh điều hướng hệ thống."
+      ]
+    },
     {
       "version": "v1.0.6",
       "release_date": "2026-09-23",

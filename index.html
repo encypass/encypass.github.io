@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://encypass.github.io/icons/icon-512.png">
 
   <meta name="theme-color" content="#0d9488">
-  <meta name="version" content="v1.0.6">
+  <meta name="version" content="v1.0.7">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -81,7 +81,7 @@
 		  <img src="/icons/icon-192.png" alt="EncyPass Logo" class="w-full h-full block rounded-[24%] drop-shadow-md">
 	</div>
     <div class="font-black text-[20px] mt-3 tracking-wide">EncyPass</div>
-    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.0.6</b></div>
+    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.0.7</b></div>
   </div>
 
   <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 relative shadow-2xl overflow-hidden">
@@ -98,6 +98,10 @@
         </div>
         
         <div class="flex gap-2 items-center">
+            <button id="btn-outdated" class="hidden header-btn !bg-amber-500 !border-amber-400 text-slate-950 animate-pulse relative flex items-center justify-center" title="Cảnh báo: Có mật khẩu chưa đổi một thời gian">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+                <span id="outdated-badge" class="absolute top-0 right-0 transform translate-x-1 -translate-y-1 bg-rose-600 text-white text-[9px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-sm">0</span>
+            </button>
             <button id="btn-install" class="hidden header-btn !bg-amber-500 !border-amber-400 text-slate-950 animate-pulse" title="Cài đặt ứng dụng">
                 <i data-lucide="download" class="w-4 h-4"></i>
             </button>
@@ -482,6 +486,25 @@
     </div>
   </div>
 
+  <div id="outdatedModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div class="modal-drag-handle"></div>
+      <div class="modal-head">
+        <h3 class="modal-title"><i data-lucide="bell" class="w-5 h-5 text-rose-500"></i> Cảnh báo bảo mật</h3>
+        <button id="outdatedX" class="modal-close" aria-label="Đóng"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="modal-body !overflow-y-auto max-h-[60vh]">
+        <div id="outdatedAlertBox" class="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-100 text-rose-800 text-[13px] leading-relaxed">
+          <!-- Text sẽ được gen động từ JS -->
+        </div>
+        <div id="outdatedList" class="flex flex-col gap-2"></div>
+      </div>
+      <div class="p-4 border-t border-slate-100 mt-auto">
+        <button id="outdatedClose" class="btn text w-full">Đóng</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="text-center text-slate-400 text-[13px] my-6 mb-3">© 2026 - Hoàng Đợi</footer>
   </div>
 
@@ -496,6 +519,41 @@
     import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, setDoc, getDoc, deleteDoc, onSnapshot, getDocs, writeBatch, clearIndexedDbPersistence, terminate } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getStorage, ref, uploadString, getDownloadURL, listAll, deleteObject, getMetadata } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+    // ----------------------------------------------------
+    // CẤU HÌNH TẬP TRUNG HỆ THỐNG (APP_CONFIG)
+    // ----------------------------------------------------
+    const APP_CONFIG = {
+        meta: {
+            version: 'v1.0.7',
+            appName: 'EncyPass'
+        },
+        crypto: {
+            iterations: 600000, 
+            saltLen: 16,        
+            ivLen: 12,          
+        },
+        security: {
+            idleLockTimeout: 3 * 60 * 1000,    // 3 phút: Thời gian chờ để tự động khóa 
+            maxMasterFail: 5,                  // Số lần nhập sai mật khẩu tối đa
+            masterLockDuration: 3 * 60 * 1000, // 3 phút: Thời gian bị phạt khóa sau khi sai quá số lần
+            outdatedPasswordDays: 90           // Số ngày để cảnh báo mật khẩu cũ chưa đổi
+        },
+        constants: {
+            checkKey: "_verify",
+            checkValue: "EncyPass"
+        }
+    };
+
+    // MAP LẠI CÁC BIẾN CŨ (ĐẢM BẢO TƯƠNG THÍCH NGƯỢC)
+    const APP_VERSION = APP_CONFIG.meta.version;
+    const CHECK_KEY = APP_CONFIG.constants.checkKey;
+    const CHECK_VALUE = APP_CONFIG.constants.checkValue;
+    const MAX_MASTER_FAIL = APP_CONFIG.security.maxMasterFail;
+    const MASTER_LOCK_MS = APP_CONFIG.security.masterLockDuration;
+    const LOCK_TIMEOUT = APP_CONFIG.security.idleLockTimeout;
+
 
     const firebaseConfig = {
       apiKey: "AIzaSyCY1dSogyXtxkO4dm4_5u4lurWz6-rHxX8",
@@ -515,6 +573,8 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
     const storage = getStorage(app);
+    const functions = getFunctions(app, "asia-southeast1");
+    const getDisplayKeyFn = httpsCallable(functions, 'getDisplayKey');
     
     let currentUserUid = null;
     let systemEncryptKey = null;
@@ -522,7 +582,6 @@
     let unsubVerify = null;
     let activeDEKKey = null;
 
-    const LOCK_TIMEOUT = 3 * 60 * 1000; // 3 phút
     let inactivityTimer = null;
 
     function lockVault(isManual = false) {
@@ -567,14 +626,19 @@
     });
 
     lucide.createIcons();
-    const APP_VERSION = 'v1.0.6';
-    const CHECK_KEY = "_verify";
-    const CHECK_VALUE = "EncyPass";
-    const MAX_MASTER_FAIL = 5;
-    const MASTER_LOCK_MS = 3 * 60 * 1000;
 
     const $ = s => document.querySelector(s);
     function escapeHtml(s){ return String(s??'').replace(/&/g,'&lt;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+    function resetPasswordToggles(modalElement) {
+        if (!modalElement) return;
+        modalElement.querySelectorAll('.toggle-password').forEach(btn => {
+            const input = btn.parentElement.querySelector('input');
+            if (input) input.type = 'password';
+            btn.innerHTML = '<i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>';
+        });
+        lucide.createIcons({ root: modalElement });
+    }
 
     function getFriendlyErrorMessage(err) {
       if (!err) return "Đã xảy ra lỗi không xác định.";
@@ -593,6 +657,10 @@
       
       if (msg.includes('JSON')) return "Tệp dữ liệu không đúng định dạng (không phải file JSON hợp lệ).";
       if (msg.includes('Không thể giải mã khóa dữ liệu cũ')) return "Mật khẩu hiện tại không khớp với hệ thống. Đổi mật khẩu thất bại.";
+
+      if (msg.toLowerCase().includes('terminated') || code === 'failed-precondition') {
+         return "Phiên kết nối dữ liệu đã kết thúc (có thể do đăng xuất ở cửa sổ khác). Vui lòng tải lại trang để tiếp tục.";
+      }
 
       return `Lỗi hệ thống: ${msg}`;
     }
@@ -634,7 +702,10 @@
     };
 
     const SecureCrypto = {
-      ITERATIONS: 600000, SALT_LEN: 16, IV_LEN: 12,
+      ITERATIONS: APP_CONFIG.crypto.iterations, 
+      SALT_LEN: APP_CONFIG.crypto.saltLen, 
+      IV_LEN: APP_CONFIG.crypto.ivLen,
+      
       bufferToBase64: (buffer) => {
           let binary = '';
           const bytes = new Uint8Array(buffer);
@@ -855,6 +926,15 @@
     };
     el.appVersion.textContent = APP_VERSION; $('#splashVersion').textContent = APP_VERSION;
 
+    // ĐẢM BẢO ĐỒNG BỘ UI & LOGIC CỦA TÍNH NĂNG OUTDATED PASSWORD
+    const outdatedAlertBox = document.getElementById('outdatedAlertBox');
+    if (outdatedAlertBox) {
+        outdatedAlertBox.innerHTML = `
+            <i data-lucide="alert-triangle" class="w-4 h-4 inline-block mb-0.5 mr-1 text-rose-500"></i> 
+            Các tài khoản dưới đây đã không được cập nhật mật khẩu <b>hơn ${APP_CONFIG.security.outdatedPasswordDays} ngày</b>. Bạn nên cân nhắc đổi mật khẩu để đảm bảo an toàn.`;
+        lucide.createIcons({root: outdatedAlertBox});
+    }
+
     const SW_SCOPE = '/';
 
     async function getVersionInfo(targetVersion){
@@ -1068,8 +1148,7 @@
     const formFields = [
       { input: el.fDisplay, err: el.errDisplay },
       { input: el.fAccount, err: el.errAccount },
-      { input: el.fPassword, err: el.errPassword },
-      { input: el.fMaster, err: el.errMaster }
+      { input: el.fPassword, err: el.errMaster }
     ];
     formFields.forEach(field => {
       if (field.input) {
@@ -1304,18 +1383,30 @@
 
           currentUserUid = user.uid;
 
-          const keyDoc = await getDoc(doc(db, "system", "encrypt_key"));
-          if (keyDoc.exists()) {
-            systemEncryptKey = keyDoc.data().key;
-          } else {
-            systemEncryptKey = "encypass_display_key";
-            setDoc(doc(db, "system", "encrypt_key"), { key: systemEncryptKey }).catch(e => console.warn(e));
+          try {
+            const result = await getDisplayKeyFn();
+            systemEncryptKey = result.data.key;
+          } catch (funcErr) {
+            console.error("Lỗi gọi Cloud Function lấy khóa hệ thống:", funcErr);
+            throw new Error("Không thể lấy khóa mã hóa từ máy chủ (Cloud Functions).");
           }
 
           $('#loginOverlay').classList.add('hidden'); $('#app').classList.remove('invisible');
           el.connectionStatus.textContent = navigator.onLine ? "Đã kết nối máy chủ an toàn" : "Đang hoạt động ngoại tuyến";
           
           listenCloudLockState(); 
+          
+          try {
+            const verifySnap = await getDoc(doc(db, "system", "verify"));
+            if (verifySnap.exists()) {
+              const dataObj = verifySnap.data();
+              const vObj = { [CHECK_KEY]: dataObj.value, encrypted_dek: dataObj.encrypted_dek };
+              if (!data.some(e => e[CHECK_KEY])) data.unshift(vObj);
+            }
+          } catch (e) {
+            console.warn("Không thể tải khóa xác thực ban đầu:", e);
+          }
+
           startRealtimeSync();
         } catch (e) {
           console.error(e);
@@ -1431,7 +1522,7 @@
         console.error("Lỗi hệ thống khi đăng xuất:", e);
       } finally {
         toggleLoader(false, 'logout');
-        window.location.reload();
+        window.location.replace(window.location.pathname);
       }
     };
 
@@ -1474,28 +1565,32 @@
       
       if (unsubVerify) unsubVerify();
       unsubVerify = onSnapshot(doc(db, "system", "verify"), (verifySnap) => {
+          const idx = data.findIndex(e => e[CHECK_KEY]);
           if(verifySnap.exists()) {
               const dataObj = verifySnap.data();
               const vObj = { [CHECK_KEY]: dataObj.value, encrypted_dek: dataObj.encrypted_dek };
-              const idx = data.findIndex(e => e[CHECK_KEY]);
               if (idx > -1) data[idx] = vObj; else data.unshift(vObj);
-              render(); 
+          } else {
+              if (idx > -1) data.splice(idx, 1);
           }
+          render();
+          if (typeof updateLockUI === 'function') updateLockUI();
       });
 
+      if (unsubSnapshot) unsubSnapshot();
       unsubSnapshot = onSnapshot(collection(db, "account"), { includeMetadataChanges: true }, async (snapshot) => {
         toggleLoader(true, 'sync', 'Đang đồng bộ...');
         try {
-          const newData = [];
+          const fetchedAccounts = [];
           for (const docChange of snapshot.docs) {
             const raw = docChange.data();
             const decDisplay = await SecureCrypto.decryptSafe(raw.display, systemEncryptKey);
-            newData.push({ record_id: docChange.id, update: raw.update, display: decDisplay || "[Dữ liệu mã hóa]", account: raw.account, password: raw.password, rawDisplay: raw.display, pending: docChange.metadata.hasPendingWrites });
+            fetchedAccounts.push({ record_id: docChange.id, update: raw.update, display: decDisplay || "[Dữ liệu mã hóa]", account: raw.account, password: raw.password, rawDisplay: raw.display, pending: docChange.metadata.hasPendingWrites });
           }
           
-          const v = data.find(e => e[CHECK_KEY]); 
-          data = newData; 
-          if(v) data.unshift(v);
+          const existingVerify = data.find(e => e[CHECK_KEY]);
+          data = fetchedAccounts;
+          if (existingVerify) data.unshift(existingVerify);
           
           render();
         } catch (error) { 
@@ -1537,7 +1632,7 @@
           div.innerHTML = `
             <h4 class="flex items-center gap-2.5">
               ${syncIcon} 
-              <span class="truncate">${escapeHtml(entry.display)}</span> 
+              <span class="truncate max-w-[200px] sm:max-w-[280px]" title="${escapeHtml(entry.display)}">${escapeHtml(entry.display)}</span> 
               
               <div class="ml-auto flex items-center justify-center min-w-[28px] h-[28px] px-3 rounded-full bg-gradient-to-b from-teal-50 to-teal-100/50 border border-teal-200/60 text-[11px] font-black text-teal-700 shadow-sm flex-shrink-0 tracking-wide" title="Tài khoản thứ ${orderNum}">
                 ${paddedNum}
@@ -1569,6 +1664,7 @@
       }
       lucide.createIcons({root: el.list});
       if (typeof updateLockUI === 'function') updateLockUI();
+      if (typeof checkOutdatedPasswords === 'function') checkOutdatedPasswords();
     }
 
     let searchT;
@@ -1727,6 +1823,8 @@
             editingId=null; 
             ['fDisplay','fAccount','fPassword','fMaster','fMasterConfirm'].forEach(id=>el[id].value=''); 
             el.strengthMsg.style.display='none'; el.masterConfirmHint.style.display='none'; el.masterConfirmRow.style.display='none'; 
+            
+            resetPasswordToggles(el.editModal);
         } 
     }
     
@@ -1914,6 +2012,12 @@
       if(await showConfirm('Bạn có chắc chắn muốn xóa tài khoản này? Hành động này không thể hoàn tác.', 'Cảnh báo', 'error')) { 
           toggleLoader(true, 'delete', 'Đang xóa...');
           try {
+              if (autoHideTimers[record_id]) {
+                  clearInterval(autoHideTimers[record_id].interval);
+                  delete autoHideTimers[record_id];
+                  visible[record_id] = false;
+              }
+
               await deleteDoc(doc(db, "account", record_id)); 
               toggleLoader(false, 'delete'); 
               showToast(navigator.onLine ? 'Tài khoản đã được xóa.' : 'Đã xóa ngoại tuyến (sẽ tự đồng bộ khi có mạng).', 'success'); 
@@ -1941,6 +2045,8 @@
       if(!open){ 
         el.ckOld.value=el.ckNew.value=el.ckConfirm.value=''; 
         el.ckStrength.style.display=el.ckHint.style.display='none'; 
+        
+        resetPasswordToggles(el.ckModal);
       } else {
         setTimeout(()=>el.ckOld.focus(),0);
       }
@@ -2040,8 +2146,15 @@
     document.getElementById('btnCloseMenu').addEventListener('click', closeMenuModal);
 
     const exportData = async () => {
+      const accountsToExport = data.filter(e => !e[CHECK_KEY]);
+      if (accountsToExport.length === 0) {
+        return showToast('Danh sách tài khoản hiện đang trống. Không có dữ liệu để sao lưu.', 'warning');
+      }
+
       const verify = data.find(e => e[CHECK_KEY]); 
-      if(!verify) return;
+      if(!verify) {
+        return showToast('Hệ thống chưa thiết lập khóa bảo mật.', 'error');
+      }
 
       const dekKeyToUse = await requireDEK('xác thực sao lưu');
       if (!dekKeyToUse) return;
@@ -2074,7 +2187,7 @@
               app_name: "EncyPass",
               version: APP_VERSION,
               created_at: new Date().toISOString(),
-              total_accounts: exportList.filter(item => !item[CHECK_KEY]).length
+              total_accounts: accountsToExport.length
             },
             data: exportList
           };
@@ -2205,15 +2318,11 @@
           const batch = writeBatch(db);
 
           const dekKeyToUse = await getDEKKey(m, verify);
-          let recoveredSystemKey = systemEncryptKey; 
 
           if (verify.encrypted_display_key) {
               const decKey = await SecureCrypto.decryptWithDEK(verify.encrypted_display_key, dekKeyToUse);
               if (decKey) {
-                  recoveredSystemKey = decKey;
-                  systemEncryptKey = recoveredSystemKey; 
-                  
-                  batch.set(doc(db, "system", "encrypt_key"), { key: recoveredSystemKey });
+                  systemEncryptKey = decKey; 
               }
           }
 
@@ -2255,6 +2364,15 @@
         }
       }; r.readAsText(f);
     };
+
+    // --- TIỆN ÍCH TIMEOUT CHUNG CHO CLOUD ---
+    const withTimeout = (promise, ms) => {
+        const timeout = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('timeout_error')), ms);
+        });
+        return Promise.race([promise, timeout]);
+    };
+    // ----------------------------------------
     
     const elCloud = {
       modal: $('#cloudBackupModal'),
@@ -2331,12 +2449,13 @@
           `;
           
           itemDiv.querySelector('.btn-restore').onclick = async () => {
+            if (!navigator.onLine) return showAlert('Mất kết nối mạng. Vui lòng kết nối Internet để khôi phục.', {type: 'warning'});
             if (!await showConfirm(`Khôi phục dữ liệu từ bản sao lưu ngày:\n${displayTitle}?\n\nLưu ý: Bạn sẽ cần nhập mật khẩu chính của thời điểm đó.`, 'Khôi phục từ Cloud', 'info')) return;
             
             toggleLoader(true, 'restore_cloud', 'Đang đọc file đám mây...');
             try {
-              const url = await getDownloadURL(itemRef);
-              const response = await fetch(url);
+              const url = await withTimeout(getDownloadURL(itemRef), 15000);
+              const response = await withTimeout(fetch(url), 15000);
               const jsonText = await response.text();
               
               let importedRaw;
@@ -2379,14 +2498,11 @@
               const batch = writeBatch(db);
 
               const dekKeyToUse = await getDEKKey(m, verify);
-              let recoveredSystemKey = systemEncryptKey; 
 
               if (verify.encrypted_display_key) {
                   const decKey = await SecureCrypto.decryptWithDEK(verify.encrypted_display_key, dekKeyToUse);
                   if (decKey) {
-                      recoveredSystemKey = decKey;
-                      systemEncryptKey = recoveredSystemKey; 
-                      batch.set(doc(db, "system", "encrypt_key"), { key: recoveredSystemKey });
+                      systemEncryptKey = decKey; 
                   }
               }
 
@@ -2425,28 +2541,42 @@
             } catch(err) {
               toggleLoader(false, 'restore_cloud');
               toggleLoader(false, 'import_cloud');
-              await showAlert(getFriendlyErrorMessage(err), { title: 'Lỗi khôi phục', type:'error' });
+              if (err.message === 'timeout_error') {
+                  await showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
+              } else {
+                  await showAlert(getFriendlyErrorMessage(err), { title: 'Lỗi khôi phục', type:'error' });
+              }
             }
           };
 
           itemDiv.querySelector('.btn-download').onclick = async () => {
+            if (!navigator.onLine) return showAlert('Mất kết nối mạng. Vui lòng kết nối Internet để tải file.', {type: 'warning'});
             toggleLoader(true, 'dl_cloud', 'Đang tải file...');
             try {
-              const url = await getDownloadURL(itemRef);
-              const response = await fetch(url);
+              const url = await withTimeout(getDownloadURL(itemRef), 15000);
+              const response = await withTimeout(fetch(url), 15000);
               const blob = await response.blob();
               const a = document.createElement('a');
               a.href = URL.createObjectURL(blob);
               a.download = rawFileName;
               a.click();
+              showToast('Đã tải bản sao lưu xuống thiết bị.', 'success');
             } catch (error) {
-              showAlert('Lỗi khi tải file.', {type: 'error'});
+              if (error.message === 'timeout_error') {
+                  showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
+              } else {
+                  showAlert('Lỗi khi tải file.', {type: 'error'});
+              }
             } finally {
               toggleLoader(false, 'dl_cloud');
             }
           };
 
           itemDiv.querySelector('.btn-delete').onclick = async () => {
+            if (!navigator.onLine) {
+                return showAlert('Mất kết nối mạng. Vui lòng kết nối Internet để xóa.', {type: 'warning'});
+            }
+
             const verify = data.find(e => e[CHECK_KEY]);
             if (!verify) {
                 return showAlert('Hệ thống chưa thiết lập khóa bảo mật.', {type: 'error'});
@@ -2467,16 +2597,26 @@
             } 
             resetMasterFail();
 
+            if (!navigator.onLine) {
+                return showAlert('Kết nối mạng đã bị ngắt. Vui lòng thử lại sau.', {type: 'error'});
+            }
+
             toggleLoader(true, 'del_cloud', 'Đang xóa bản sao lưu...');
             try {
-              await deleteObject(itemRef);
+              await withTimeout(deleteObject(itemRef), 15000);
               itemDiv.remove(); 
               
               if (elCloud.list.children.length === 0) {
                   elCloud.list.innerHTML = '<div class="text-center py-6 text-slate-400">Chưa có bản sao lưu nào.</div>';
               }
+              
+              showToast('Đã xóa vĩnh viễn bản sao lưu trên Cloud.', 'success');
             } catch (error) {
-              showAlert('Lỗi khi xóa file. Vui lòng thử lại sau.', {type: 'error'});
+              if (error.message === 'timeout_error') {
+                  showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
+              } else {
+                  showAlert('Lỗi khi xóa file. Vui lòng thử lại sau.', {type: 'error'});
+              }
             } finally {
               toggleLoader(false, 'del_cloud');
             }
@@ -2779,6 +2919,88 @@
         lucide.createIcons({ root: this });
       });
     });
+
+    const btnOutdated = document.getElementById('btn-outdated');
+    const outdatedBadge = document.getElementById('outdated-badge');
+    const outdatedModal = document.getElementById('outdatedModal');
+    const outdatedList = document.getElementById('outdatedList');
+    const outdatedClose = document.getElementById('outdatedClose');
+    const outdatedX = document.getElementById('outdatedX');
+
+    function parseCustomTimestamp(ts) {
+        const s = String(ts || '');
+        if (s.length !== 14) return new Date(); 
+        return new Date(s.slice(0,4), parseInt(s.slice(4,6))-1, s.slice(6,8), s.slice(8,10), s.slice(10,12), s.slice(12,14));
+    }
+
+    function checkOutdatedPasswords() {
+        if (!currentUserUid || data.length === 0) {
+            if (btnOutdated) btnOutdated.classList.add('hidden');
+            return [];
+        }
+        
+        const now = new Date();
+        const EXPIRE_MS = APP_CONFIG.security.outdatedPasswordDays * 24 * 60 * 60 * 1000; 
+        
+        const outdated = data.filter(item => {
+            if (item[CHECK_KEY]) return false; 
+            const itemDate = parseCustomTimestamp(item.update);
+            return (now - itemDate) > EXPIRE_MS;
+        });
+
+        if (outdated.length > 0) {
+            btnOutdated.classList.remove('hidden');
+            outdatedBadge.textContent = outdated.length > 9 ? '9+' : outdated.length;
+        } else {
+            btnOutdated.classList.add('hidden');
+        }
+        return outdated;
+    }
+
+    if (btnOutdated) {
+        btnOutdated.onclick = () => {
+            const outdated = checkOutdatedPasswords();
+            if (!outdated || outdated.length === 0) return;
+            
+            outdatedList.innerHTML = '';
+            outdated.forEach((item) => {
+                const updateDate = parseCustomTimestamp(item.update);
+                const dateStr = updateDate.toLocaleDateString('vi-VN');
+                
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 rounded-xl border border-rose-100 bg-white mb-2 shadow-sm';
+                div.innerHTML = `
+                  <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="bell" class="w-4 h-4 text-rose-500"></i>
+                    </div>
+                    <div>
+                      <div class="truncate text-[14px] font-bold text-slate-700">${escapeHtml(item.display)}</div>
+                      <div class="text-[11px] text-slate-400 font-medium tracking-wide">Đổi lần cuối: ${dateStr}</div>
+                    </div>
+                  </div>
+                  <button class="btn-edit-outdated text-teal-600 p-2 hover:bg-teal-50 rounded-lg transition-colors flex-shrink-0" data-id="${item.record_id}" title="Cập nhật ngay">
+                    <i data-lucide="edit-3" class="w-5 h-5 pointer-events-none"></i>
+                  </button>
+                `;
+                
+                div.querySelector('.btn-edit-outdated').onclick = () => {
+                    outdatedModal.classList.remove('open');
+                    editEntry(item.record_id); 
+                };
+                
+                outdatedList.appendChild(div);
+            });
+            lucide.createIcons({root: outdatedList});
+            outdatedModal.classList.add('open');
+        };
+    }
+
+    if (outdatedX && outdatedClose) {
+        outdatedX.onclick = outdatedClose.onclick = () => {
+            outdatedModal.classList.remove('open');
+        };
+    }
     
   </script>
 </body>
