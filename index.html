@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://encypass.github.io/icons/icon-512.png">
 
   <meta name="theme-color" content="#0d9488">
-  <meta name="version" content="v1.0.7">
+  <meta name="version" content="v1.0.8">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -81,7 +81,7 @@
 		  <img src="/icons/icon-192.png" alt="EncyPass Logo" class="w-full h-full block rounded-[24%] drop-shadow-md">
 	</div>
     <div class="font-black text-[20px] mt-3 tracking-wide">EncyPass</div>
-    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.0.7</b></div>
+    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.0.8</b></div>
   </div>
 
   <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 relative shadow-2xl overflow-hidden">
@@ -526,7 +526,7 @@
     // ----------------------------------------------------
     const APP_CONFIG = {
         meta: {
-            version: 'v1.0.7',
+            version: 'v1.0.8',
             appName: 'EncyPass'
         },
         crypto: {
@@ -3001,6 +3001,32 @@
             outdatedModal.classList.remove('open');
         };
     }
+    
+    // --- BẮT ĐẦU: YÊU CẦU BẢO VỆ DỮ LIỆU CỤC BỘ (PERSISTENT STORAGE) ---
+    async function requestPersistentStorage() {
+      if (navigator.storage && navigator.storage.persist) {
+        try {
+          const isPersisted = await navigator.storage.persisted();
+          if (!isPersisted) {
+            const granted = await navigator.storage.persist();
+            if (granted) {
+              console.log("Persistent storage granted. Dữ liệu ngoại tuyến đã được bảo vệ an toàn.");
+            } else {
+              console.warn("Persistent storage denied. Dữ liệu có thể bị trình duyệt xóa nếu máy đầy bộ nhớ.");
+            }
+          } else {
+            console.log("Storage is already persisted.");
+          }
+        } catch (error) {
+          console.error("Lỗi khi yêu cầu Persistent Storage:", error);
+        }
+      }
+    }
+
+    window.addEventListener('load', () => {
+        requestPersistentStorage();
+    });
+    // --- KẾT THÚC: YÊU CẦU BẢO VỆ DỮ LIỆU CỤC BỘ ---
     
   </script>
 </body>

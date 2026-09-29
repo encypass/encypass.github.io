@@ -4,11 +4,19 @@
   "website": "https://encypass.github.io/",
   "author": "Hoàng Đợi",
   "latest": {
-    "version": "v1.0.7",
-    "release_date": "2026-09-25",
-    "summary": "Bản cập nhật nâng cao trải nghiệm quản lý bảo mật với tính năng cảnh báo mật khẩu quá củ và tối ưu hóa giao diện di động."
+    "version": "v1.0.8",
+    "release_date": "2026-09-29",
+    "summary": "Bản cập nhật quan trọng bổ sung cơ chế bảo vệ dữ liệu cục bộ (Persistent Storage), ngăn chặn trình duyệt tự động xóa dữ liệu ngoại tuyến khi thiết bị cạn kiệt dung lượng."
   },
   "changelog": [
+    {
+      "version": "v1.0.8",
+      "release_date": "2026-09-29",
+      "changes": [
+        "Bảo vệ dữ liệu ngoại tuyến: Tích hợp Persistent Storage API giúp bảo vệ an toàn kho dữ liệu bộ nhớ đệm (IndexedDB/Cache), ngăn trình duyệt tự động dọn dẹp khi thiết bị sắp hết bộ nhớ.",
+        "Tối ưu hóa độ tin cậy: Đảm bảo khả năng truy cập ứng dụng và giải mã mật khẩu mượt mà ngay cả khi thiết bị ngắt kết nối mạng trong thời gian dài."
+      ]
+    },
     {
       "version": "v1.0.7",
       "release_date": "2026-09-24",
