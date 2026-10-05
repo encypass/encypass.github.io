@@ -4,11 +4,22 @@
   "website": "https://encypass.github.io/",
   "author": "Hoàng Đợi",
   "latest": {
-    "version": "v1.0.8",
-    "release_date": "2026-09-29",
-    "summary": "Bản cập nhật quan trọng bổ sung cơ chế bảo vệ dữ liệu cục bộ (Persistent Storage), ngăn chặn trình duyệt tự động xóa dữ liệu ngoại tuyến khi thiết bị cạn kiệt dung lượng."
+    "version": "v1.0.9",
+    "release_date": "2026-10-06",
+    "summary": "Tái cấu trúc hệ thống cấu hình, tối ưu trải nghiệm bàn phím ảo trên di động, ngăn chặn xung đột từ các tiện ích điền mật khẩu bên thứ ba và xử lý triệt để các lỗi liên quan đến bộ nhớ đệm IndexedDB."
   },
   "changelog": [
+    {
+      "version": "v1.0.9",
+      "release_date": "2026-10-06",
+      "changes": [
+        "Tái cấu trúc hệ thống: Gom nhóm toàn bộ tham số cốt lõi (Bảo mật, Mã hóa, Hẹn giờ) vào cấu trúc cấu hình tập trung (APP_CONFIG) để tối ưu hiệu năng và dễ dàng quản lý.",
+        "Chống xung đột điền tự động: Cập nhật các thuộc tính chuyên sâu cho ô nhập liệu (như data-lpignore) nhằm ngăn chặn sự can thiệp gây lỗi của trình duyệt hoặc các tiện ích mở rộng như LastPass, Bitwarden.",
+        "Tối ưu bàn phím ảo: Hỗ trợ thuộc tính viewport mới (interactive-widget=resizes-content), giúp giao diện tự động điều chỉnh mượt mà, không bị che khuất khi gõ phím trên thiết bị di động.",
+        "Chống nhấp nháy màn hình: Áp dụng độ trễ (debounce delay) cho màn hình chờ (Loader) giúp trải nghiệm thị giác mượt mà hơn đối với các tác vụ được xử lý quá nhanh.",
+        "Xử lý lỗi bộ nhớ đệm: Tự động phục hồi khi phiên kết nối cơ sở dữ liệu cục bộ bị kẹt hoặc ngắt đột ngột, đồng thời dọn dẹp sạch sẽ cache của Firestore khi người dùng đăng xuất để đảm bảo an toàn tối đa."
+      ]
+    },
     {
       "version": "v1.0.8",
       "release_date": "2026-09-29",
