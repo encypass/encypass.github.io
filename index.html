@@ -1756,13 +1756,26 @@
 
     function render(){
       Object.keys(autoHideTimers).forEach(id => { clearInterval(autoHideTimers[id]?.interval); delete autoHideTimers[id]; }); visible = {};
-      const q = (el.search.value || '').trim().toLowerCase(); el.list.innerHTML = '';
+      
+      const rawQuery = (el.search.value || '').trim().toLowerCase();
+      const removeDiacritics = (str) => {
+          return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+      };
+      const q = removeDiacritics(rawQuery);
+      
+      el.list.innerHTML = '';
       
       const items = []; 
       data.forEach((e, idx) => { 
         if(e[CHECK_KEY]) return; 
         const dName = e.decryptedDisplay || '•••••••• (Đã khóa)';
-        if (q && !dName.toLowerCase().includes(q)) return;
+        
+        if (q) {
+            const standardTitle = String(dName).toLowerCase();
+            const cleanTitle = removeDiacritics(standardTitle);
+            if (!standardTitle.includes(q) && !cleanTitle.includes(q)) return;
+        }
+        
         items.push({ entry: e, idx, dName }); 
       });
       
@@ -2000,10 +2013,7 @@
             editingId=null; 
             
             ['fDisplay','fAccount','fPassword','fMaster','fMasterConfirm'].forEach(id=>{
-                if (el[id]) {
-                    el[id].value = '';
-                    el[id].classList.remove('ring-invalid');
-                }
+                if (el[id]) el[id].value = '';
             }); 
             
             el.strengthMsg.style.display='none'; 
@@ -2179,7 +2189,12 @@
 
         toggleLoader(false, 'save'); 
         openEdit(false); 
-        showToast(navigator.onLine ? 'Đã lưu dữ liệu thành công' : 'Đã lưu ngoại tuyến (tự động đồng bộ khi có mạng)', 'success'); 
+        showToast(navigator.onLine ? 'Đã lưu dữ liệu thành công' : 'Đã lưu ngoại tuyến (tự động đồng bộ khi có mạng)', 'success');  
+        
+        if (el.search && el.search.value.trim() !== '') {
+            el.search.value = '';
+            render();
+        }
         
       } catch(err) {
         toggleLoader(false, 'save');
@@ -2403,6 +2418,10 @@
       
       if (el.miExport) {
         el.miExport.style.display = hasMasterKey ? '' : 'none';
+      }
+      
+      if (el.miReset) {
+        el.miReset.style.display = hasMasterKey ? 'flex' : 'none';
       }
       
       $('#fab-menu-modal').classList.add('open');
