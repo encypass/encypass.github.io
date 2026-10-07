@@ -4,81 +4,91 @@
   "website": "https://encypass.github.io/",
   "author": "Hoàng Đợi",
   "latest": {
-    "version": "v1.0.9",
-    "release_date": "2026-10-06",
-    "summary": "Tái cấu trúc hệ thống cấu hình, tối ưu trải nghiệm bàn phím ảo trên di động, ngăn chặn xung đột từ các tiện ích điền mật khẩu bên thứ ba và xử lý triệt để các lỗi liên quan đến bộ nhớ đệm IndexedDB."
+    "version": "v1.1.0",
+    "release_date": "2026-10-07",
+    "summary": "Cải tiến tính năng quản lý khóa bảo mật, giúp đổi mật khẩu chính mượt mà hơn và tối ưu hóa hệ thống đồng bộ trạng thái."
   },
   "changelog": [
+    {
+      "version": "v1.1.0",
+      "release_date": "2026-10-07",
+      "changes": [
+        "Đổi Mật khẩu chính an toàn hơn: Sử dụng giao dịch cơ sở dữ liệu để cập nhật khóa mã hóa mượt mà và đồng bộ ngay lập tức giữa các thiết bị.",
+        "Khóa bảo mật thông minh: Đồng bộ trạng thái khóa giữa các thiết bị, tự động ẩn thông tin nhạy cảm khi kho dữ liệu bị khóa.",
+        "Tinh chỉnh giao diện: Cải thiện các hộp thoại thông báo và thêm hiệu ứng phản hồi trực quan khi sao lưu hoặc khôi phục dữ liệu.",
+        "Nâng cao độ ổn định: Xử lý tốt hơn khi mạng chập chờn và tối ưu quá trình đồng bộ ngầm."
+      ]
+    },
     {
       "version": "v1.0.9",
       "release_date": "2026-10-06",
       "changes": [
-        "Tái cấu trúc hệ thống: Gom nhóm toàn bộ tham số cốt lõi (Bảo mật, Mã hóa, Hẹn giờ) vào cấu trúc cấu hình tập trung (APP_CONFIG) để tối ưu hiệu năng và dễ dàng quản lý.",
-        "Chống xung đột điền tự động: Cập nhật các thuộc tính chuyên sâu cho ô nhập liệu (như data-lpignore) nhằm ngăn chặn sự can thiệp gây lỗi của trình duyệt hoặc các tiện ích mở rộng như LastPass, Bitwarden.",
-        "Tối ưu bàn phím ảo: Hỗ trợ thuộc tính viewport mới (interactive-widget=resizes-content), giúp giao diện tự động điều chỉnh mượt mà, không bị che khuất khi gõ phím trên thiết bị di động.",
-        "Chống nhấp nháy màn hình: Áp dụng độ trễ (debounce delay) cho màn hình chờ (Loader) giúp trải nghiệm thị giác mượt mà hơn đối với các tác vụ được xử lý quá nhanh.",
-        "Xử lý lỗi bộ nhớ đệm: Tự động phục hồi khi phiên kết nối cơ sở dữ liệu cục bộ bị kẹt hoặc ngắt đột ngột, đồng thời dọn dẹp sạch sẽ cache của Firestore khi người dùng đăng xuất để đảm bảo an toàn tối đa."
+        "Tái cấu trúc hệ thống: Gom chung các thông số cốt lõi (bảo mật, mã hóa, thời gian chờ) vào một mục cấu hình để dễ quản lý.",
+        "Chống xung đột điền tự động: Ngăn chặn các tiện ích như LastPass hoặc Bitwarden can thiệp gây lỗi nhập liệu.",
+        "Tối ưu bàn phím ảo: Giao diện tự động co giãn mượt mà, không bị che khuất khi gõ phím trên điện thoại.",
+        "Chống nhấp nháy màn hình: Thêm độ trễ cho màn hình chờ (Loader) giúp trải nghiệm trực quan mượt mà hơn.",
+        "Xử lý lỗi bộ nhớ đệm: Tự động phục hồi khi kết nối bị lỗi và dọn dẹp sạch cache khi đăng xuất."
       ]
     },
     {
       "version": "v1.0.8",
       "release_date": "2026-09-29",
       "changes": [
-        "Bảo vệ dữ liệu ngoại tuyến: Tích hợp Persistent Storage API giúp bảo vệ an toàn kho dữ liệu bộ nhớ đệm (IndexedDB/Cache), ngăn trình duyệt tự động dọn dẹp khi thiết bị sắp hết bộ nhớ.",
-        "Tối ưu hóa độ tin cậy: Đảm bảo khả năng truy cập ứng dụng và giải mã mật khẩu mượt mà ngay cả khi thiết bị ngắt kết nối mạng trong thời gian dài."
+        "Bảo vệ dữ liệu ngoại tuyến: Tích hợp Persistent Storage API giúp giữ lại bộ nhớ đệm an toàn, tránh bị trình duyệt tự động xóa khi máy đầy dung lượng.",
+        "Độ tin cậy cao: Giúp truy cập ứng dụng và giải mã mật khẩu mượt mà ngay cả khi mất mạng dài ngày."
       ]
     },
     {
       "version": "v1.0.7",
       "release_date": "2026-09-24",
       "changes": [
-        "Cảnh báo mật khẩu quá hạn: Bổ sung tính năng thông báo khi tài khoản không được thay đổi mật khẩu quá củ, giúp chủ động nâng cao mức độ an toàn.",
-        "Tối ưu hóa quản lý phiên: Nâng cấp cơ chế tự động khóa kho dữ liệu khi không hoạt động, đảm bảo an toàn tuyệt đối khi thiết bị bỏ quên.",
-        "Tinh chỉnh giao diện: Hoàn thiện trải nghiệm hiển thị trên các dòng điện thoại có màn hình nhỏ và hỗ trợ tốt hơn cho thanh điều hướng hệ thống."
+        "Cảnh báo mật khẩu quá hạn: Báo động khi tài khoản để lâu không đổi mật khẩu để nâng cao tính bảo mật.",
+        "Tối ưu khóa tự động: Kho dữ liệu sẽ tự động khóa khi bỏ quên, bảo vệ an toàn tuyệt đối.",
+        "Tinh chỉnh giao diện: Hiển thị hoàn hảo hơn trên màn hình điện thoại nhỏ và thanh điều hướng."
       ]
     },
     {
       "version": "v1.0.6",
       "release_date": "2026-09-23",
       "changes": [
-        "Tối ưu hiệu năng giải mã: Khắc phục tình trạng hao tốn CPU và giật lag trên thiết bị di động bằng cách tối ưu hóa thuật toán đếm ngược thời gian hiển thị mật khẩu.",
-        "Xử lý lỗi hộp thoại (Modal Queue): Giải quyết triệt để tình trạng rò rỉ bộ nhớ (memory leak) và xung đột sự kiện phím bấm (Enter/Escape) khi thao tác với các thông báo hệ thống.",
-        "Bảo mật khôi phục dữ liệu (JSON): Thiết lập cơ chế kiểm duyệt độ dài chuỗi nghiêm ngặt, ngăn chặn nguy cơ nhồi nhét dữ liệu rác hoặc mã độc làm hỏng cơ sở dữ liệu Firestore.",
-        "Đồng bộ thiết kế: Cải tiến cách hiển thị màu sắc cảnh báo trong phần Xác nhận mật khẩu chính, sử dụng chuẩn hệ thống giúp giao diện mượt mà và dễ mở rộng hơn."
+        "Tối ưu hiệu năng: Giảm tải CPU và chống giật lag khi đếm ngược thời gian ẩn mật khẩu trên di động.",
+        "Sửa lỗi hộp thoại: Giải quyết triệt để lỗi rò rỉ bộ nhớ và xung đột phím (Enter/Escape).",
+        "Kiểm duyệt file JSON: Chặn dữ liệu rác hoặc mã độc khi người dùng khôi phục sao lưu.",
+        "Đồng bộ thiết kế: Cải thiện màu sắc và giao diện xác nhận mật khẩu trực quan hơn."
       ]
     },
     {
       "version": "v1.0.5",
       "release_date": "2026-08-21",
       "changes": [
-        "Quản lý đám mây: Thêm giao diện quản lý để xem, tải về, xóa hoặc khôi phục trực tiếp các bản sao lưu đã đẩy lên hệ thống.",
-        "Dùng chung bản sao lưu: Các tài khoản đăng nhập (được cấp phép) hiện sử dụng chung một kho lưu trữ sao lưu. Việc khôi phục dữ liệu chéo giữa các thiết bị của bạn giờ đây dễ dàng hơn.",
-        "Thông tin trực quan: Danh sách sao lưu hiển thị rõ số lượng tài khoản đã lưu và phiên bản ứng dụng lúc sao lưu thay vì tên tệp mặc định.",
-        "Khôi phục an toàn: Hiển thị chi tiết thông tin của bản sao lưu để bạn kiểm tra trước khi xác nhận ghi đè dữ liệu."
+        "Quản lý đám mây: Giao diện mới giúp xem, tải về, xóa hoặc khôi phục trực tiếp bản sao lưu trên Cloud.",
+        "Dùng chung bản sao lưu: Dễ dàng đồng bộ và khôi phục dữ liệu chéo giữa các thiết bị đã cấp quyền.",
+        "Thông tin trực quan: Hiển thị rõ số lượng tài khoản và phiên bản lúc sao lưu thay vì tên file phức tạp.",
+        "Khôi phục an toàn: Kiểm tra trước thông tin bản sao lưu trước khi xác nhận ghi đè dữ liệu."
       ]
     },
     {
       "version": "v1.0.4",
       "release_date": "2026-07-22",
       "changes": [
-        "Quản lý trạng thái thông minh: Triển khai hệ thống thông báo tải trạng thái (Loader) mới, xử lý mượt mà khi thực hiện đa tác vụ (đăng nhập, đồng bộ, mã hóa).",
-        "Trải nghiệm sao chép: Thêm phản hồi trực quan (hiển thị biểu tượng dấu tích xanh) ngay tại nút bấm khi sao chép tên đăng nhập hoặc mật khẩu thành công.",
-        "Giám sát kết nối mạng: Cập nhật giao diện trạng thái kết nối theo thời gian thực, tự động cảnh báo khi thiết bị ngoại tuyến và thông báo khi có mạng trở lại.",
-        "Cải tiến giao diện danh sách: Tích hợp đánh số thứ tự cho từng tài khoản, giúp bạn dễ dàng đối chiếu và quản lý kho dữ liệu.",
-        "Nâng cấp bộ cập nhật ứng dụng: Xử lý mượt mà quá trình tải nền và yêu cầu làm mới phiên bản khi có bản cập nhật."
+        "Trạng thái tải thông minh: Hệ thống Loader mới giúp mượt mà khi xử lý đa tác vụ.",
+        "Sao chép trực quan: Thêm dấu tích xanh ngay tại nút bấm khi sao chép tài khoản hoặc mật khẩu thành công.",
+        "Giám sát mạng: Cảnh báo thời gian thực khi mất kết nối và tự động thông báo khi có mạng trở lại.",
+        "Đánh số thứ tự: Danh sách tài khoản có số thứ tự giúp dễ dàng đối chiếu và quản lý.",
+        "Nâng cấp cập nhật: Tự động tải ngầm và nhắc làm mới ứng dụng khi có bản mới."
       ]
     },
     {
       "version": "v1.0.3",
       "release_date": "2026-07-04",
       "changes": [
-        "Nâng cấp bảo mật: Áp dụng công nghệ Khóa dữ liệu (DEK) giúp tăng tốc độ mã hóa và bảo mật tối đa.",
-        "Cải thiện giao diện nhập liệu: Thêm hiệu ứng cảnh báo và hiển thị lỗi trực tiếp dưới các ô nhập liệu khi để trống hoặc nhập sai.",
-        "Khóa bảo mật thông minh: Hiển thị đếm ngược thời gian khóa trực tiếp bên trong hộp thoại khi bạn nhập sai mật khẩu quá nhiều lần.",
-        "Tối ưu hóa hệ thống: Tránh lỗi chồng chéo giao diện khi có nhiều hộp thoại thông báo xuất hiện cùng lúc.",
-        "Nâng cấp hạ tầng: Cập nhật hệ thống Firebase giúp ứng dụng hoạt động ngoại tuyến ổn định hơn.",
-        "An toàn dữ liệu: Bổ sung bộ lọc kiểm tra cấu trúc tệp dữ liệu trước khi khôi phục để chống lỗi hỏng hệ thống.",
-        "Sửa lỗi & Tối ưu: Hiển thị thông báo lỗi bằng tiếng Việt dễ hiểu hơn; Tối ưu hóa thuật toán tạo mật khẩu ngẫu nhiên."
+        "Bảo mật mạnh hơn: Áp dụng khóa dữ liệu DEK tăng tốc độ mã hóa tối đa.",
+        "Cải thiện nhập liệu: Hiển thị lỗi ngay bên dưới ô nhập khi để trống hoặc nhập sai.",
+        "Đếm ngược khóa máy: Hiển thị thời gian chờ trực tiếp khi nhập sai mật khẩu quá nhiều lần.",
+        "Chống chồng chéo: Tránh lỗi hiển thị khi có nhiều hộp thoại cùng bật lên.",
+        "Ổn định ngoại tuyến: Cập nhật hạ tầng Firebase giúp chạy offline mượt mà hơn.",
+        "Kiểm tra tệp tin: Bộ lọc an toàn chống hỏng hệ thống trước khi khôi phục dữ liệu.",
+        "Sửa lỗi: Thông báo tiếng Việt dễ hiểu hơn và tối ưu tạo mật khẩu ngẫu nhiên."
       ]
     },
     {
@@ -86,28 +96,28 @@
       "release_date": "2026-06-29",
       "changes": [
         "Khắc phục triệt để lỗi báo sai 'Đã ở phiên bản mới nhất' khi kiểm tra cập nhật.",
-        "Nâng cấp luồng truyền dữ liệu, đảm bảo ứng dụng luôn kiểm tra đúng phiên bản đang chạy.",
-        "Cải thiện cơ chế lưu trữ bộ nhớ đệm (cache), giúp tính năng kiểm tra cập nhật hoạt động mượt mà và chính xác hơn."
+        "Cải thiện luồng truyền dữ liệu để kiểm tra đúng phiên bản đang chạy.",
+        "Tối ưu bộ nhớ đệm (cache) giúp tính năng cập nhật hoạt động chính xác hơn."
       ]
     },
     {
       "version": "v1.0.1",
       "release_date": "2026-06-28",
       "changes": [
-        "Tối ưu hóa mã nguồn giao diện giúp tăng tốc độ mở ứng dụng đáng kể.",
-        "Cải thiện cách hiển thị nội dung của các thông báo lỗi bảo mật.",
-        "Sửa một số lỗi nhỏ trong quy trình đăng nhập và đồng bộ dữ liệu."
+        "Tối ưu giao diện giúp tăng tốc độ mở ứng dụng.",
+        "Cải thiện cách hiển thị thông báo lỗi bảo mật.",
+        "Sửa một số lỗi nhỏ khi đăng nhập và đồng bộ."
       ]
     },
     {
       "version": "v1.0.0",
       "release_date": "2026-06-26",
       "changes": [
-        "Kiến trúc bảo mật Zero-Knowledge: Không ai có thể đọc được dữ liệu của bạn, kể cả máy chủ.",
-        "Đồng bộ dữ liệu đám mây an toàn và theo thời gian thực.",
-        "Hỗ trợ hoạt động ngoại tuyến (Offline) 100% liền mạch.",
-        "Giao diện tương thích hoàn hảo trên mọi thiết bị di động.",
-        "Cơ chế khóa bảo mật nhiều lớp chống tấn công dò mật khẩu."
+        "Bảo mật Zero-Knowledge: Không ai đọc được dữ liệu của bạn, kể cả máy chủ.",
+        "Đồng bộ đám mây an toàn theo thời gian thực.",
+        "Hỗ trợ hoạt động ngoại tuyến (Offline) liền mạch 100%.",
+        "Giao diện tối ưu hoàn hảo cho mọi thiết bị di động.",
+        "Khóa bảo mật nhiều lớp chống dò mật khẩu."
       ]
     }
   ]

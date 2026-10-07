@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://encypass.github.io/icons/icon-512.png">
 
   <meta name="theme-color" content="#0d9488">
-  <meta name="version" content="v1.0.9">
+  <meta name="version" content="v1.1.0">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -81,7 +81,7 @@
 		  <img src="/icons/icon-192.png" alt="EncyPass Logo" class="w-full h-full block rounded-[24%] drop-shadow-md">
 	</div>
     <div class="font-black text-[20px] mt-3 tracking-wide">EncyPass</div>
-    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.0.9</b></div>
+    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.1.0</b></div>
   </div>
 
   <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 relative shadow-2xl overflow-hidden">
@@ -174,7 +174,7 @@
           
           <button id="miCloudBackup" class="menu-btn">
             <div class="p-3 rounded-2xl bg-sky-100/50 text-sky-600"><i data-lucide="cloud" class="w-6 h-6"></i></div>
-            <span>Dữ liệu Cloud Storage</span>
+            <span>Dữ liệu trên Cloud</span>
           </button>
 
           <button id="miChangeKey" class="menu-btn">
@@ -283,7 +283,7 @@
             </div>
             
             <p class="mb-4 text-[14px] text-slate-600 leading-relaxed">
-              EncyPass là ứng dụng giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc Zero-Knowledge, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên Cloud Storage. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông tin của bạn.
+              EncyPass là ứng dụng giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc Zero-Knowledge, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên máy chủ. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông tin của bạn.
             </p>
 
             <ul class="about-features">
@@ -471,11 +471,11 @@
     <div class="modal-card" role="dialog" aria-modal="true">
       <div class="modal-drag-handle"></div>
       <div class="modal-head">
-        <h3 class="modal-title"><i data-lucide="cloud" class="w-5 h-5 text-sky-500"></i> Dữ liệu trên Cloud Storage</h3>
+        <h3 class="modal-title"><i data-lucide="cloud" class="w-5 h-5 text-sky-500"></i> Dữ liệu trên Cloud</h3>
         <button id="cloudBackupX" class="modal-close" aria-label="Đóng"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <div class="modal-body !overflow-y-auto max-h-[60vh]">
-        <p class="text-sm text-slate-500 mb-4">Danh sách các bản sao lưu trên Cloud Storage.</p>
+        <p class="text-sm text-slate-500 mb-4">Danh sách các bản sao lưu trên Cloud.</p>
         
         <div id="cloudBackupList" class="flex flex-col gap-2"></div>
         
@@ -525,11 +525,11 @@
     // ----------------------------------------------------
     const APP_CONFIG = {
         meta: {
-            version: 'v1.0.9',
+            version: 'v1.1.0',
             appName: 'EncyPass'
         },
         crypto: {
-            iterations: 600000, 
+            iterations: 800000, 
             saltLen: 16,        
             ivLen: 12,          
         },
@@ -551,7 +551,6 @@
     const MAX_MASTER_FAIL = APP_CONFIG.security.maxMasterFail;
     const MASTER_LOCK_MS = APP_CONFIG.security.masterLockDuration;
     const LOCK_TIMEOUT = APP_CONFIG.security.idleLockTimeout;
-
 
     const firebaseConfig = {
       apiKey: "AIzaSyCY1dSogyXtxkO4dm4_5u4lurWz6-rHxX8",
@@ -626,7 +625,7 @@
         render();
         
         if (!isManual && document.hasFocus() && data.length > 0) {
-            showToast("Kho dữ liệu đã tự động khóa để bảo vệ an toàn.", 'info');
+            showToast('Kho dữ liệu đã tự động khóa để bảo đảm an toàn', 'info');
         }
         
         if (typeof updateLockUI === 'function') updateLockUI();
@@ -686,28 +685,32 @@
     }
 
     function getFriendlyErrorMessage(err) {
-      if (!err) return "Đã xảy ra lỗi không xác định.";
-      const code = err.code || err.name;
-      const msg = err.message || "";
+        if (!err) return "Đã xảy ra lỗi không xác định.";
+        const code = err.code || err.name;
+        const msg = err.message || "";
+        
+        if (code === 'auth/user-cancelled' || msg.includes('IdP denied access')) {
+            return "Bạn đã hủy quá trình đăng nhập hoặc từ chối cấp quyền truy cập.";
+        }
 
-      if (code === 'auth/popup-closed-by-user') return "Bạn đã đóng cửa sổ trước khi hoàn tất đăng nhập.";
-      if (code === 'auth/popup-blocked') return "Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép trang web mở popup (cửa sổ bật lên).";
-      if (code === 'auth/network-request-failed') return "Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại kết nối mạng (WiFi/4G).";
-      
-      if (code === 'permission-denied') return "Bạn không có quyền thực hiện thao tác này (Truy cập bị từ chối).";
-      if (code === 'unavailable') return "Dịch vụ đang gián đoạn hoặc bạn đang mất kết nối mạng. Vui lòng thử lại sau.";
-      if (code === 'resource-exhausted') return "Máy chủ đang quá tải. Vui lòng thử lại sau ít phút.";
+        if (code === 'auth/popup-closed-by-user') return "Bạn đã đóng cửa sổ trước khi hoàn tất đăng nhập.";
+        if (code === 'auth/popup-blocked') return "Trình duyệt đang chặn cửa sổ đăng nhập. Vui lòng cho phép mở popup và thử lại.";
+        if (code === 'auth/network-request-failed') return "Không thể kết nối máy chủ. Vui lòng kiểm tra kết nối mạng (Wi-Fi/4G).";
+        
+        if (code === 'permission-denied') return "Bạn không có quyền thực hiện thao tác này.";
+        if (code === 'unavailable') return "Kết nối bị gián đoạn. Vui lòng thử lại sau.";
+        if (code === 'resource-exhausted') return "Hệ thống đang quá tải. Vui lòng thử lại sau ít phút.";
 
-      if (code === 'OperationError' || msg.includes('decrypt')) return "Mật khẩu giải mã không chính xác hoặc dữ liệu đã bị hỏng.";
-      
-      if (msg.includes('JSON')) return "Tệp dữ liệu không đúng định dạng (không phải file JSON hợp lệ).";
-      if (msg.includes('Không thể giải mã khóa dữ liệu cũ')) return "Mật khẩu hiện tại không khớp với hệ thống. Đổi mật khẩu thất bại.";
+        if (code === 'OperationError' || msg.includes('decrypt')) return "Mật khẩu chính không chính xác hoặc dữ liệu đã bị hỏng.";
+        
+        if (msg.includes('JSON')) return "Tệp dữ liệu không hợp lệ (không đúng định dạng JSON).";
+        if (msg.includes('Không thể giải mã khóa dữ liệu cũ')) return "Mật khẩu hiện tại không chính xác. Đổi mật khẩu thất bại.";
 
-      if (msg.toLowerCase().includes('terminated') || code === 'failed-precondition') {
-         return "Phiên kết nối dữ liệu đã kết thúc (có thể do đăng xuất ở cửa sổ khác). Vui lòng tải lại trang để tiếp tục.";
-      }
+        if (msg.toLowerCase().includes('terminated') || code === 'failed-precondition') {
+            return "Phiên làm việc đã kết thúc hoặc bị gián đoạn. Vui lòng tải lại trang để tiếp tục.";
+        }
 
-      return `Lỗi hệ thống: ${msg}`;
+        return `Lỗi hệ thống: ${msg}`;
     }
 
     const activeLoaders = new Map();
@@ -967,8 +970,14 @@
     function getMasterLockRemainingSeconds() { return isMasterLocked() ? Math.max(1, Math.ceil((masterLockUntil - Date.now()) / 1000)) : 0; }
     function registerMasterFail() { masterFailCount++; if (masterFailCount >= MAX_MASTER_FAIL) { masterLockUntil = Date.now() + MASTER_LOCK_MS; } saveLockState(); }
     function resetMasterFail() { if(masterFailCount===0 && masterLockUntil===0) return; masterFailCount = 0; masterLockUntil = 0; saveLockState(); }
-    function getMasterLockMessage() { return `Bạn đã nhập sai mật khẩu quá nhiều lần.\nVui lòng thử lại sau ${getMasterLockRemainingSeconds()} giây.`; }
-    function getWrongMasterMessage(base = 'Mật khẩu chính không chính xác') { if (isMasterLocked()) return getMasterLockMessage(); const remain = Math.max(0, MAX_MASTER_FAIL - masterFailCount); return remain > 0 ? `${base} (còn ${remain} lần thử).` : base; }
+    function getMasterLockMessage() { 
+        return `Tạm khóa bảo mật do nhập sai nhiều lần.\nVui lòng thử lại sau ${getMasterLockRemainingSeconds()} giây.`; 
+    }
+    function getWrongMasterMessage(base = 'Mật khẩu chính không chính xác') { 
+        if (isMasterLocked()) return getMasterLockMessage(); 
+        const remain = Math.max(0, MAX_MASTER_FAIL - masterFailCount); 
+        return remain > 0 ? `${base} (còn ${remain} lần thử).` : base; 
+    }
 
     const el = {
       miGenerate: $('#miGenerate'), genModal: $('#genModal'), genLength: $('#genLength'), genLower: $('#genLower'), genUpper: $('#genUpper'), genNumber: $('#genNumber'), genSymbol: $('#genSymbol'), genBtn: $('#genBtn'), genResult: $('#genResult'), btnCopyGen: $('#btnCopyGen'), genStrength: $('#genStrength'), genClose: $('#genClose'), genX: $('#genX'),
@@ -1208,7 +1217,9 @@
     const formFields = [
       { input: el.fDisplay, err: el.errDisplay },
       { input: el.fAccount, err: el.errAccount },
-      { input: el.fPassword, err: el.errMaster }
+      { input: el.fPassword, err: el.errPassword },
+      { input: el.fMaster, err: el.errMaster },
+      { input: el.fMasterConfirm, err: el.masterConfirmHint }
     ];
     formFields.forEach(field => {
       if (field.input) {
@@ -1415,7 +1426,7 @@
               el.modalMsg.textContent = "Bạn có thể thử lại ngay bây giờ.";
               el.modalOk.disabled = false;
             } else {
-              el.modalMsg.textContent = `Bạn đã nhập sai mật khẩu quá nhiều lần.\nVui lòng thử lại sau ${remain} giây.`;
+              el.modalMsg.textContent = `Tạm khóa bảo mật do nhập sai nhiều lần.\nVui lòng thử lại sau ${remain} giây.`;
             }
         }
       }, 1000);
@@ -1443,7 +1454,7 @@
           currentUserUid = user.uid;
 
           $('#loginOverlay').classList.add('hidden'); $('#app').classList.remove('invisible');
-          el.connectionStatus.textContent = navigator.onLine ? "Đã kết nối máy chủ" : "Đang dùng ngoại tuyến (Offline)";
+          el.connectionStatus.textContent = navigator.onLine ? "Đang đồng bộ..." : "Đang ngoại tuyến";
           
           listenCloudLockState(); 
           
@@ -1495,7 +1506,7 @@
           
           const isRetry = await openModal({
             title: "Không có kết nối mạng",
-            message: "Ứng dụng cần kết nối mạng để đăng nhập và đồng bộ dữ liệu với máy chủ.\nVui lòng bật mạng (WiFi/4G) và thử lại.",
+            message: "Ứng dụng cần kết nối mạng để đăng nhập và đồng bộ dữ liệu với máy chủ.\nVui lòng bật mạng (Wi-Fi/4G) và thử lại.",
             okText: "Thử lại",
             cancelText: "Thoát ứng dụng",
             cancelVisible: true,
@@ -1505,11 +1516,34 @@
           if (isRetry) {
             window.location.reload();
           } else {
-            try {
-               window.close();
-            } catch (e) {}
-            document.body.innerHTML = '<div class="fixed inset-0 bg-teal-900 flex flex-col items-center justify-center text-white text-center p-6"><i data-lucide="wifi-off" class="w-16 h-16 mb-4 text-teal-300"></i><h2 class="text-xl font-bold mb-2">Đã ngắt kết nối</h2><p class="text-teal-100/80">Vui lòng kết nối mạng và mở lại ứng dụng.</p></div>';
-            lucide.createIcons();
+            try { window.close(); } catch (e) {}
+
+            const fatalOfflineOverlay = document.createElement('div');
+            fatalOfflineOverlay.id = "fatal-offline-overlay";
+            fatalOfflineOverlay.className = "fixed inset-0 bg-teal-900 flex flex-col items-center justify-center text-white text-center p-6 z-[100000]";
+            fatalOfflineOverlay.innerHTML = `
+              <i data-lucide="wifi-off" class="w-16 h-16 mb-4 text-teal-300"></i>
+              <h2 class="text-xl font-bold mb-2">Không có kết nối mạng</h2>
+              <p class="text-teal-100/80 mb-6">Ứng dụng cần kết nối mạng trong lần đầu đăng nhập. Vui lòng kiểm tra Wi-Fi/4G và thử lại.</p>
+              <button id="btn-force-reload" class="px-6 py-3 bg-teal-700 hover:bg-teal-600 rounded-xl font-bold transition-colors shadow-lg active:scale-95 flex items-center gap-2">
+                <i data-lucide="refresh-cw" class="w-5 h-5"></i> Thử lại
+              </button>
+            `;
+            document.body.appendChild(fatalOfflineOverlay);
+            lucide.createIcons({ root: fatalOfflineOverlay });
+
+            document.getElementById('btn-force-reload').addEventListener('click', () => {
+              window.location.reload();
+            });
+
+            window.addEventListener('online', () => {
+              const btn = document.getElementById('btn-force-reload');
+              if (btn) {
+                btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Đang kết nối lại...';
+                lucide.createIcons({ root: btn });
+              }
+              setTimeout(() => window.location.reload(), 500);
+            }, { once: true });
           }
           return;
         }
@@ -1528,7 +1562,7 @@
 
     $('#btnGoogleLogin').onclick = async () => {
       if (!navigator.onLine) {
-        return showAlert('Không có kết nối mạng. Vui lòng kiểm tra lại WiFi/4G.', { title: 'Lỗi kết nối', type: 'error' });
+        return showAlert('Không có kết nối mạng. Vui lòng kiểm tra lại Wi-Fi/4G.', { title: 'Lỗi kết nối', type: 'error' });
       }
 
       toggleLoader(true, 'login', 'Đang đăng nhập...');
@@ -1546,8 +1580,8 @@
       const userEmail = auth.currentUser ? auth.currentUser.email : 'Không xác định';
 
       const isConfirmed = await showConfirm(
-        `Bạn có muốn đăng xuất tài khoản:\n${userEmail}`, 
-        'Xác nhận đăng xuất', 
+        `Bạn có muốn đăng xuất khỏi tài khoản:\n${userEmail}?`, 
+        'Đăng xuất', 
         'warning'
       );
       
@@ -1634,7 +1668,7 @@
             lockVault(true);
         } else {
             const dek = await requireDEK('mở khóa toàn bộ Kho dữ liệu');
-            if (dek) showToast('Kho dữ liệu đã được mở khóa!', 'success');
+            if (dek) showToast('Kho dữ liệu đã được mở khóa', 'success');
         }
       };
     }
@@ -1653,7 +1687,7 @@
                   const currentVerify = data[idx];
                   if (currentVerify.encrypted_dek !== incomingEncryptedDek && activeDEKKey) {
                       lockVault(true); 
-                      showAlert("Mật khẩu chính đã được thay đổi từ một thiết bị hoặc phiên làm việc khác. Kho dữ liệu đã tự động khóa để bảo vệ an toàn.", {type: 'warning', title: 'Cảnh báo bảo mật'});
+                      showAlert("Mật khẩu chính đã được thay đổi từ một thiết bị hoặc phiên làm việc khác. Kho dữ liệu đã tự động khóa để bảo đảm an toàn.", {type: 'warning', title: 'Cảnh báo bảo mật'});
                   }
               }
 
@@ -1673,6 +1707,10 @@
       if (unsubSnapshot) unsubSnapshot();
       unsubSnapshot = onSnapshot(collection(db, "account"), { includeMetadataChanges: true }, async (snapshot) => {
         toggleLoader(true, 'sync', 'Đang đồng bộ...');
+        if (navigator.onLine && el.connectionStatus) {
+            el.connectionStatus.textContent = "Đang đồng bộ...";
+        }
+
         try {
           const fetchedAccounts = [];
           for (const docChange of snapshot.docs) {
@@ -1696,6 +1734,11 @@
               await decryptAllDisplays();
           } else {
               render();
+          }
+
+          const hasPending = snapshot.metadata.hasPendingWrites;
+          if (navigator.onLine && el.connectionStatus) {
+             el.connectionStatus.textContent = hasPending ? "Đang đồng bộ..." : "Đã đồng bộ";
           }
         } catch (error) { 
           console.error(error); 
@@ -1955,9 +1998,19 @@
             el.fMaster.closest('.form-row').style.display = isUnlocked ? 'none' : 'flex';
         } else { 
             editingId=null; 
-            ['fDisplay','fAccount','fPassword','fMaster','fMasterConfirm'].forEach(id=>el[id].value=''); 
-            el.strengthMsg.style.display='none'; el.masterConfirmHint.style.display='none'; el.masterConfirmRow.style.display='none'; 
             
+            ['fDisplay','fAccount','fPassword','fMaster','fMasterConfirm'].forEach(id=>{
+                if (el[id]) {
+                    el[id].value = '';
+                    el[id].classList.remove('ring-invalid');
+                }
+            }); 
+            
+            el.strengthMsg.style.display='none'; 
+            el.masterConfirmHint.style.display='none'; 
+            el.masterConfirmRow.style.display='none'; 
+            
+            clearAllEditErrors(); 
             resetPasswordToggles(el.editModal);
         } 
     }
@@ -2115,7 +2168,6 @@
             update: currentTimeNum
         });
 
-        // Xử lý chống kẹt màn hình khi lưu ngoại tuyến
         const commitTask = batch.commit().catch(err => console.warn("Chờ đồng bộ nền:", err));
         
         if (navigator.onLine) {
@@ -2127,7 +2179,7 @@
 
         toggleLoader(false, 'save'); 
         openEdit(false); 
-        showToast(navigator.onLine ? 'Dữ liệu đã được lưu thành công.' : 'Đã lưu nháp ngoại tuyến (sẽ tự đồng bộ khi có mạng).', 'success'); 
+        showToast(navigator.onLine ? 'Đã lưu dữ liệu thành công' : 'Đã lưu ngoại tuyến (tự động đồng bộ khi có mạng)', 'success'); 
         
       } catch(err) {
         toggleLoader(false, 'save');
@@ -2166,7 +2218,7 @@
       const dekKey = await requireDEK('xóa tài khoản');
       if (!dekKey) return;
       
-      if(await showConfirm('Bạn có chắc chắn muốn xóa tài khoản này? Hành động này không thể hoàn tác.', 'Cảnh báo', 'error')) { 
+      if(await showConfirm('Dữ liệu sau khi xóa sẽ không thể khôi phục lại.\nBạn có chắc chắn muốn xóa tài khoản này?', 'Xóa tài khoản', 'error')) { 
           toggleLoader(true, 'delete', 'Đang xóa...');
           try {
               if (autoHideTimers[record_id]) {
@@ -2175,7 +2227,6 @@
                   visible[record_id] = false;
               }
 
-              // Xử lý chống kẹt màn hình khi xóa ngoại tuyến
               const delTask = deleteDoc(doc(db, "account", record_id)).catch(err => console.warn("Chờ đồng bộ nền:", err)); 
               
               if (navigator.onLine) {
@@ -2186,7 +2237,7 @@
               }
 
               toggleLoader(false, 'delete'); 
-              showToast(navigator.onLine ? 'Tài khoản đã được xóa.' : 'Đã xóa ngoại tuyến (sẽ tự đồng bộ khi có mạng).', 'success'); 
+              showToast(navigator.onLine ? 'Đã xóa tài khoản' : 'Đã xóa ngoại tuyến (tự động đồng bộ khi có mạng)', 'success'); 
           } catch(e) {
               toggleLoader(false, 'delete');
               await showAlert(getFriendlyErrorMessage(e), { title: 'Lỗi khi xóa', type:'error' });
@@ -2217,11 +2268,19 @@
         setTimeout(()=>el.ckOld.focus(),0);
       }
     }
-    el.miChangeKey.onclick = () => { closeMenuModal(); if(data.some(e=>!e[CHECK_KEY])) openCK(true); else showAlert('Danh sách hiện đang trống.', {type: 'info'}); };
+    el.miChangeKey.onclick = () => { 
+        closeMenuModal(); 
+        if (!navigator.onLine) {
+            showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để thực hiện đổi Mật khẩu chính!', { type: 'warning' });
+            return;
+        }
+        if(data.some(e=>!e[CHECK_KEY])) openCK(true); 
+        else showAlert('Danh sách hiện đang trống.', {type: 'info'}); 
+    };
     el.ckCancel.onclick = el.ckX.onclick = () => openCK(false);
     
     el.ckOk.onclick = async () => {
-      if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (WiFi/4G) để đổi Mật khẩu chính!', {type: 'warning'});
+      if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để đổi Mật khẩu chính!', {type: 'warning'});
       
       if (isMasterLocked()) return showLockoutAlert();
       
@@ -2238,7 +2297,7 @@
 
       const masterRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
       if(nk && !masterRegex.test(nk)) { showInlineError(el.ckNew, el.errCkNew, "Mật khẩu phải ≥ 12 ký tự, gồm chữ Hoa, thường, số và ký tự đặc biệt", false); isValid = false; firstErrorInput = firstErrorInput || el.ckNew; }
-      if(cf && nk !== cf) { showInlineError(el.ckConfirm, el.errCkConfirm, "Xác nhận mật khẩu không khớp", false); isValid = false; firstErrorInput = firstErrorInput || el.ckConfirm; }
+      if(cf && nk !== cf) { showInlineError(el.ckConfirm, el.errCkConfirm, "Xác nhận mật khẩu không khớp", false); isValid = false; firstErrorInput = firstErrorInput || el.ckNew; }
       
       if (!isValid) {
           if (firstErrorInput) focusAndBlink(firstErrorInput);
@@ -2336,18 +2395,30 @@
 
     function closeMenuModal() { $('#fab-menu-modal').classList.remove('open'); }
     
-    document.getElementById('btnOpenMenu').addEventListener('click', () => $('#fab-menu-modal').classList.add('open'));
+    document.getElementById('btnOpenMenu').addEventListener('click', () => {
+      const hasMasterKey = data.some(e => e[CHECK_KEY]);
+      if (el.miChangeKey) {
+        el.miChangeKey.style.display = hasMasterKey ? '' : 'none';
+      }
+      
+      if (el.miExport) {
+        el.miExport.style.display = hasMasterKey ? '' : 'none';
+      }
+      
+      $('#fab-menu-modal').classList.add('open');
+    });
+    
     document.getElementById('btnCloseMenu').addEventListener('click', closeMenuModal);
 
     const exportData = async () => {
       const accountsToExport = data.filter(e => !e[CHECK_KEY]);
       if (accountsToExport.length === 0) {
-        return showToast('Danh sách tài khoản hiện đang trống. Không có dữ liệu để sao lưu.', 'warning');
+        return showToast('Kho dữ liệu trống. Không có dữ liệu để sao lưu', 'warning');
       }
 
       const verify = data.find(e => e[CHECK_KEY]); 
       if(!verify) {
-        return showToast('Hệ thống chưa thiết lập khóa bảo mật.', 'error');
+        return showToast('Hệ thống chưa thiết lập khóa bảo mật', 'error');
       }
 
       const dekKeyToUse = await requireDEK('xác thực sao lưu');
@@ -2397,7 +2468,7 @@
           };
 
           if (navigator.onLine && currentUserUid) {
-              toggleLoader(true, 'export', 'Đang đẩy dữ liệu lên Cloud Storage...');
+              toggleLoader(true, 'export', 'Đang sao lưu dữ liệu lên Cloud...');
               
               try {
                   const storageRef = ref(storage, `backups/shared/${fileName}`);
@@ -2408,15 +2479,15 @@
                           total_accounts: String(backupContent.metadata.total_accounts)
                       }
                   });
-                  showToast('Dữ liệu đã được sao lưu an toàn lên Cloud Storage!', 'success');
+                  showToast('Đã sao lưu dữ liệu lên Cloud', 'success');
               } catch (cloudErr) {
-                  console.error("Lỗi khi upload lên Cloud Storage:", cloudErr);
+                  console.error("Lỗi khi sao lưu dữ liệu lên Cloud:", cloudErr);
                   downloadLocalFile();
-                  await showAlert('Không thể kết nối Cloud Storage. Dữ liệu đã được tải xuống thiết bị của bạn để dự phòng.', {title: 'Lỗi mạng', type: 'warning'});
+                  await showAlert('Không thể kết nối Cloud. Dữ liệu đã được tải xuống thiết bị của bạn để dự phòng.', {title: 'Lỗi mạng', type: 'warning'});
               }
           } else {
               downloadLocalFile();
-              showToast('Dữ liệu đã được tải xuống thiết bị dự phòng.', 'success');
+              showToast('Đã tải bản sao lưu xuống thiết bị', 'success');
           }
       } catch (err) {
           console.error("Lỗi khi sao lưu:", err);
@@ -2433,7 +2504,7 @@
     el.fileImport.onchange = (e) => {
       if (!navigator.onLine) {
         e.target.value = '';
-        return showAlert('Vui lòng kết nối mạng (WiFi/4G) để khôi phục dữ liệu!', {type: 'warning'});
+        return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để khôi phục dữ liệu!', {type: 'warning'});
       }
       const f = e.target.files?.[0]; 
       if(!f) return; 
@@ -2464,13 +2535,13 @@
           try {
             importedRaw = JSON.parse(ev.target.result);
           } catch (parseErr) {
-            throw new Error("Tệp tin bị hỏng hoặc không phải là JSON hợp lệ.");
+            throw new Error("Tệp tin bị hỏng hoặc không hợp lệ.");
           }
           
           imported = Array.isArray(importedRaw) ? importedRaw : importedRaw?.data;
           
           if (!imported || !Array.isArray(imported)) {
-             throw new Error("Cấu trúc file không đúng định dạng dữ liệu EncyPass. Vui lòng kiểm tra lại tệp sao lưu.");
+             throw new Error("Cấu trúc file không đúng định dạng dữ liệu của EncyPass. Vui lòng kiểm tra lại tệp sao lưu.");
           }
           
           validateImportSchema(imported);
@@ -2495,7 +2566,7 @@
               promptMessage = `Thông tin tệp sao lưu:\n• Phiên bản: ${meta.version || '---'}\n• Thời gian tạo: ${dateStr}\n• Tổng số tài khoản: ${meta.total_accounts}\n\nVui lòng nhập mật khẩu để giải mã và khôi phục dữ liệu.`;
           }
           
-          const m = await showPrompt(promptMessage, 'Nhập mật khẩu...', 'Khôi phục Dữ liệu', 'password', 'info'); 
+          const m = await showPrompt(promptMessage, 'Nhập mật khẩu...', 'Khôi phục dữ liệu từ tệp', 'password', 'info'); 
           if(!m) { e.target.value = ''; return; }
           
           if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE) { 
@@ -2506,7 +2577,7 @@
           } 
           resetMasterFail();
           
-          if(!await showConfirm('Cảnh báo: Hành động này sẽ GHI ĐÈ VÀ XÓA VĨNH VIỄN dữ liệu hiện tại trên thiết bị. Bạn có chắc chắn muốn tiếp tục?', 'Cảnh báo Nguy hiểm', 'error')) { 
+          if(!await showConfirm('Dữ liệu khôi phục sẽ ghi đè và xóa hoàn toàn dữ liệu hiện tại trên thiết bị của bạn.\n\nBạn có chắc chắn muốn tiếp tục?', 'Cảnh báo ghi đè dữ liệu', 'warning')) { 
               e.target.value = ''; 
               return; 
           }
@@ -2572,7 +2643,7 @@
           if (typeof updateLockUI === 'function') updateLockUI();
           
           toggleLoader(false, 'import');
-          showToast('Dữ liệu đã được khôi phục thành công.', 'success');
+          showToast('Đã khôi phục dữ liệu thành công', 'success');
         } catch(err) { 
           toggleLoader(false, 'import');
           await showAlert(getFriendlyErrorMessage(err), { title: 'Lỗi khôi phục dữ liệu', type:'error' }); 
@@ -2603,7 +2674,7 @@
       
       if (!navigator.onLine) {
         elCloud.modal.classList.remove('open');
-        return showAlert('Vui lòng kết nối mạng để xem dữ liệu Cloud Storage!', {type: 'warning'});
+        return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để xem dữ liệu trên Cloud!', {type: 'warning'});
       }
 
       elCloud.list.innerHTML = '<div class="text-center py-6 text-slate-400"><i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i> Đang tải dữ liệu...</div>';
@@ -2664,10 +2735,10 @@
           `;
           
           itemDiv.querySelector('.btn-restore').onclick = async () => {
-            if (!navigator.onLine) return showAlert('Mất kết nối mạng. Vui lòng kết nối Internet để khôi phục.', {type: 'warning'});
-            if (!await showConfirm(`Khôi phục dữ liệu từ bản sao lưu ngày:\n${displayTitle}?\n\nLưu ý: Bạn sẽ cần nhập Mật khẩu chính của thời điểm đó.`, 'Khôi phục từ Cloud Storage', 'info')) return;
+            if (!navigator.onLine) return showAlert('Mất kết nối mạng. Vui lòng kết nối mạng (Wi-Fi/4G) để khôi phục.', {type: 'warning'});
+            if (!await showConfirm(`Khôi phục dữ liệu từ bản sao lưu ngày:\n${displayTitle}?\n\nLưu ý: Bạn sẽ cần nhập Mật khẩu chính của thời điểm tạo bản sao lưu này.`, 'Khôi phục dữ liệu từ Cloud', 'info')) return;
             
-            toggleLoader(true, 'restore_cloud', 'Đang đọc file Cloud Storage...');
+            toggleLoader(true, 'restore_cloud', 'Đang đọc dữ liệu...');
             try {
               const url = await withTimeout(getDownloadURL(itemRef), 15000);
               const response = await withTimeout(fetch(url), 15000);
@@ -2678,12 +2749,12 @@
               try {
                 importedRaw = JSON.parse(jsonText);
               } catch (parseErr) {
-                throw new Error("File trên Cloud Storage bị hỏng hoặc không phải JSON hợp lệ.");
+                throw new Error("Tệp sao lưu trên Cloud bị hỏng hoặc không hợp lệ.");
               }
               
               imported = Array.isArray(importedRaw) ? importedRaw : importedRaw?.data;
               if (!imported || !Array.isArray(imported)) {
-                 throw new Error("Cấu trúc file không đúng định dạng EncyPass.");
+                 throw new Error("Cấu trúc Tệp sao lưu không đúng định dạng của EncyPass.");
               }
               
               validateImportSchema(imported);
@@ -2696,7 +2767,7 @@
                   promptMessage = `Thông tin bản sao lưu:\n• Thời gian: ${displayTitle}\n• Tổng số tài khoản: ${importedRaw.metadata.total_accounts}\n\nVui lòng nhập mật khẩu để giải mã và khôi phục.`;
               }
               
-              const m = await showPrompt(promptMessage, 'Nhập mật khẩu...', 'Khôi phục Dữ liệu', 'password', 'info'); 
+              const m = await showPrompt(promptMessage, 'Nhập mật khẩu...', 'Khôi phục dữ liệu từ Cloud', 'password', 'info'); 
               if(!m) return;
               
               if(await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE) { 
@@ -2705,7 +2776,7 @@
               } 
               resetMasterFail();
               
-              if(!await showConfirm('Hành động này sẽ XÓA VĨNH VIỄN dữ liệu hiện tại trên tất cả thiết bị và thay thế bằng dữ liệu từ bản sao lưu này. Bạn có chắc chắn muốn tiếp tục?', 'Cảnh báo Nguy hiểm', 'error')) { 
+              if(!await showConfirm('Dữ liệu khôi phục sẽ ghi đè và xóa hoàn toàn dữ liệu hiện tại trên thiết bị của bạn.\n\nBạn có chắc chắn muốn tiếp tục?', 'Cảnh báo ghi đè dữ liệu', 'warning')) { 
                   return; 
               }
               
@@ -2771,7 +2842,7 @@
               
               toggleLoader(false, 'import_cloud');
               elCloud.modal.classList.remove('open');
-              showToast('Dữ liệu từ Cloud Storage đã được khôi phục thành công!', 'success');
+              showToast('Đã khôi phục dữ liệu thành công', 'success');
               
             } catch(err) {
               toggleLoader(false, 'restore_cloud');
@@ -2785,7 +2856,7 @@
           };
 
           itemDiv.querySelector('.btn-download').onclick = async () => {
-            if (!navigator.onLine) return showAlert('Mất kết nối mạng. Vui lòng kết nối Internet để tải file.', {type: 'warning'});
+            if (!navigator.onLine) return showAlert('Mất kết nối mạng. Vui lòng kết nối mạng (Wi-Fi/4G) để tải file.', {type: 'warning'});
             toggleLoader(true, 'dl_cloud', 'Đang tải file...');
             try {
               const url = await withTimeout(getDownloadURL(itemRef), 15000);
@@ -2795,7 +2866,7 @@
               a.href = URL.createObjectURL(blob);
               a.download = rawFileName;
               a.click();
-              showToast('Đã tải bản sao lưu xuống thiết bị.', 'success');
+              showToast('Đã tải bản sao lưu xuống thiết bị', 'success');
             } catch (error) {
               if (error.message === 'timeout_error') {
                   showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
@@ -2809,7 +2880,7 @@
 
           itemDiv.querySelector('.btn-delete').onclick = async () => {
             if (!navigator.onLine) {
-                return showAlert('Mất kết nối mạng. Vui lòng kết nối Internet để xóa.', {type: 'warning'});
+                return showAlert('Mất kết nối mạng. Vui lòng kết nối mạng (Wi-Fi/4G) để xóa.', {type: 'warning'});
             }
 
             const verify = data.find(e => e[CHECK_KEY]);
@@ -2818,7 +2889,7 @@
             }
 
             const m = await showPrompt(
-                `Bạn đang muốn XÓA VĨNH VIỄN bản sao lưu ngày:\n${displayTitle}\n\nVui lòng nhập Mật khẩu chính để xác nhận hành động này.`, 
+                `Bạn đang muốn xóa bản sao lưu ngày:\n${displayTitle}\n\nVui lòng nhập Mật khẩu chính để xác nhận hành động này.`, 
                 'Nhập Mật khẩu chính...', 
                 'Xác thực xóa sao lưu', 
                 'password', 
@@ -2845,12 +2916,12 @@
                   elCloud.list.innerHTML = '<div class="text-center py-6 text-slate-400">Chưa có bản sao lưu nào.</div>';
               }
               
-              showToast('Đã xóa vĩnh viễn bản sao lưu trên Cloud Storage.', 'success');
+              showToast('Đã xóa bản sao lưu trên Cloud', 'success');
             } catch (error) {
               if (error.message === 'timeout_error') {
                   showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
               } else {
-                  showAlert('Lỗi khi xóa file. Vui lòng thử lại sau.', {type: 'error'});
+                  showAlert('Lỗi khi xóa Tệp sao lưu. Vui lòng thử lại sau.', {type: 'error'});
               }
             } finally {
               toggleLoader(false, 'del_cloud');
@@ -2863,7 +2934,7 @@
         lucide.createIcons({root: elCloud.list});
 
       } catch (error) {
-        elCloud.list.innerHTML = '<div class="text-center py-6 text-rose-500">Lỗi khi lấy dữ liệu Cloud Storage.</div>';
+        elCloud.list.innerHTML = '<div class="text-center py-6 text-rose-500">Lỗi khi lấy dữ liệu từ Cloud.</div>';
       }
     };
 
@@ -2875,19 +2946,21 @@
 
     el.miReset.onclick = async () => {
       closeMenuModal(); 
-      if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (WiFi/4G) để xóa toàn bộ dữ liệu!', {type: 'warning'});
+      if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để xóa toàn bộ dữ liệu!', {type: 'warning'});
       
       const dekKey = await requireDEK('xóa TOÀN BỘ dữ liệu');
       if (!dekKey) return;
       
-      if(!await showConfirm('Lưu ý: Dữ liệu sau khi xóa sẽ không thể khôi phục. Bạn vẫn muốn tiếp tục?', 'Bước cuối cùng', 'error')) return;
+      if(!await showConfirm('Hành động này sẽ xóa vĩnh viễn toàn bộ mật khẩu của bạn và không thể khôi phục.\n\nBạn có chắc chắn muốn xóa toàn bộ dữ liệu?', 'Xóa toàn bộ dữ liệu', 'error')) return;
       
       toggleLoader(true, 'reset', 'Đang xóa dữ liệu...');
       try {
           const batch = writeBatch(db); 
           (await getDocs(collection(db, "account"))).forEach(d => batch.delete(d.ref)); 
           batch.delete(doc(db, "system", "verify")); 
-          await batch.commit(); 
+          await batch.commit();
+          data = []; 
+          render(); 
           activeDEKKey = null;
           
           Object.keys(autoHideTimers).forEach(id => { clearInterval(autoHideTimers[id]?.interval); });
@@ -2901,7 +2974,7 @@
           if (typeof updateLockUI === 'function') updateLockUI();
           
           toggleLoader(false, 'reset');
-          showToast('Toàn bộ dữ liệu đã được xóa khỏi hệ thống.', 'success');
+          showToast('Đã xóa toàn bộ dữ liệu khỏi hệ thống', 'success');
       } catch (e) {
           toggleLoader(false, 'reset');
           await showAlert(getFriendlyErrorMessage(e), { title: 'Không thể xóa', type:'error' });
@@ -3010,7 +3083,7 @@
             const checkedCount = genOptions.filter(c => c.checked).length;
             if (checkedCount === 0) {
                 e.target.checked = true; 
-                showToast("Bắt buộc phải chọn ít nhất 1 loại ký tự!", "warning");
+                showToast("Bắt buộc phải chọn ít nhất 1 loại ký tự", "warning");
             } else {
                 generatePassword();
             }
@@ -3110,7 +3183,7 @@
       }
     });
 
-    window.addEventListener('appinstalled', () => showToast('Ứng dụng đã được thêm vào màn hình chính thành công.', 'success'));
+    window.addEventListener('appinstalled', () => showToast('Đã thêm ứng dụng vào màn hình chính', 'success'));
     
     setTimeout(()=>{
       const s = document.getElementById('splash');
@@ -3119,7 +3192,7 @@
 
     window.addEventListener('offline', () => {
       if (currentUserUid && el.connectionStatus && el.connectionWrapper) {
-        el.connectionStatus.textContent = "Đang dùng ngoại tuyến (Offline)";
+        el.connectionStatus.textContent = "Đang ngoại tuyến";
         el.connectionWrapper.classList.replace('text-teal-100/90', 'text-amber-200');
         el.connectionWrapper.classList.replace('bg-white/10', 'bg-amber-900/40');
         
@@ -3142,7 +3215,7 @@
 
     window.addEventListener('online', () => {
       if (currentUserUid && el.connectionStatus && el.connectionWrapper) {
-        el.connectionStatus.textContent = "Đã kết nối máy chủ";
+        el.connectionStatus.textContent = "Đang đồng bộ...";
         el.connectionWrapper.classList.replace('text-amber-200', 'text-teal-100/90');
         el.connectionWrapper.classList.replace('bg-amber-900/40', 'bg-white/10');
         
