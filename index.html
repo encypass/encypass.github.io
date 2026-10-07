@@ -2536,7 +2536,7 @@
       const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
       if (f.size > MAX_FILE_SIZE) {
           e.target.value = '';
-          return showAlert('Dung lượng file quá lớn. Tệp sao lưu tối đa chỉ được phép 2MB.', {type: 'error'});
+          return showAlert('Dung lượng tệp quá lớn. Tệp sao lưu tối đa chỉ được phép 2MB.', {type: 'error'});
       }
 
       if (isMasterLocked()) {
