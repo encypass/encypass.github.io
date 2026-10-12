@@ -1,5 +1,5 @@
-/* sw.js - 1.1.0 */
-const APP_VERSION = '1.1.0';
+/* sw.js - 1.1.1 */
+const APP_VERSION = '1.1.1';
 const CACHE_STATIC = `static-${APP_VERSION}`;
 const BASE = '/';
 const VERSION_FILE = BASE + 'version.json';

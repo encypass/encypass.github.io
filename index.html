@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://encypass.github.io/icons/icon-512.png">
 
   <meta name="theme-color" content="#0d9488">
-  <meta name="version" content="v1.1.0">
+  <meta name="version" content="v1.1.1">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -81,7 +81,7 @@
 		  <img src="/icons/icon-192.png" alt="EncyPass Logo" class="w-full h-full block rounded-[24%] drop-shadow-md">
 	</div>
     <div class="font-black text-[20px] mt-3 tracking-wide">EncyPass</div>
-    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.1.0</b></div>
+    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.1.1</b></div>
   </div>
 
   <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 relative shadow-2xl overflow-hidden">
@@ -283,7 +283,7 @@
             </div>
             
             <p class="mb-4 text-[14px] text-slate-600 leading-relaxed">
-              EncyPass là ứng dụng giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc Zero-Knowledge, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên máy chủ. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông tin của bạn.
+              EncyPass là ứng dụng giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc Zero-Knowledge, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên máy chủ. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông vị trí của bạn.
             </p>
 
             <ul class="about-features">
@@ -425,14 +425,14 @@
       <div class="modal-body gen-body !overflow-y-visible">
         <div class="form-row">
           <label>Độ dài mật khẩu</label>
-          <input id="genLength" class="modal-input !text-lg !font-bold" type="number" value="16" min="1" max="100">
+          <input id="genLength" class="modal-input !text-lg !font-bold" type="number" value="16" min="4" max="99">
         </div>
         
         <div class="gen-options">
           <label class="gen-opt"><input type="checkbox" id="genLower" checked><span>a–z</span></label>
           <label class="gen-opt"><input type="checkbox" id="genUpper" checked><span>A–Z</span></label>
           <label class="gen-opt"><input type="checkbox" id="genNumber" checked><span>0–9</span></label>
-          <label class="gen-opt"><input type="checkbox" id="genSymbol" checked><span>!@#$_</span></label>
+          <label class="gen-opt"><input type="checkbox" id="genSymbol" checked><span>​!@#$%_-</span></label>
         </div>
 
         <button id="genBtn" class="btn green"><i data-lucide="refresh-cw" class="w-5 h-5"></i> Tạo mới</button>
@@ -506,26 +506,33 @@
   </div>
 
   <footer class="text-center text-slate-400 text-[13px] my-6 mb-3">© 2026 - Hoàng Đợi</footer>
-  </div>
 
   <script type="module">
-    function getTimestamp() {
-      const now = new Date();
-      const pad = (n) => n.toString().padStart(2, '0');
-      return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    if (!window.isSecureContext) {
+      document.body.innerHTML = `
+        <div style="position:fixed; inset:0; background:#134e4a; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; z-index:999999; padding: 24px; text-align: center;">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px; color: #fde047;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <h2 style="font-size:24px; font-weight:bold; margin-bottom:12px;">Kết nối không an toàn</h2>
+          <p style="color:#ccfbf1; margin-bottom:24px; max-width:400px; line-height: 1.6;">Ứng dụng quản lý mật khẩu yêu cầu kết nối mã hóa bảo mật (HTTPS) để bảo vệ dữ liệu của bạn. Trình duyệt đã khóa chức năng mã hóa.</p>
+          <a href="https://${window.location.host}${window.location.pathname}" style="padding: 14px 28px; background: #0d9488; color: white; border-radius: 12px; font-weight: bold; text-decoration: none; border: 1px solid #14b8a6; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+            Chuyển sang đường dẫn an toàn (HTTPS)
+          </a>
+        </div>
+      `;
+      throw new Error("Fatal: Ứng dụng bị dừng do môi trường không phải là Secure Context.");
     }
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, setDoc, getDoc, deleteDoc, onSnapshot, getDocs, writeBatch, clearIndexedDbPersistence, terminate, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, setDoc, getDoc, deleteDoc, onSnapshot, getDocs, writeBatch, clearIndexedDbPersistence, terminate } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getStorage, ref, uploadString, getDownloadURL, listAll, deleteObject, getMetadata } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     // ----------------------------------------------------
-    // CẤU HÌNH TẬP TRUNG HỆ THỐNG (APP_CONFIG)
+    // 1. CẤU HÌNH TẬP TRUNG HỆ THỐNG (APP_CONFIG)
     // ----------------------------------------------------
     const APP_CONFIG = {
         meta: {
-            version: 'v1.1.0',
+            version: 'v1.1.1',
             appName: 'EncyPass'
         },
         crypto: {
@@ -534,10 +541,10 @@
             ivLen: 12,          
         },
         security: {
-            idleLockTimeout: 3 * 60 * 1000,    // 3 phút: Thời gian chờ để tự động khóa 
-            maxMasterFail: 5,                  // Số lần nhập sai mật khẩu tối đa
-            masterLockDuration: 3 * 60 * 1000, // 3 phút: Thời gian bị phạt khóa sau khi sai quá số lần
-            outdatedPasswordDays: 80           // Số ngày để cảnh báo mật khẩu cũ chưa đổi
+            idleLockTimeout: 3 * 60 * 1000,    // 3 phút
+            maxMasterFail: 5,                  
+            masterLockDuration: 3 * 60 * 1000, 
+            outdatedPasswordDays: 80           
         },
         constants: {
             checkKey: "_verify",
@@ -551,26 +558,11 @@
     const MAX_MASTER_FAIL = APP_CONFIG.security.maxMasterFail;
     const MASTER_LOCK_MS = APP_CONFIG.security.masterLockDuration;
     const LOCK_TIMEOUT = APP_CONFIG.security.idleLockTimeout;
+    const SW_SCOPE = '/';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCY1dSogyXtxkO4dm4_5u4lurWz6-rHxX8",
-      authDomain: "encypass.web.app",
-      projectId: "encypass",
-      storageBucket: "encypass.firebasestorage.app",
-      messagingSenderId: "101205529627",
-      appId: "1:101205529627:web:352dfc91b5a798515654be"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    
-    const db = initializeFirestore(app, {
-      localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})
-    });
-
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    const storage = getStorage(app);
-    
+    // ----------------------------------------------------
+    // 2. GLOBAL STATE VARIABLES & HELPERS
+    // ----------------------------------------------------
     let currentUserUid = null;
     let unsubSnapshot = null;
     let unsubVerify = null;
@@ -581,10 +573,93 @@
     let searchT = null;
     let shuffler = null;
     let genTimeout = null;
+    let loaderShowTimeout = null;
 
+    let data = []; 
+    let visible = {}; 
+    let autoHideTimers = {}; 
+    let editingId = null; 
+    let savingEdit = false;
+
+    let masterFailCount = 0; 
+    let masterLockUntil = 0; 
+    let unsubLockState = null;
+
+    const activeLoaders = new Map();
+    const modalQueue = [];
+    let isModalActive = false;
+
+    const $ = s => document.querySelector(s);
+    function escapeHtml(s){ return String(s??'').replace(/&/g,'&lt;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+    function getTimestamp() {
+      const now = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    }
+
+    // ----------------------------------------------------
+    // 3. DOM ELEMENTS MAPPING
+    // ----------------------------------------------------
+    const el = {
+      miGenerate: $('#miGenerate'), genModal: $('#genModal'), genLength: $('#genLength'), genLower: $('#genLower'), genUpper: $('#genUpper'), genNumber: $('#genNumber'), genSymbol: $('#genSymbol'), genBtn: $('#genBtn'), genResult: $('#genResult'), btnCopyGen: $('#btnCopyGen'), genStrength: $('#genStrength'), genClose: $('#genClose'), genX: $('#genX'),
+      search: $('#search'), list: $('#passwordList'), statCount: $('#statCount'),
+      miAdd: $('#miAdd'), miExport: $('#miExport'), miImport: $('#miImport'), miChangeKey: $('#miChangeKey'), miReset: $('#miReset'), miAbout: $('#miAbout'), miInstall: $('#miInstall'), fileImport: $('#fileImport'),
+      modal: $('#modal'), modalTitle: $('#modalTitle'), modalMsg: $('#modalMsg'), modalInput: $('#modalInput'), modalCancel: $('#modalCancel'), modalOk: $('#modalOk'),
+      editModal: $('#editModal'), editTitle: $('#editTitle'), fDisplay: $('#fDisplay'), fAccount: $('#fAccount'), fPassword: $('#fPassword'), fMaster: $('#fMaster'), btnSaveEdit: $('#btnSaveEdit'), btnCancelEdit: $('#btnCancelEdit'), editX: $('#editX'), strengthMsg: $('#strengthMsg'), masterConfirmRow: $('#masterConfirmRow'), fMasterConfirm: $('#fMasterConfirm'), masterConfirmHint: $('#masterConfirmHint'),
+      errDisplay: $('#errDisplay'), errAccount: $('#errAccount'), errPassword: $('#errPassword'), errMaster: $('#errMaster'),
+      aboutModal: $('#aboutModal'), aboutX: $('#aboutX'), aboutClose: $('#aboutClose'), appVersion: $('#appVersion'), 
+      connectionStatus: $('#connection-status'), connectionWrapper: $('#connection-wrapper'),
+      ckModal: $('#changeKeyModal'), ckX: $('#ckX'), ckOld: $('#ckOld'), ckNew: $('#ckNew'), ckConfirm: $('#ckConfirm'), ckStrength: $('#ckStrength'), ckHint: $('#ckHint'), ckOk: $('#ckOk'), ckCancel: $('#ckCancel'),
+      errCkOld: $('#errCkOld'), errCkNew: $('#errCkNew'), errCkConfirm: $('#errCkConfirm'),
+      installModal: $('#installModal'), installX: $('#installX'), installNow: $('#installNow'), installLater: $('#installLater'), iosTip: $('#iosTip'),
+      btnInstallHeader: $('#btn-install'), btnInstallLogin: $('#btn-install-login'), btnLock: $('#btn-lock'), btnLogout: $('#btn-logout'),
+      latestVersion: $('#latestVersion'), aboutCheckUpdate: $('#aboutCheckUpdate'),
+      btnOutdated: $('#btn-outdated'), outdatedBadge: $('#outdated-badge'), outdatedModal: $('#outdatedModal'), outdatedList: $('#outdatedList'), outdatedClose: $('#outdatedClose'), outdatedX: $('#outdatedX')
+    };
+
+    el.appVersion.textContent = APP_VERSION; 
+    $('#splashVersion').textContent = APP_VERSION;
+
+    const outdatedAlertBox = document.getElementById('outdatedAlertBox');
+    if (outdatedAlertBox) {
+        outdatedAlertBox.innerHTML = `
+            <i data-lucide="alert-triangle" class="w-4 h-4 inline-block mb-0.5 mr-1 text-rose-500"></i> 
+            Các tài khoản dưới đây chưa được thay đổi mật khẩu trong <b>hơn ${APP_CONFIG.security.outdatedPasswordDays} ngày</b>. Bạn nên cân nhắc đổi mật khẩu để đảm bảo an toàn.`;
+        lucide.createIcons({root: outdatedAlertBox});
+    }
+
+    // ----------------------------------------------------
+    // 4. FIREBASE CONFIGURATION
+    // ----------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyCY1dSogyXtxkO4dm4_5u4lurWz6-rHxX8",
+      authDomain: "encypass.web.app",
+      projectId: "encypass",
+      storageBucket: "encypass.firebasestorage.app",
+      messagingSenderId: "101205529627",
+      appId: "1:101205529627:web:352dfc91b5a798515654be"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = initializeFirestore(app, {
+      localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})
+    });
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const storage = getStorage(app);
+
+    // ----------------------------------------------------
+    // 5. CORE LOGIC & SECURITY FUNCTIONS
+    // ----------------------------------------------------
     function lockVault(isManual = false) {
         activeDEKKey = null; 
+        savingEdit = false;
         if (inactivityTimer) clearTimeout(inactivityTimer);
+        
+        if (el.search) {
+            el.search.value = '';
+        }
 
         const sensitiveModals = ['editModal', 'changeKeyModal', 'outdatedModal'];
         sensitiveModals.forEach(id => {
@@ -628,7 +703,7 @@
             showToast('Kho dữ liệu đã tự động khóa để bảo đảm an toàn', 'info');
         }
         
-        if (typeof updateLockUI === 'function') updateLockUI();
+        updateLockUI();
     }
 
     function resetInactivityTimer() {
@@ -643,9 +718,6 @@
     });
 
     lucide.createIcons();
-
-    const $ = s => document.querySelector(s);
-    function escapeHtml(s){ return String(s??'').replace(/&/g,'&lt;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
     async function safeCopyToClipboard(text) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -712,9 +784,6 @@
 
         return `Lỗi hệ thống: ${msg}`;
     }
-
-    const activeLoaders = new Map();
-    let loaderShowTimeout = null;
 
     const toggleLoader = (show, id = 'default', message = 'Đang xử lý...') => {
       const loader = document.getElementById('global-loader');
@@ -867,7 +936,7 @@
 
         activeDEKKey = dekKey;
         resetInactivityTimer();
-        if (typeof updateLockUI === 'function') updateLockUI();
+        updateLockUI();
         
         await decryptAllDisplays();
         
@@ -928,10 +997,6 @@
       return true;
     }
 
-    let masterFailCount = 0; 
-    let masterLockUntil = 0; 
-    let unsubLockState = null;
-
     function listenCloudLockState() {
       if (!currentUserUid) return;
       if (unsubLockState) unsubLockState();
@@ -979,33 +1044,9 @@
         return remain > 0 ? `${base} (còn ${remain} lần thử).` : base; 
     }
 
-    const el = {
-      miGenerate: $('#miGenerate'), genModal: $('#genModal'), genLength: $('#genLength'), genLower: $('#genLower'), genUpper: $('#genUpper'), genNumber: $('#genNumber'), genSymbol: $('#genSymbol'), genBtn: $('#genBtn'), genResult: $('#genResult'), btnCopyGen: $('#btnCopyGen'), genStrength: $('#genStrength'), genClose: $('#genClose'), genX: $('#genX'),
-      search: $('#search'), list: $('#passwordList'), statCount: $('#statCount'),
-      miAdd: $('#miAdd'), miExport: $('#miExport'), miImport: $('#miImport'), miChangeKey: $('#miChangeKey'), miReset: $('#miReset'), miAbout: $('#miAbout'), miInstall: $('#miInstall'), fileImport: $('#fileImport'),
-      modal: $('#modal'), modalTitle: $('#modalTitle'), modalMsg: $('#modalMsg'), modalInput: $('#modalInput'), modalCancel: $('#modalCancel'), modalOk: $('#modalOk'),
-      editModal: $('#editModal'), editTitle: $('#editTitle'), fDisplay: $('#fDisplay'), fAccount: $('#fAccount'), fPassword: $('#fPassword'), fMaster: $('#fMaster'), btnSaveEdit: $('#btnSaveEdit'), btnCancelEdit: $('#btnCancelEdit'), editX: $('#editX'), strengthMsg: $('#strengthMsg'), masterConfirmRow: $('#masterConfirmRow'), fMasterConfirm: $('#fMasterConfirm'), masterConfirmHint: $('#masterConfirmHint'),
-      errDisplay: $('#errDisplay'), errAccount: $('#errAccount'), errPassword: $('#errPassword'), errMaster: $('#errMaster'),
-      aboutModal: $('#aboutModal'), aboutX: $('#aboutX'), aboutClose: $('#aboutClose'), appVersion: $('#appVersion'), 
-      connectionStatus: $('#connection-status'), connectionWrapper: $('#connection-wrapper'),
-      ckModal: $('#changeKeyModal'), ckX: $('#ckX'), ckOld: $('#ckOld'), ckNew: $('#ckNew'), ckConfirm: $('#ckConfirm'), ckStrength: $('#ckStrength'), ckHint: $('#ckHint'), ckOk: $('#ckOk'), ckCancel: $('#ckCancel'),
-      errCkOld: $('#errCkOld'), errCkNew: $('#errCkNew'), errCkConfirm: $('#errCkConfirm'),
-      installModal: $('#installModal'), installX: $('#installX'), installNow: $('#installNow'), installLater: $('#installLater'), iosTip: $('#iosTip'),
-      btnInstallHeader: $('#btn-install'), btnInstallLogin: $('#btn-install-login'), btnLock: $('#btn-lock'), btnLogout: $('#btn-logout'),
-      latestVersion: $('#latestVersion'), aboutCheckUpdate: $('#aboutCheckUpdate')
-    };
-    el.appVersion.textContent = APP_VERSION; $('#splashVersion').textContent = APP_VERSION;
-
-    const outdatedAlertBox = document.getElementById('outdatedAlertBox');
-    if (outdatedAlertBox) {
-        outdatedAlertBox.innerHTML = `
-            <i data-lucide="alert-triangle" class="w-4 h-4 inline-block mb-0.5 mr-1 text-rose-500"></i> 
-            Các tài khoản dưới đây chưa được thay đổi mật khẩu trong <b>hơn ${APP_CONFIG.security.outdatedPasswordDays} ngày</b>. Bạn nên cân nhắc đổi mật khẩu để đảm bảo an toàn.`;
-        lucide.createIcons({root: outdatedAlertBox});
-    }
-
-    const SW_SCOPE = '/';
-
+    // ----------------------------------------------------
+    // 6. VERSION & UPDATER UTILITIES
+    // ----------------------------------------------------
     async function getVersionInfo(targetVersion){
       try{
         const res = await fetch('/version.json?ts=' + Date.now(), { cache: 'no-cache' });
@@ -1164,7 +1205,6 @@
           return; 
         } 
         if (el.latestVersion && newV) el.latestVersion.textContent = newV; 
-        
         if (el.aboutModal) el.aboutModal.classList.remove('open');
         
         const infoNew = await getVersionInfo(newV); const infoCur = await getVersionInfo(curV); 
@@ -1194,6 +1234,9 @@
       });
     }
 
+    // ----------------------------------------------------
+    // 7. UI & MODAL MANAGEMENT UTILITIES
+    // ----------------------------------------------------
     function focusAndBlink(target){ if(!target) return; try{ target.focus({preventScroll:false}); if(typeof target.select==='function'&&target.type!=='password') target.select(); target.classList.remove('ring-invalid'); void target.offsetWidth; target.classList.add('ring-invalid'); }catch{} }
     
     function showInlineError(inputEl, errorEl, msg, autoFocus = true) {
@@ -1247,9 +1290,6 @@
     function clearAllCkErrors() {
       ckFields.forEach(field => clearInlineError(field.input, field.err));
     }
-    
-    const modalQueue = [];
-    let isModalActive = false;
 
     function processModalQueue() {
       if (isModalActive || modalQueue.length === 0) return;
@@ -1320,6 +1360,10 @@
         el.modal.classList.remove('open'); 
         el.modal.setAttribute('aria-hidden', 'true'); 
         el.modalInput.value = ''; 
+        
+        if (typeof lockoutInterval !== 'undefined' && lockoutInterval) {
+            clearInterval(lockoutInterval);
+        }
         
         setTimeout(() => {
           isModalActive = false;
@@ -1434,8 +1478,9 @@
       return promise;
     }
 
-    let data = []; let visible = {}; let autoHideTimers = {}; let editingId = null; let savingEdit = false;
-
+    // ----------------------------------------------------
+    // 8. AUTHENTICATION & SYNC MANAGEMENT
+    // ----------------------------------------------------
     toggleLoader(true, 'boot', 'Đang khởi động...');
     
     onAuthStateChanged(auth, async (user) => {
@@ -1662,16 +1707,14 @@
       lucide.createIcons({root: el.btnLock});
     }
     
-    if (el.btnLock) {
-      el.btnLock.onclick = async () => {
-        if (activeDEKKey) {
-            lockVault(true);
-        } else {
-            const dek = await requireDEK('mở khóa toàn bộ Kho dữ liệu');
-            if (dek) showToast('Kho dữ liệu đã được mở khóa', 'success');
-        }
-      };
-    }
+    el.btnLock.onclick = async () => {
+      if (activeDEKKey) {
+          lockVault(true);
+      } else {
+          const dek = await requireDEK('mở khóa toàn bộ Kho dữ liệu');
+          if (dek) showToast('Kho dữ liệu đã được mở khóa', 'success');
+      }
+    };
 
     function startRealtimeSync() {
       if (!currentUserUid) return;
@@ -1701,7 +1744,7 @@
               if (idx > -1) data.splice(idx, 1);
           }
           render();
-          if (typeof updateLockUI === 'function') updateLockUI();
+          updateLockUI();
       });
 
       if (unsubSnapshot) unsubSnapshot();
@@ -1754,6 +1797,88 @@
       });
     }
 
+    // ----------------------------------------------------
+    // 9. OUTDATED PASSWORDS UTILITIES
+    // ----------------------------------------------------
+    function parseCustomTimestamp(ts) {
+        const s = String(ts || '');
+        if (s.length !== 14) return new Date(); 
+        return new Date(s.slice(0,4), parseInt(s.slice(4,6))-1, s.slice(6,8), s.slice(8,10), s.slice(10,12), s.slice(12,14));
+    }
+
+    function checkOutdatedPasswords() {
+        if (!currentUserUid || data.length === 0) {
+            if (el.btnOutdated) el.btnOutdated.classList.add('hidden');
+            return [];
+        }
+        
+        const now = new Date();
+        const EXPIRE_MS = APP_CONFIG.security.outdatedPasswordDays * 24 * 60 * 60 * 1000; 
+        
+        const outdated = data.filter(item => {
+            if (item[CHECK_KEY]) return false; 
+            const itemDate = parseCustomTimestamp(item.update);
+            return (now - itemDate) > EXPIRE_MS;
+        });
+
+        if (outdated.length > 0) {
+            el.btnOutdated.classList.remove('hidden');
+            el.outdatedBadge.textContent = outdated.length > 9 ? '9+' : outdated.length;
+        } else {
+            el.btnOutdated.classList.add('hidden');
+        }
+        return outdated;
+    }
+
+    if (el.btnOutdated) {
+        el.btnOutdated.onclick = () => {
+            const outdated = checkOutdatedPasswords();
+            if (!outdated || outdated.length === 0) return;
+            
+            el.outdatedList.innerHTML = '';
+            outdated.forEach((item) => {
+                const updateDate = parseCustomTimestamp(item.update);
+                const dateStr = updateDate.toLocaleDateString('vi-VN');
+                const displaySafe = item.decryptedDisplay || 'Tài khoản (Đang khóa)';
+                
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 rounded-xl border border-rose-100 bg-white mb-2 shadow-sm';
+                div.innerHTML = `
+                  <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="bell" class="w-4 h-4 text-rose-500"></i>
+                    </div>
+                    <div>
+                      <div class="truncate text-[14px] font-bold text-slate-700">${escapeHtml(displaySafe)}</div>
+                      <div class="text-[11px] text-slate-400 font-medium tracking-wide">Đổi lần cuối: ${dateStr}</div>
+                    </div>
+                  </div>
+                  <button class="btn-edit-outdated text-teal-600 p-2 hover:bg-teal-50 rounded-lg transition-colors flex-shrink-0" data-id="${item.record_id}" title="Cập nhật ngay">
+                    <i data-lucide="edit-3" class="w-5 h-5 pointer-events-none"></i>
+                  </button>
+                `;
+                
+                div.querySelector('.btn-edit-outdated').onclick = () => {
+                    el.outdatedModal.classList.remove('open');
+                    editEntry(item.record_id); 
+                };
+                
+                el.outdatedList.appendChild(div);
+            });
+            lucide.createIcons({root: el.outdatedList});
+            el.outdatedModal.classList.add('open');
+        };
+    }
+
+    if (el.outdatedX && el.outdatedClose) {
+        el.outdatedX.onclick = el.outdatedClose.onclick = () => {
+            el.outdatedModal.classList.remove('open');
+        };
+    }
+
+    // ----------------------------------------------------
+    // 10. RENDERING & UI EVENT HANDLERS
+    // ----------------------------------------------------
     function render(){
       Object.keys(autoHideTimers).forEach(id => { clearInterval(autoHideTimers[id]?.interval); delete autoHideTimers[id]; }); visible = {};
       
@@ -1794,13 +1919,14 @@
           
           const orderNum = totalItems - index;
           const paddedNum = String(orderNum).padStart(2, '0');
+          const titleAttr = entry.decryptedDisplay ? `title="${escapeHtml(dName)}"` : '';
 
           const div = document.createElement('div'); 
           div.className = 'entry';
           div.innerHTML = `
             <h4 class="flex items-center gap-2.5">
               ${syncIcon} 
-              <span class="truncate max-w-[200px] sm:max-w-[280px]" title="${escapeHtml(dName)}">${escapeHtml(dName)}</span> 
+              <span class="truncate max-w-[200px] sm:max-w-[280px]" ${titleAttr}>${escapeHtml(dName)}</span> 
               
               <div class="ml-auto flex items-center justify-center min-w-[28px] h-[28px] px-3 rounded-full bg-gradient-to-b from-teal-50 to-teal-100/50 border border-teal-200/60 text-[11px] font-black text-teal-700 shadow-sm flex-shrink-0 tracking-wide" title="Tài khoản thứ ${orderNum}">
                 ${paddedNum}
@@ -1831,8 +1957,8 @@
         el.list.appendChild(fragment);
       }
       lucide.createIcons({root: el.list});
-      if (typeof updateLockUI === 'function') updateLockUI();
-      if (typeof checkOutdatedPasswords === 'function') checkOutdatedPasswords();
+      updateLockUI();
+      checkOutdatedPasswords();
     }
 
     el.search.addEventListener('input', async (e) => { 
@@ -1859,8 +1985,10 @@
       const passInp = document.getElementById(`pass-${record_id}`);
       
       if (visible[record_id]) { 
-        clearInterval(autoHideTimers[record_id]?.interval); 
-        delete autoHideTimers[record_id]; 
+        if (autoHideTimers[record_id]) {
+            clearInterval(autoHideTimers[record_id].interval); 
+            delete autoHideTimers[record_id]; 
+        }
         visible[record_id] = false;
         accInp.value = 'Tài khoản: •••••••'; 
         passInp.value = 'Mật khẩu: •••••••'; 
@@ -1914,6 +2042,10 @@
         lucide.createIcons({root: btn});
         const timeSpan = btn.querySelector('.time-rem');
         
+        if (autoHideTimers[record_id]) {
+            clearInterval(autoHideTimers[record_id].interval);
+        }
+
         autoHideTimers[record_id] = { 
             interval: setInterval(()=>{ 
                 rem--; 
@@ -2068,6 +2200,59 @@
     el.fMaster.addEventListener('input', () => { updateStrength(); checkMasterMatch(); });
     el.fMasterConfirm.addEventListener('input', checkMasterMatch);
     
+    // Tự động sao lưu Cloud khi thêm mới/chỉnh sửa thành công
+    async function autoCloudBackup() {
+      if (!navigator.onLine || !currentUserUid) return;
+
+      try {
+        const accountsToExport = data.filter(e => !e[CHECK_KEY]);
+        if (accountsToExport.length === 0) return;
+
+        const exportList = data.map(item => {
+          if (item[CHECK_KEY]) {
+            return { 
+              [CHECK_KEY]: item[CHECK_KEY], 
+              encrypted_dek: item.encrypted_dek
+            }; 
+          }
+          return {
+            record_id: item.record_id,
+            display: item.rawDisplay || item.display,
+            account: item.account,
+            password: item.password,
+            update: item.update
+          };
+        });
+
+        const backupContent = {
+          metadata: {
+            app_name: "EncyPass",
+            version: APP_VERSION,
+            created_at: new Date().toISOString(),
+            total_accounts: accountsToExport.length
+          },
+          data: exportList
+        };
+
+        const jsonString = JSON.stringify(backupContent, null, 2);
+        const userEmailPrefix = auth.currentUser ? auth.currentUser.email.split('@')[0] : 'user';
+        const fileName = `EncyPass_AutoBackup_${userEmailPrefix}_${getTimestamp()}.json`;
+
+        const storageRef = ref(storage, `backups/shared/${fileName}`);
+        await uploadString(storageRef, jsonString, 'raw', {
+          contentType: 'application/json',
+          customMetadata: {
+            version: APP_VERSION,
+            total_accounts: String(backupContent.metadata.total_accounts)
+          }
+        });
+
+        showToast('Tự động tạo bản sao lưu lên Cloud thành công!', 'success');
+      } catch (err) {
+        console.warn("Lỗi khi tự động sao lưu lên Cloud:", err);
+      }
+    }
+
     el.btnSaveEdit.onclick = async () => {
       if(savingEdit) return; savingEdit=true; 
       
@@ -2136,7 +2321,7 @@
               }
               
               activeDEKKey = dekKeyToUse;
-              if (typeof updateLockUI === 'function') updateLockUI();
+              updateLockUI();
               await decryptAllDisplays();
           }
           resetInactivityTimer();
@@ -2152,7 +2337,7 @@
 
           dekKeyToUse = await SecureCrypto.importDEK(newRawDEK);
           activeDEKKey = dekKeyToUse;
-          if (typeof updateLockUI === 'function') updateLockUI();
+          updateLockUI();
           resetInactivityTimer();
         }
 
@@ -2189,7 +2374,13 @@
 
         toggleLoader(false, 'save'); 
         openEdit(false); 
-        showToast(navigator.onLine ? 'Đã lưu dữ liệu thành công' : 'Đã lưu ngoại tuyến (tự động đồng bộ khi có mạng)', 'success');  
+        
+        if (navigator.onLine) {
+          showToast('Đã lưu dữ liệu thành công', 'success');
+          autoCloudBackup();
+        } else {
+          showToast('Đã lưu ngoại tuyến (tự động đồng bộ khi có mạng)', 'success');
+        }
         
         if (el.search && el.search.value.trim() !== '') {
             el.search.value = '';
@@ -2202,7 +2393,6 @@
       } finally { 
         savingEdit=false; 
         el.btnSaveEdit.disabled=false; 
-        
         el.btnSaveEdit.innerHTML='<i data-lucide="save" class="w-5 h-5"></i> Lưu dữ liệu'; 
         lucide.createIcons({root: el.btnSaveEdit});
       }
@@ -2277,12 +2467,12 @@
       if(!open){ 
         el.ckOld.value=el.ckNew.value=el.ckConfirm.value=''; 
         el.ckStrength.style.display=el.ckHint.style.display='none'; 
-        
         resetPasswordToggles(el.ckModal);
       } else {
         setTimeout(()=>el.ckOld.focus(),0);
       }
     }
+    
     el.miChangeKey.onclick = () => { 
         closeMenuModal(); 
         if (!navigator.onLine) {
@@ -2296,7 +2486,6 @@
     
     el.ckOk.onclick = async () => {
       if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để đổi Mật khẩu chính!', {type: 'warning'});
-      
       if (isMasterLocked()) return showLockoutAlert();
       
       const old=el.ckOld.value, nk=el.ckNew.value, cf=el.ckConfirm.value;
@@ -2342,17 +2531,13 @@
 
         const verifyDocRef = doc(db, "system", "verify");
         
-        await runTransaction(db, async (transaction) => {
-            await transaction.get(verifyDocRef);
-            
-            transaction.set(verifyDocRef, { 
-                value: newCheckVal,
-                encrypted_dek: newEncryptedDEK
-            });
+        await setDoc(verifyDocRef, { 
+            value: newCheckVal,
+            encrypted_dek: newEncryptedDEK
         });
         
         activeDEKKey = null;
-        if (typeof updateLockUI === 'function') updateLockUI();
+        updateLockUI();
         
         toggleLoader(false, 'ck');
         openCK(false); 
@@ -2376,7 +2561,7 @@
             el.ckStrength.className = `small mt-1 flex items-center gap-1.5 ${res.valid ? 'text-teal-600' : 'text-rose-600'}`;
             el.ckStrength.style.display = 'inline-flex';
             el.ckStrength.innerHTML = `<i data-lucide="${res.valid ? 'shield-check' : 'alert-circle'}" class="w-3.5 h-3.5"></i> ${res.text}`;
-            lucide.createIcons({ root: el.ckStrength.parentNode.parentNode });
+            lucide.createIcons({ root: el.ckNew.parentNode.parentNode });
         }
         
         el.ckHint.className = 'small mt-1 flex items-center gap-1.5';
@@ -2415,15 +2600,12 @@
       if (el.miChangeKey) {
         el.miChangeKey.style.display = hasMasterKey ? '' : 'none';
       }
-      
       if (el.miExport) {
         el.miExport.style.display = hasMasterKey ? '' : 'none';
       }
-      
       if (el.miReset) {
         el.miReset.style.display = hasMasterKey ? 'flex' : 'none';
       }
-      
       $('#fab-menu-modal').classList.add('open');
     });
     
@@ -2474,7 +2656,6 @@
           };
 
           const jsonString = JSON.stringify(backupContent, null, 2);
-          
           const userEmailPrefix = auth.currentUser ? auth.currentUser.email.split('@')[0] : 'user';
           const fileName = `EncyPass_${userEmailPrefix}_${getTimestamp()}.json`;
 
@@ -2517,7 +2698,6 @@
     };
 
     el.miExport.onclick = () => { closeMenuModal(); exportData(); };
-    
     el.miImport.onclick = () => { closeMenuModal(); el.fileImport.click(); };
     
     el.fileImport.onchange = (e) => {
@@ -2566,7 +2746,6 @@
           validateImportSchema(imported);
 
           const verify = imported.find(x => x[CHECK_KEY]);
-          
           let promptMessage = 'Vui lòng nhập mật khẩu của tệp dữ liệu (JSON) để khôi phục.'; 
           
           if (importedRaw && importedRaw.metadata) {
@@ -2657,9 +2836,16 @@
                 update: parseInt(i.update, 10) || parseInt(getTimestamp(), 10) 
             });
           }
-          await batch.commit(); 
+          
+          const commitTask = batch.commit().catch(err => console.warn("Chờ đồng bộ nền:", err));
+          if (navigator.onLine) {
+              await Promise.race([
+                  commitTask,
+                  new Promise(resolve => setTimeout(resolve, 8000))
+              ]);
+          }
           activeDEKKey = null;
-          if (typeof updateLockUI === 'function') updateLockUI();
+          updateLockUI();
           
           toggleLoader(false, 'import');
           showToast('Đã khôi phục dữ liệu thành công', 'success');
@@ -2757,8 +2943,8 @@
             if (!navigator.onLine) return showAlert('Mất kết nối mạng. Vui lòng kết nối mạng (Wi-Fi/4G) để khôi phục.', {type: 'warning'});
             if (!await showConfirm(`Khôi phục dữ liệu từ bản sao lưu ngày:\n${displayTitle}?\n\nLưu ý: Bạn sẽ cần nhập Mật khẩu chính của thời điểm tạo bản sao lưu này.`, 'Khôi phục dữ liệu từ Cloud', 'info')) return;
             
-            toggleLoader(true, 'restore_cloud', 'Đang đọc dữ liệu...');
             try {
+              toggleLoader(true, 'restore_cloud', 'Đang đọc dữ liệu...');
               const url = await withTimeout(getDownloadURL(itemRef), 15000);
               const response = await withTimeout(fetch(url), 15000);
               const jsonText = await response.text();
@@ -2855,22 +3041,29 @@
                     update: parseInt(i.update, 10) || parseInt(getTimestamp(), 10) 
                 });
               }
-              await batch.commit(); 
-              activeDEKKey = null;
-              if (typeof updateLockUI === 'function') updateLockUI();
               
-              toggleLoader(false, 'import_cloud');
+              const commitTaskCloud = batch.commit().catch(err => console.warn("Chờ đồng bộ nền Cloud:", err));
+              if (navigator.onLine) {
+                  await Promise.race([
+                      commitTaskCloud,
+                      new Promise(resolve => setTimeout(resolve, 8000))
+                  ]);
+              }
+              activeDEKKey = null;
+              updateLockUI();
+              
               elCloud.modal.classList.remove('open');
               showToast('Đã khôi phục dữ liệu thành công', 'success');
               
             } catch(err) {
-              toggleLoader(false, 'restore_cloud');
-              toggleLoader(false, 'import_cloud');
               if (err.message === 'timeout_error') {
                   await showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
               } else {
                   await showAlert(getFriendlyErrorMessage(err), { title: 'Lỗi khôi phục', type:'error' });
               }
+            } finally {
+              toggleLoader(false, 'restore_cloud');
+              toggleLoader(false, 'import_cloud');
             }
           };
 
@@ -2962,7 +3155,6 @@
     }
     elCloud.btnX.onclick = elCloud.btnClose.onclick = () => openCloudBackupManager(false);
 
-
     el.miReset.onclick = async () => {
       closeMenuModal(); 
       if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để xóa toàn bộ dữ liệu!', {type: 'warning'});
@@ -2990,7 +3182,7 @@
           if (shuffler) clearInterval(shuffler);
           if (genTimeout) clearTimeout(genTimeout);
           
-          if (typeof updateLockUI === 'function') updateLockUI();
+          updateLockUI();
           
           toggleLoader(false, 'reset');
           showToast('Đã xóa toàn bộ dữ liệu khỏi hệ thống', 'success');
@@ -3028,57 +3220,66 @@
         if (/\d/.test(pw)) score += 1;
         if (/[\W_]/.test(pw)) score += 1;
 
-        if (len <= 4) return { text: "Rất yếu", color: "text-rose-600", icon: "alert-circle" };
-        if (score <= 3) return { text: "Yếu", color: "text-amber-500", icon: "alert-triangle" };
-        if (score <= 5) return { text: "Khá", color: "text-blue-500", icon: "shield" };
+        if (len < 8 || score <= 3) return { text: "Yếu", color: "text-rose-600", icon: "alert-circle" };
+        if (score <= 5) return { text: "Khá", color: "text-amber-500", icon: "alert-triangle" };
+        if (score <= 6) return { text: "Mạnh", color: "text-blue-500", icon: "shield" };
         return { text: "Rất mạnh", color: "text-teal-600", icon: "shield-check" };
     }
 
     function generatePassword() {
-      const lenInput = el.genLength.value;
-      let len = parseInt(lenInput, 10);
+      const len = parseInt(el.genLength.value, 10);
 
-      if (isNaN(len) || len <= 0 || len > 100) {
+      if (isNaN(len) || len < 4 || len > 99) {
           el.genResult.value = "";
           el.genStrength.innerHTML = "";
-          return showAlert("Độ dài mật khẩu phải lớn hơn 0 và tối đa 100 ký tự.", {type: 'warning'});
+          return showAlert("Độ dài mật khẩu phải từ 4 đến 99 ký tự.", {type: 'warning'});
       }
 
-      let sets = [];
-      if (el.genLower.checked) sets.push("abcdefghijklmnopqrstuvwxyz"); 
-      if (el.genUpper.checked) sets.push("ABCDEFGHIJKLMNOPQRSTUVWXYZ"); 
-      if (el.genNumber.checked) sets.push("0123456789"); 
-      if (el.genSymbol.checked) sets.push("!@#$_");
+      const sets = {
+          lower: "abcdefghijklmnopqrstuvwxyz",
+          upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+          number: "0123456789",
+          symbol: "​!@#$%_-"
+      };
+
+      let activeSets = [];
+      if (el.genLower.checked) activeSets.push(sets.lower);
+      if (el.genUpper.checked) activeSets.push(sets.upper);
+      if (el.genNumber.checked) activeSets.push(sets.number);
+      if (el.genSymbol.checked) activeSets.push(sets.symbol);
       
-      if (!sets.length) return showAlert("Vui lòng chọn ít nhất một nhóm ký tự.", {type: 'warning'});
+      if (!activeSets.length) return showAlert("Vui lòng chọn ít nhất một nhóm ký tự.", {type: 'warning'});
       
       let pwd = []; 
+      activeSets.forEach(s => pwd.push(s[rand(s.length)])); 
       
-      sets.forEach(s => {
-          if (pwd.length < len) pwd.push(s[rand(s.length)]);
-      }); 
+      const allChars = activeSets.join(""); 
+      while (pwd.length < len) {
+          pwd.push(allChars[rand(allChars.length)]);
+      }
       
-      const all = sets.join(""); 
-      while (pwd.length < len) pwd.push(all[rand(all.length)]);
+      for (let i = pwd.length - 1; i > 0; i--) { 
+        const j = rand(i + 1); 
+        [pwd[i], pwd[j]] = [pwd[j], pwd[i]]; 
+      } 
+      const finalPassword = pwd.join("");
       
       el.genBtn.disabled = true; 
       el.genStrength.textContent = ""; 
-      
       clearInterval(shuffler);
       clearTimeout(genTimeout);
       
       shuffler = setInterval(() => { 
-        for(let i = pwd.length - 1; i > 0; i--){ 
-          const j = rand(i + 1); 
-          [pwd[i], pwd[j]] = [pwd[j], pwd[i]]; 
-        } 
-        el.genResult.value = pwd.join(""); 
+        let visualScramble = '';
+        for (let i = 0; i < len; i++) {
+            visualScramble += allChars[Math.floor(Math.random() * allChars.length)];
+        }
+        el.genResult.value = visualScramble; 
       }, 40);
       
       genTimeout = setTimeout(() => { 
         clearInterval(shuffler); 
         el.genBtn.disabled = false; 
-        const finalPassword = pwd.join(""); 
         el.genResult.value = finalPassword; 
         
         const res = evaluateGenStrength(finalPassword);
@@ -3111,7 +3312,7 @@
 
     el.genLength.addEventListener('change', () => {
         let len = parseInt(el.genLength.value, 10);
-        if (!isNaN(len) && len > 0 && len <= 100) generatePassword();
+        if (!isNaN(len) && len >= 4 && len <= 99) generatePassword();
     });
     
     el.miGenerate.onclick = ()=>{ closeMenuModal(); openGen(); }; 
@@ -3156,7 +3357,6 @@
     const openInstallModal = (e) => {
       if (e) e.stopPropagation();
       closeMenuModal();
-      
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       
       if (isIOS) {
@@ -3166,7 +3366,6 @@
         el.installNow.style.display = 'flex';
         el.iosTip.style.display = 'none';
       }
-      
       el.installModal.classList.add('open');
     };
 
@@ -3191,17 +3390,6 @@
       el.installModal.classList.remove('open');
     };
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      
-      if (isIOS && !isStandalone) {
-        el.miInstall.style.display = 'flex'; 
-        el.btnInstallHeader.classList.remove('hidden'); 
-        if (el.btnInstallLogin) el.btnInstallLogin.classList.remove('hidden');
-      }
-    });
-
     window.addEventListener('appinstalled', () => showToast('Đã thêm ứng dụng vào màn hình chính', 'success'));
     
     setTimeout(()=>{
@@ -3219,7 +3407,6 @@
         if (oldIcon) oldIcon.remove();
         
         el.connectionStatus.insertAdjacentHTML('beforebegin', '<i id="connection-icon" data-lucide="cloud-off" class="w-3 h-3 text-amber-400 transition-colors duration-300"></i>');
-        
         lucide.createIcons({root: el.connectionWrapper});
       }
 
@@ -3242,7 +3429,6 @@
         if (oldIcon) oldIcon.remove();
         
         el.connectionStatus.insertAdjacentHTML('beforebegin', '<i id="connection-icon" data-lucide="cloud-cog" class="w-3 h-3 text-teal-300 transition-colors duration-300"></i>');
-        
         lucide.createIcons({root: el.connectionWrapper});
       }
 
@@ -3254,10 +3440,18 @@
       }
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
+    function runInitActions() {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      
+      if (isIOS && !isStandalone) {
+        el.miInstall.style.display = 'flex'; 
+        el.btnInstallHeader.classList.remove('hidden'); 
+        if (el.btnInstallLogin) el.btnInstallLogin.classList.remove('hidden');
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const action = urlParams.get('action');
-      
       if (action) {
         setTimeout(() => {
           if (!$('#app').classList.contains('invisible')) {
@@ -3272,7 +3466,13 @@
           window.history.replaceState({}, document.title, window.location.pathname);
         }, 2000); 
       }
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', runInitActions);
+    } else {
+      runInitActions();
+    }
 
     const navHomeBtn = document.getElementById('nav-home');
     if (navHomeBtn) {
@@ -3298,90 +3498,6 @@
       });
     });
 
-    const btnOutdated = document.getElementById('btn-outdated');
-    const outdatedBadge = document.getElementById('outdated-badge');
-    const outdatedModal = document.getElementById('outdatedModal');
-    const outdatedList = document.getElementById('outdatedList');
-    const outdatedClose = document.getElementById('outdatedClose');
-    const outdatedX = document.getElementById('outdatedX');
-
-    function parseCustomTimestamp(ts) {
-        const s = String(ts || '');
-        if (s.length !== 14) return new Date(); 
-        return new Date(s.slice(0,4), parseInt(s.slice(4,6))-1, s.slice(6,8), s.slice(8,10), s.slice(10,12), s.slice(12,14));
-    }
-
-    function checkOutdatedPasswords() {
-        if (!currentUserUid || data.length === 0) {
-            if (btnOutdated) btnOutdated.classList.add('hidden');
-            return [];
-        }
-        
-        const now = new Date();
-        const EXPIRE_MS = APP_CONFIG.security.outdatedPasswordDays * 24 * 60 * 60 * 1000; 
-        
-        const outdated = data.filter(item => {
-            if (item[CHECK_KEY]) return false; 
-            const itemDate = parseCustomTimestamp(item.update);
-            return (now - itemDate) > EXPIRE_MS;
-        });
-
-        if (outdated.length > 0) {
-            btnOutdated.classList.remove('hidden');
-            outdatedBadge.textContent = outdated.length > 9 ? '9+' : outdated.length;
-        } else {
-            btnOutdated.classList.add('hidden');
-        }
-        return outdated;
-    }
-
-    if (btnOutdated) {
-        btnOutdated.onclick = () => {
-            const outdated = checkOutdatedPasswords();
-            if (!outdated || outdated.length === 0) return;
-            
-            outdatedList.innerHTML = '';
-            outdated.forEach((item) => {
-                const updateDate = parseCustomTimestamp(item.update);
-                const dateStr = updateDate.toLocaleDateString('vi-VN');
-                
-                const displaySafe = item.decryptedDisplay || 'Tài khoản (Đang khóa)';
-                
-                const div = document.createElement('div');
-                div.className = 'flex items-center justify-between p-3 rounded-xl border border-rose-100 bg-white mb-2 shadow-sm';
-                div.innerHTML = `
-                  <div class="flex items-center gap-3 overflow-hidden">
-                    <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
-                      <i data-lucide="bell" class="w-4 h-4 text-rose-500"></i>
-                    </div>
-                    <div>
-                      <div class="truncate text-[14px] font-bold text-slate-700">${escapeHtml(displaySafe)}</div>
-                      <div class="text-[11px] text-slate-400 font-medium tracking-wide">Đổi lần cuối: ${dateStr}</div>
-                    </div>
-                  </div>
-                  <button class="btn-edit-outdated text-teal-600 p-2 hover:bg-teal-50 rounded-lg transition-colors flex-shrink-0" data-id="${item.record_id}" title="Cập nhật ngay">
-                    <i data-lucide="edit-3" class="w-5 h-5 pointer-events-none"></i>
-                  </button>
-                `;
-                
-                div.querySelector('.btn-edit-outdated').onclick = () => {
-                    outdatedModal.classList.remove('open');
-                    editEntry(item.record_id); 
-                };
-                
-                outdatedList.appendChild(div);
-            });
-            lucide.createIcons({root: outdatedList});
-            outdatedModal.classList.add('open');
-        };
-    }
-
-    if (outdatedX && outdatedClose) {
-        outdatedX.onclick = outdatedClose.onclick = () => {
-            outdatedModal.classList.remove('open');
-        };
-    }
-    
     async function requestPersistentStorage() {
       if (navigator.storage && navigator.storage.persist) {
         try {
@@ -3389,12 +3505,8 @@
           if (!isPersisted) {
             const granted = await navigator.storage.persist();
             if (granted) {
-              console.log("Persistent storage granted. Dữ liệu ngoại tuyến đã được bảo vệ an toàn.");
-            } else {
-              console.warn("Persistent storage denied. Dữ liệu có thể bị trình duyệt xóa nếu máy đầy bộ nhớ.");
+              console.log("Persistent storage granted.");
             }
-          } else {
-            console.log("Storage is already persisted.");
           }
         } catch (error) {
           console.error("Lỗi khi yêu cầu Persistent Storage:", error);
@@ -3405,7 +3517,6 @@
     window.addEventListener('load', () => {
         requestPersistentStorage();
     });
-    
   </script>
 </body>
 </html>
