@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://encypass.github.io/icons/icon-512.png">
 
   <meta name="theme-color" content="#0d9488">
-  <meta name="version" content="v1.1.1">
+  <meta name="version" content="v1.1.2">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -81,7 +81,7 @@
 		  <img src="/icons/icon-192.png" alt="EncyPass Logo" class="w-full h-full block rounded-[24%] drop-shadow-md">
 	</div>
     <div class="font-black text-[20px] mt-3 tracking-wide">EncyPass</div>
-    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.1.1</b></div>
+    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.1.2</b></div>
   </div>
 
   <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 relative shadow-2xl overflow-hidden">
@@ -432,7 +432,7 @@
           <label class="gen-opt"><input type="checkbox" id="genLower" checked><span>a–z</span></label>
           <label class="gen-opt"><input type="checkbox" id="genUpper" checked><span>A–Z</span></label>
           <label class="gen-opt"><input type="checkbox" id="genNumber" checked><span>0–9</span></label>
-          <label class="gen-opt"><input type="checkbox" id="genSymbol" checked><span>​!@#$%_-</span></label>
+          <label class="gen-opt"><input type="checkbox" id="genSymbol" checked><span>!@#$%_-</span></label>
         </div>
 
         <button id="genBtn" class="btn green"><i data-lucide="refresh-cw" class="w-5 h-5"></i> Tạo mới</button>
@@ -532,7 +532,7 @@
     // ----------------------------------------------------
     const APP_CONFIG = {
         meta: {
-            version: 'v1.1.1',
+            version: 'v1.1.2',
             appName: 'EncyPass'
         },
         crypto: {
@@ -694,6 +694,11 @@
                 const passInp = document.getElementById(`pass-${id}`);
                 if(accInp) accInp.value = 'Tài khoản: •••••••';
                 if(passInp) passInp.value = 'Mật khẩu: •••••••';
+
+                const copyAccBtn = document.getElementById(`copy-acc-${id}`);
+                const copyPassBtn = document.getElementById(`copy-pass-${id}`);
+                if(copyAccBtn) copyAccBtn.style.display = 'none';
+                if(copyPassBtn) copyPassBtn.style.display = 'none';
             }
         });
         
@@ -953,7 +958,7 @@
       }
 
       let hasVerifyKey = false;
-      const maxDisplayLength = 255;
+      const maxDisplayLength = 3000;
       const maxEncryptedLength = 3000;
 
       for (let i = 0; i < importedArray.length; i++) {
@@ -1688,8 +1693,11 @@
       if (!el.btnLock) return;
       
       const hasVerify = data.some(e => e[CHECK_KEY]);
+      const searchSection = el.search.closest('section');
+      
       if (!currentUserUid || !hasVerify) {
           el.btnLock.classList.add('hidden');
+          if (searchSection) searchSection.style.display = 'none';
           return;
       }
       
@@ -1699,10 +1707,12 @@
           el.btnLock.title = "Đang mở khóa - Nhấn để khóa lại";
           el.btnLock.classList.add('!bg-amber-500', '!border-amber-400', 'text-slate-950', 'animate-pulse');
           el.btnLock.style.cssText = "";
+          if (searchSection) searchSection.style.display = 'block';
       } else {
           el.btnLock.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i>';
           el.btnLock.title = "Đang khóa - Nhấn để mở khóa";     
           el.btnLock.classList.remove('!bg-amber-500', '!border-amber-400', 'text-slate-950', 'animate-pulse');
+          if (searchSection) searchSection.style.display = 'none';
       }
       lucide.createIcons({root: el.btnLock});
     }
@@ -1935,14 +1945,14 @@
             
             <div class="row" style="position: relative;">
               <input id="acc-${entry.record_id}" class="ro" style="width: 100%; padding-right: 44px; box-sizing: border-box; background: #fff; color: #334155;" value="Tài khoản: •••••••" readonly>
-              <button class="action-copy-acc flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép tài khoản" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+              <button id="copy-acc-${entry.record_id}" class="action-copy-acc flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép tài khoản" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none; display: none;">
                 <i data-lucide="copy" style="width: 18px; height: 18px; pointer-events: none;"></i>
               </button>
             </div>
             
             <div class="row" style="position: relative; margin-top: 6px;">
               <input id="pass-${entry.record_id}" class="ro" style="width: 100%; padding-right: 44px; box-sizing: border-box; background: #fff; color: #334155;" value="Mật khẩu: •••••••" readonly>
-              <button class="action-copy-pass flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép mật khẩu" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
+              <button id="copy-pass-${entry.record_id}" class="action-copy-pass flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép mật khẩu" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none; display: none;">
                 <i data-lucide="copy" style="width: 18px; height: 18px; pointer-events: none;"></i>
               </button>
             </div>
@@ -1961,18 +1971,7 @@
       checkOutdatedPasswords();
     }
 
-    el.search.addEventListener('input', async (e) => { 
-        const val = el.search.value.trim();
-        if (val && !activeDEKKey && data.some(item => item[CHECK_KEY])) {
-            el.search.blur();
-            const dekKey = await requireDEK('tìm kiếm tài khoản');
-            if (!dekKey) {
-                el.search.value = '';
-                render();
-                return;
-            }
-            el.search.focus();
-        }
+    el.search.addEventListener('input', (e) => { 
         clearTimeout(searchT); 
         searchT = setTimeout(render, 200); 
     });
@@ -1983,6 +1982,8 @@
       
       const accInp = document.getElementById(`acc-${record_id}`);
       const passInp = document.getElementById(`pass-${record_id}`);
+      const copyAccBtn = document.getElementById(`copy-acc-${record_id}`);
+      const copyPassBtn = document.getElementById(`copy-pass-${record_id}`);
       
       if (visible[record_id]) { 
         if (autoHideTimers[record_id]) {
@@ -1994,6 +1995,9 @@
         passInp.value = 'Mật khẩu: •••••••'; 
         btn.innerHTML = '<i data-lucide="eye" class="w-[15px] h-[15px]"></i> Giải mã'; 
         lucide.createIcons({root: btn}); 
+
+        if(copyAccBtn) copyAccBtn.style.display = 'none';
+        if(copyPassBtn) copyPassBtn.style.display = 'none';
         return;
       }
 
@@ -2013,6 +2017,11 @@
               const otherPass = document.getElementById(`pass-${id}`);
               if (otherAcc) otherAcc.value = 'Tài khoản: •••••••';
               if (otherPass) otherPass.value = 'Mật khẩu: •••••••';
+
+              const otherCopyAcc = document.getElementById(`copy-acc-${id}`);
+              const otherCopyPass = document.getElementById(`copy-pass-${id}`);
+              if(otherCopyAcc) otherCopyAcc.style.display = 'none';
+              if(otherCopyPass) otherCopyPass.style.display = 'none';
           }
       });
 
@@ -2035,6 +2044,9 @@
         visible[record_id] = true; 
         accInp.value = decAcc; 
         passInp.value = decPass;
+        
+        if(copyAccBtn) copyAccBtn.style.display = '';
+        if(copyPassBtn) copyPassBtn.style.display = '';
         
         let rem = 15; 
         btn.disabled = false; 
@@ -2078,52 +2090,15 @@
 
     const copyToClipboard = async (record_id, type, btn) => {
       if (btn.disabled || btn.dataset.processing === "true") return;
-      
-      if (visible[record_id]) {
-          const inp = type === 'account' ? document.getElementById(`acc-${record_id}`) : document.getElementById(`pass-${record_id}`);
-          if (inp && inp.value && inp.value !== '•••••••') {
-              const success = await safeCopyToClipboard(inp.value);
-              if (success) {
-                  showCopySuccess(btn);
-              } else {
-                  showAlert('Trình duyệt không hỗ trợ sao chép tự động.', {type: 'error'});
-              }
-              return;
-          }
-      }
+      if (!visible[record_id]) return;
 
-      btn.disabled = true;
-      btn.dataset.processing = "true";
-      const origHtml = btn.innerHTML;
-      btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin w-[16px] h-[16px] pointer-events-none"></i>';
-      lucide.createIcons({root: btn});
-
-      try {
-          const actionLabel = type === 'account' ? 'sao chép tên đăng nhập' : 'sao chép mật khẩu';
-          const dekKey = await requireDEK(actionLabel);
-          if (!dekKey) return;
-          
-          const entry = data.find(e => e.record_id === record_id);
-          const cipherText = type === 'account' ? entry.account : entry.password;
-          const decText = await SecureCrypto.decryptWithDEK(cipherText, dekKey);
-          
-          if(!decText) return showAlert('Giải mã thất bại. Dữ liệu có thể đã bị hỏng.', { title: 'Lỗi dữ liệu', type:'error' });
-
-          const success = await safeCopyToClipboard(decText);
+      const inp = type === 'account' ? document.getElementById(`acc-${record_id}`) : document.getElementById(`pass-${record_id}`);
+      if (inp && inp.value && inp.value !== '•••••••') {
+          const success = await safeCopyToClipboard(inp.value);
           if (success) {
               showCopySuccess(btn);
           } else {
-              throw new Error("Clipboard API fail");
-          }
-
-      } catch (e) {
-          showAlert('Trình duyệt của bạn chặn tự động sao chép. Vui lòng bấm Giải mã và sao chép thủ công.', {type: 'error'});
-      } finally {
-          delete btn.dataset.processing;
-          btn.disabled = false;
-          if (!btn.innerHTML.includes('check')) {
-              btn.innerHTML = origHtml;
-              lucide.createIcons({root: btn});
+              showAlert('Trình duyệt không hỗ trợ sao chép tự động.', {type: 'error'});
           }
       }
     };
@@ -2200,15 +2175,14 @@
     el.fMaster.addEventListener('input', () => { updateStrength(); checkMasterMatch(); });
     el.fMasterConfirm.addEventListener('input', checkMasterMatch);
     
-    // Tự động sao lưu Cloud khi thêm mới/chỉnh sửa thành công
-    async function autoCloudBackup() {
+    async function autoCloudBackup(dataToBackup = data) {
       if (!navigator.onLine || !currentUserUid) return;
 
       try {
-        const accountsToExport = data.filter(e => !e[CHECK_KEY]);
+        const accountsToExport = dataToBackup.filter(e => !e[CHECK_KEY]);
         if (accountsToExport.length === 0) return;
 
-        const exportList = data.map(item => {
+        const exportList = dataToBackup.map(item => {
           if (item[CHECK_KEY]) {
             return { 
               [CHECK_KEY]: item[CHECK_KEY], 
@@ -2217,7 +2191,7 @@
           }
           return {
             record_id: item.record_id,
-            display: item.rawDisplay || item.display,
+            display: item.display,
             account: item.account,
             password: item.password,
             update: item.update
@@ -2247,7 +2221,6 @@
           }
         });
 
-        showToast('Tự động tạo bản sao lưu lên Cloud thành công!', 'success');
       } catch (err) {
         console.warn("Lỗi khi tự động sao lưu lên Cloud:", err);
       }
@@ -2347,6 +2320,17 @@
         const currentTimeNum = parseInt(currentTimeStr, 10);
         const record_id = editingId !== null ? editingId : currentTimeStr; 
 
+        let finalUpdateTime = currentTimeNum;
+        if (editingId !== null) {
+            const oldRecord = data.find(e => e.record_id === editingId);
+            if (oldRecord && oldRecord.password) {
+                const oldDecP = await SecureCrypto.decryptWithDEK(oldRecord.password, dekKeyToUse);
+                if (p === oldDecP) {
+                    finalUpdateTime = oldRecord.update || currentTimeNum;
+                }
+            }
+        }
+
         const encD = await SecureCrypto.encryptWithDEK(d, dekKeyToUse);
         const encA = await SecureCrypto.encryptWithDEK(a, dekKeyToUse);
         const encP = await SecureCrypto.encryptWithDEK(p, dekKeyToUse);
@@ -2360,7 +2344,7 @@
             display: encD,
             account: encA,
             password: encP,
-            update: currentTimeNum
+            update: finalUpdateTime
         });
 
         const commitTask = batch.commit().catch(err => console.warn("Chờ đồng bộ nền:", err));
@@ -2375,9 +2359,34 @@
         toggleLoader(false, 'save'); 
         openEdit(false); 
         
+        const updatedData = [...data];
+        const existingIdx = updatedData.findIndex(e => e.record_id === record_id);
+        const newItem = {
+            record_id: record_id,
+            display: encD,
+            rawDisplay: encD,
+            decryptedDisplay: d,
+            account: encA,
+            password: encP,
+            update: finalUpdateTime
+        };
+        
+        if (existingIdx > -1) {
+            updatedData[existingIdx] = newItem;
+        } else {
+            updatedData.push(newItem);
+        }
+        
+        if (verifyDataToBatch) {
+            const vIdx = updatedData.findIndex(e => e[CHECK_KEY]);
+            const newV = { [CHECK_KEY]: verifyDataToBatch.value, encrypted_dek: verifyDataToBatch.encrypted_dek };
+            if (vIdx > -1) updatedData[vIdx] = newV;
+            else updatedData.unshift(newV);
+        }
+
         if (navigator.onLine) {
           showToast('Đã lưu dữ liệu thành công', 'success');
-          autoCloudBackup();
+          autoCloudBackup(updatedData); 
         } else {
           showToast('Đã lưu ngoại tuyến (tự động đồng bộ khi có mạng)', 'success');
         }
@@ -2501,7 +2510,7 @@
 
       const masterRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
       if(nk && !masterRegex.test(nk)) { showInlineError(el.ckNew, el.errCkNew, "Mật khẩu phải ≥ 12 ký tự, gồm chữ Hoa, thường, số và ký tự đặc biệt", false); isValid = false; firstErrorInput = firstErrorInput || el.ckNew; }
-      if(cf && nk !== cf) { showInlineError(el.ckConfirm, el.errCkConfirm, "Xác nhận mật khẩu không khớp", false); isValid = false; firstErrorInput = firstErrorInput || el.ckNew; }
+      if(cf && nk !== cf) { showInlineError(el.ckConfirm, el.errCkConfirm, "Xác nhận mật khẩu không khớp", false); isValid = false; firstErrorInput = firstErrorInput || el.ckConfirm; }
       
       if (!isValid) {
           if (firstErrorInput) focusAndBlink(firstErrorInput);
@@ -2638,7 +2647,7 @@
             
             return {
               record_id: item.record_id,
-              display: item.rawDisplay || item.display,
+              display: item.display,
               account: item.account,
               password: item.password,
               update: item.update
@@ -2928,8 +2937,8 @@
           itemDiv.innerHTML = `
             <div class="flex items-center gap-3 overflow-hidden">
               <div>
-                <div class="truncate text-[14px] font-bold text-slate-700">${displayTitle}</div>
-                <div class="text-[11px] text-slate-400 font-medium tracking-wide">${version} - Có ${totalAcc} bản ghi</div>
+                <div class="truncate text-[14px] font-bold text-slate-700">${escapeHtml(displayTitle)}</div>
+                <div class="text-[11px] text-slate-400 font-medium tracking-wide">${escapeHtml(version)} - Có ${escapeHtml(totalAcc)} bản ghi</div>
               </div>
             </div>
             <div class="flex items-center gap-1">
@@ -3239,7 +3248,7 @@
           lower: "abcdefghijklmnopqrstuvwxyz",
           upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
           number: "0123456789",
-          symbol: "​!@#$%_-"
+          symbol: "!@#$%_-"
       };
 
       let activeSets = [];

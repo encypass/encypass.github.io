@@ -4,11 +4,19 @@
   "website": "https://encypass.github.io/",
   "author": "Hoàng Đợi",
   "latest": {
-    "version": "v1.1.1",
-    "release_date": "2026-10-12",
-    "summary": "Nâng cấp bảo mật, cải thiện hiệu suất và trải nghiệm người dùng."
+    "version": "v1.1.2",
+    "release_date": "2026-10-23",
+    "summary": "Tối ưu hóa hiệu suất và sửa một số lỗi nhỏ để cải thiện trải nghiệm người dùng."
   },
   "changelog": [
+    {
+      "version": "v1.1.2",
+      "release_date": "2026-10-23",
+      "changes": [
+        "Tối ưu hóa hiệu suất hoạt động của hệ thống.",
+        "Sửa các lỗi nhỏ phát sinh và cải thiện độ ổn định khi thao tác."
+      ]
+    },
     {
       "version": "v1.1.1",
       "release_date": "2026-10-12",
