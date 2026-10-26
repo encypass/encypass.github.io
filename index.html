@@ -22,7 +22,7 @@
   <meta property="og:image" content="https://encypass.github.io/icons/icon-512.png">
 
   <meta name="theme-color" content="#0d9488">
-  <meta name="version" content="v1.1.2">
+  <meta name="version" content="v1.1.3">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -62,7 +62,7 @@
         </div>
       </div>
       <h2 class="text-2xl font-bold mb-2">EncyPass</h2>
-      <p class="text-sm text-slate-300 mb-8">Vui lòng đăng nhập bằng tài khoản Google đã được cấp quyền.</p>
+      <p class="text-sm text-slate-300 mb-8">Vui lòng đăng nhập bằng tài khoản Google đã được phê duyệt.</p>
       
       <button id="btnGoogleLogin" class="w-full py-3.5 bg-white text-slate-900 rounded-xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-transform">
         <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
@@ -81,7 +81,7 @@
 		  <img src="/icons/icon-192.png" alt="EncyPass Logo" class="w-full h-full block rounded-[24%] drop-shadow-md">
 	</div>
     <div class="font-black text-[20px] mt-3 tracking-wide">EncyPass</div>
-    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.1.2</b></div>
+    <div class="opacity-80 mt-1.5 text-sm">Phiên bản: <b id="splashVersion">v1.1.3</b></div>
   </div>
 
   <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 relative shadow-2xl overflow-hidden">
@@ -165,16 +165,16 @@
           </button>
           <button id="miExport" class="menu-btn">
             <div class="p-3 rounded-2xl bg-blue-100/50 text-blue-600"><i data-lucide="download-cloud" class="w-6 h-6"></i></div>
-            <span>Sao lưu</span>
+            <span>Tạo bản sao lưu</span>
           </button>
           <button id="miImport" class="menu-btn">
             <div class="p-3 rounded-2xl bg-indigo-100/50 text-indigo-600"><i data-lucide="upload-cloud" class="w-6 h-6"></i></div>
-            <span>Khôi phục</span>
+            <span>Khôi phục từ tệp</span>
           </button>
           
           <button id="miCloudBackup" class="menu-btn">
             <div class="p-3 rounded-2xl bg-sky-100/50 text-sky-600"><i data-lucide="cloud" class="w-6 h-6"></i></div>
-            <span>Dữ liệu trên Cloud</span>
+            <span>Bản sao lưu trên Cloud</span>
           </button>
 
           <button id="miChangeKey" class="menu-btn">
@@ -231,7 +231,7 @@
           <div class="form-row">
             <label>Mật khẩu chính</label>
             <div class="row" style="position: relative;">
-              <input id="fMaster" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Dùng để mã hóa và bảo vệ toàn bộ dữ liệu">
+              <input id="fMaster" class="modal-input" type="password" style="width: 100%; padding-right: 44px; box-sizing: border-box;" autocomplete="new-password" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Nhập Mật khẩu chính">
               <button type="button" class="toggle-password flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none;">
                 <i data-lucide="eye" style="width: 18px; height: 18px; pointer-events: none;"></i>
               </button>
@@ -283,7 +283,7 @@
             </div>
             
             <p class="mb-4 text-[14px] text-slate-600 leading-relaxed">
-              EncyPass là ứng dụng giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc Zero-Knowledge, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên máy chủ. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông vị trí của bạn.
+              EncyPass là ứng dụng giúp bạn lưu trữ và quản lý mật khẩu an toàn. Được xây dựng dựa trên kiến trúc Zero-Knowledge, toàn bộ dữ liệu của bạn sẽ được mã hóa trực tiếp trên thiết bị trước khi đồng bộ lên máy chủ. Điều này đảm bảo không một ai — kể cả nhà phát triển — có thể giải mã và đọc được thông tin của bạn.
             </p>
 
             <ul class="about-features">
@@ -471,7 +471,7 @@
     <div class="modal-card" role="dialog" aria-modal="true">
       <div class="modal-drag-handle"></div>
       <div class="modal-head">
-        <h3 class="modal-title"><i data-lucide="cloud" class="w-5 h-5 text-sky-500"></i> Dữ liệu trên Cloud</h3>
+        <h3 class="modal-title"><i data-lucide="cloud" class="w-5 h-5 text-sky-500"></i> Quản lý bản sao lưu trên Cloud</h3>
         <button id="cloudBackupX" class="modal-close" aria-label="Đóng"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <div class="modal-body !overflow-y-auto max-h-[60vh]">
@@ -532,7 +532,7 @@
     // ----------------------------------------------------
     const APP_CONFIG = {
         meta: {
-            version: 'v1.1.2',
+            version: 'v1.1.3',
             appName: 'EncyPass'
         },
         crypto: {
@@ -564,6 +564,7 @@
     // 2. GLOBAL STATE VARIABLES & HELPERS
     // ----------------------------------------------------
     let currentUserUid = null;
+    let currentUserRole = 'MEMBER';
     let unsubSnapshot = null;
     let unsubVerify = null;
     let activeDEKKey = null;
@@ -612,7 +613,7 @@
       connectionStatus: $('#connection-status'), connectionWrapper: $('#connection-wrapper'),
       ckModal: $('#changeKeyModal'), ckX: $('#ckX'), ckOld: $('#ckOld'), ckNew: $('#ckNew'), ckConfirm: $('#ckConfirm'), ckStrength: $('#ckStrength'), ckHint: $('#ckHint'), ckOk: $('#ckOk'), ckCancel: $('#ckCancel'),
       errCkOld: $('#errCkOld'), errCkNew: $('#errCkNew'), errCkConfirm: $('#errCkConfirm'),
-      installModal: $('#installModal'), installX: $('#installX'), installNow: $('#installNow'), installLater: $('#installLater'), iosTip: $('#iosTip'),
+      installModal: $('#installModal'), installX: $('#installX'), installNow: $('#installNow'), installLater: $('#installLater'), iosTip: $('#iosTip'),      
       btnInstallHeader: $('#btn-install'), btnInstallLogin: $('#btn-install-login'), btnLock: $('#btn-lock'), btnLogout: $('#btn-logout'),
       latestVersion: $('#latestVersion'), aboutCheckUpdate: $('#aboutCheckUpdate'),
       btnOutdated: $('#btn-outdated'), outdatedBadge: $('#outdated-badge'), outdatedModal: $('#outdatedModal'), outdatedList: $('#outdatedList'), outdatedClose: $('#outdatedClose'), outdatedX: $('#outdatedX')
@@ -666,6 +667,7 @@
             const modal = document.getElementById(id);
             if (modal && modal.classList.contains('open')) {
                 modal.classList.remove('open');
+                modal.setAttribute('aria-hidden', 'true');
             }
         });
 
@@ -836,7 +838,14 @@
           }
           return btoa(binary);
       },
-      base64ToBuffer: (b64) => Uint8Array.from(atob(b64), c => c.charCodeAt(0)),
+      base64ToBuffer: (b64) => {
+          try {
+              return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+          } catch (e) {
+              console.error("Lỗi giải mã Base64:", e);
+              throw new Error("Khóa dữ liệu bị hỏng định dạng (Invalid Base64).");
+          }
+      },
       
       getRawKey: async (password) => window.crypto.subtle.importKey("raw", new TextEncoder().encode(password), { name: "PBKDF2" }, false, ["deriveKey"]),
       deriveKey: async (passwordKey, salt) => window.crypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: SecureCrypto.ITERATIONS, hash: "SHA-256" }, passwordKey, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]),
@@ -1492,15 +1501,37 @@
       toggleLoader(true, 'auth', 'Đang xác thực...');
       if (user) {
         try {
-          const userDoc = await getDoc(doc(db, "users_list", user.email));
+          const userRef = doc(db, "users_list", user.email);
+          const userDoc = await getDoc(userRef);
+
+          // Nếu đăng nhập lần đầu chưa tồn tại trong danh sách -> Tự động thêm với status = false
           if (!userDoc.exists()) {
+            await setDoc(userRef, {
+              email: user.email,
+              role: 'MEMBER',
+              status: false,
+              createdAt: new Date().toISOString()
+            });
+
             await signOut(auth);
             toggleLoader(false, 'auth');
             toggleLoader(false, 'boot');
-            await showAlert("Email của bạn không nằm trong danh sách được cấp phép.", { title: 'Từ chối truy cập!', type: 'error' });
+            await showAlert("Tài khoản của bạn đã được đăng ký tự động vào hệ thống và hiện đang ở trạng thái chờ phê duyệt. Vui lòng liên hệ quản trị viên để kích hoạt.", { title: 'Tài khoản chờ phê duyệt', type: 'warning' });
             return;
           }
 
+          const userData = userDoc.data();
+          
+          // Nếu trạng thái chưa được bật (status = false) -> Chặn và thông báo chờ duyệt
+          if (userData.status !== "true" && userData.status !== true) {
+            await signOut(auth);
+            toggleLoader(false, 'auth');
+            toggleLoader(false, 'boot');
+            await showAlert("Tài khoản đang chờ quản trị viên phê duyệt. Vui lòng thử lại sau.", { title: 'Tài khoản chưa được duyệt', type: 'warning' });
+            return;
+          }
+
+          currentUserRole = userData.role || 'MEMBER';
           currentUserUid = user.uid;
 
           $('#loginOverlay').classList.add('hidden'); $('#app').classList.remove('invisible');
@@ -1574,7 +1605,7 @@
             fatalOfflineOverlay.innerHTML = `
               <i data-lucide="wifi-off" class="w-16 h-16 mb-4 text-teal-300"></i>
               <h2 class="text-xl font-bold mb-2">Không có kết nối mạng</h2>
-              <p class="text-teal-100/80 mb-6">Ứng dụng cần kết nối mạng trong lần đầu đăng nhập. Vui lòng kiểm tra Wi-Fi/4G và thử lại.</p>
+              <p class="text-teal-100/80 mb-6">Vui lòng kết nối Wi-Fi/4G để đăng nhập và đồng bộ dữ liệu lần đầu.</p>
               <button id="btn-force-reload" class="px-6 py-3 bg-teal-700 hover:bg-teal-600 rounded-xl font-bold transition-colors shadow-lg active:scale-95 flex items-center gap-2">
                 <i data-lucide="refresh-cw" class="w-5 h-5"></i> Thử lại
               </button>
@@ -1644,7 +1675,7 @@
         if (el.search) el.search.value = '';
         if (el.statCount) el.statCount.textContent = '0';
         
-        ['fDisplay','fAccount','fPassword','fMaster','fMasterConfirm', 'ckOld', 'ckNew', 'ckConfirm', 'genResult'].forEach(id => {
+        ['fDisplay','fAccount','fPassword','fMaster','fMasterConfirm', 'ckOld', 'ckNew', 'ckConfirm', 'genResult', 'modalInput'].forEach(id => {
             if(el[id]) el[id].value = '';
         });
         
@@ -1652,6 +1683,9 @@
         visible = {};
         activeDEKKey = null;
         currentUserUid = null;
+        
+        modalQueue.length = 0;
+        isModalActive = false;
         
         Object.keys(autoHideTimers).forEach(id => { 
             clearInterval(autoHideTimers[id]?.interval); 
@@ -1722,7 +1756,10 @@
           lockVault(true);
       } else {
           const dek = await requireDEK('mở khóa toàn bộ Kho dữ liệu');
-          if (dek) showToast('Kho dữ liệu đã được mở khóa', 'success');
+          if (dek) {
+              showToast('Kho dữ liệu đã được mở khóa', 'success');
+              render();
+          }
       }
     };
 
@@ -1740,7 +1777,7 @@
                   const currentVerify = data[idx];
                   if (currentVerify.encrypted_dek !== incomingEncryptedDek && activeDEKKey) {
                       lockVault(true); 
-                      showAlert("Mật khẩu chính đã được thay đổi từ một thiết bị hoặc phiên làm việc khác. Kho dữ liệu đã tự động khóa để bảo đảm an toàn.", {type: 'warning', title: 'Cảnh báo bảo mật'});
+                      showAlert("Kho dữ liệu tự động khóa vì Mật khẩu chính vừa được thay đổi từ một thiết bị khác.", {type: 'warning', title: 'Cảnh báo bảo mật'});
                   }
               }
 
@@ -1788,6 +1825,8 @@
           } else {
               render();
           }
+
+          checkOutdatedPasswords();
 
           const hasPending = snapshot.metadata.hasPendingWrites;
           if (navigator.onLine && el.connectionStatus) {
@@ -1890,7 +1929,20 @@
     // 10. RENDERING & UI EVENT HANDLERS
     // ----------------------------------------------------
     function render(){
-      Object.keys(autoHideTimers).forEach(id => { clearInterval(autoHideTimers[id]?.interval); delete autoHideTimers[id]; }); visible = {};
+      // LƯU LẠI TRẠNG THÁI CÁC ITEM ĐANG MỞ
+      const activeItems = {};
+      Object.keys(visible).forEach(id => {
+        if (visible[id]) {
+          const accInp = document.getElementById(`acc-${id}`);
+          const passInp = document.getElementById(`pass-${id}`);
+          if (accInp && passInp) {
+            activeItems[id] = { acc: accInp.value, pass: passInp.value };
+          }
+        }
+      });
+
+      Object.keys(autoHideTimers).forEach(id => { clearInterval(autoHideTimers[id]?.interval); delete autoHideTimers[id]; }); 
+      visible = {};
       
       const rawQuery = (el.search.value || '').trim().toLowerCase();
       const removeDiacritics = (str) => {
@@ -1930,6 +1982,11 @@
           const orderNum = totalItems - index;
           const paddedNum = String(orderNum).padStart(2, '0');
           const titleAttr = entry.decryptedDisplay ? `title="${escapeHtml(dName)}"` : '';
+          const copyDisplayStyle = activeDEKKey ? '' : 'display: none;';
+
+          const deleteBtnHtml = currentUserRole === 'ADMIN' 
+            ? `<button class="btn danger sm action-delete" data-id="${entry.record_id}"><i data-lucide="trash-2" style="width: 12px; height: 12px; pointer-events: none;"></i> Xóa</button>` 
+            : `<button class="btn sm opacity-60 cursor-not-allowed bg-slate-100 text-slate-400 border border-slate-200" onclick="showToast('Tài khoản của bạn không có quyền truy cập chức năng này.', 'warning')"><i data-lucide="lock" style="width: 12px; height: 12px; pointer-events: none;"></i> Xóa</button>`;
 
           const div = document.createElement('div'); 
           div.className = 'entry';
@@ -1945,14 +2002,14 @@
             
             <div class="row" style="position: relative;">
               <input id="acc-${entry.record_id}" class="ro" style="width: 100%; padding-right: 44px; box-sizing: border-box; background: #fff; color: #334155;" value="Tài khoản: •••••••" readonly>
-              <button id="copy-acc-${entry.record_id}" class="action-copy-acc flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép tài khoản" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none; display: none;">
+              <button id="copy-acc-${entry.record_id}" class="action-copy-acc flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép tài khoản" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none; ${copyDisplayStyle}">
                 <i data-lucide="copy" style="width: 18px; height: 18px; pointer-events: none;"></i>
               </button>
             </div>
             
             <div class="row" style="position: relative; margin-top: 6px;">
               <input id="pass-${entry.record_id}" class="ro" style="width: 100%; padding-right: 44px; box-sizing: border-box; background: #fff; color: #334155;" value="Mật khẩu: •••••••" readonly>
-              <button id="copy-pass-${entry.record_id}" class="action-copy-pass flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép mật khẩu" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none; display: none;">
+              <button id="copy-pass-${entry.record_id}" class="action-copy-pass flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors" data-id="${entry.record_id}" title="Sao chép mật khẩu" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 8px; border: none; background: transparent; cursor: pointer; outline: none; ${copyDisplayStyle}">
                 <i data-lucide="copy" style="width: 18px; height: 18px; pointer-events: none;"></i>
               </button>
             </div>
@@ -1960,30 +2017,49 @@
             <div class="row mt-3" style="gap:6px;flex-wrap:wrap">
               <button class="btn green sm action-toggle" data-id="${entry.record_id}"><i data-lucide="eye" style="width: 12px; height: 12px; pointer-events: none;"></i> Giải mã</button>
               <button class="btn text sm action-edit" data-id="${entry.record_id}"><i data-lucide="edit-2" style="width: 12px; height: 12px; pointer-events: none;"></i> Sửa</button>
-              <button class="btn danger sm action-delete" data-id="${entry.record_id}"><i data-lucide="trash-2" style="width: 12px; height: 12px; pointer-events: none;"></i> Xóa</button>
+              ${deleteBtnHtml}
             </div>`;
           fragment.appendChild(div);
         });
         el.list.appendChild(fragment);
       }
+      
+      // PHỤC HỒI UI CHO CÁC MỤC ĐANG MỞ
+      Object.keys(activeItems).forEach(id => {
+        const item = activeItems[id];
+        const accInp = document.getElementById(`acc-${id}`);
+        const passInp = document.getElementById(`pass-${id}`);
+        const btn = document.querySelector(`.action-toggle[data-id="${id}"]`);
+        const copyAccBtn = document.getElementById(`copy-acc-${id}`);
+        const copyPassBtn = document.getElementById(`copy-pass-${id}`);
+
+        if (accInp && passInp && btn) {
+          visible[id] = true;
+          accInp.value = item.acc;
+          passInp.value = item.pass;
+          btn.innerHTML = `<i data-lucide="eye-off" class="w-3 h-3 pointer-events-none"></i> Đang mở`;
+          if(copyAccBtn) copyAccBtn.style.display = '';
+          if(copyPassBtn) copyPassBtn.style.display = '';
+        }
+      });
+
       lucide.createIcons({root: el.list});
       updateLockUI();
-      checkOutdatedPasswords();
     }
 
     el.search.addEventListener('input', (e) => { 
         clearTimeout(searchT); 
-        searchT = setTimeout(render, 200); 
+        searchT = setTimeout(render, 400); 
     });
     document.addEventListener('click', e => { if(e.target?.classList?.contains('ro')) e.target.select(); });
 
     const toggleShow = async (record_id, btn) => {
       if (btn.disabled || btn.dataset.processing === "true") return;
       
-      const accInp = document.getElementById(`acc-${record_id}`);
-      const passInp = document.getElementById(`pass-${record_id}`);
-      const copyAccBtn = document.getElementById(`copy-acc-${record_id}`);
-      const copyPassBtn = document.getElementById(`copy-pass-${record_id}`);
+      let accInp = document.getElementById(`acc-${record_id}`);
+      let passInp = document.getElementById(`pass-${record_id}`);
+      let copyAccBtn = document.getElementById(`copy-acc-${record_id}`);
+      let copyPassBtn = document.getElementById(`copy-pass-${record_id}`);
       
       if (visible[record_id]) { 
         if (autoHideTimers[record_id]) {
@@ -1996,8 +2072,8 @@
         btn.innerHTML = '<i data-lucide="eye" class="w-[15px] h-[15px]"></i> Giải mã'; 
         lucide.createIcons({root: btn}); 
 
-        if(copyAccBtn) copyAccBtn.style.display = 'none';
-        if(copyPassBtn) copyPassBtn.style.display = 'none';
+        if(copyAccBtn) copyAccBtn.style.display = activeDEKKey ? '' : 'none';
+        if(copyPassBtn) copyPassBtn.style.display = activeDEKKey ? '' : 'none';
         return;
       }
 
@@ -2010,6 +2086,8 @@
               }
               const otherBtn = document.querySelector(`.action-toggle[data-id="${id}"]`);
               if (otherBtn) {
+                  otherBtn.disabled = false;
+                  delete otherBtn.dataset.processing;
                   otherBtn.innerHTML = '<i data-lucide="eye" style="width: 12px; height: 12px; pointer-events: none;"></i> Giải mã';
                   lucide.createIcons({root: otherBtn});
               }
@@ -2020,8 +2098,8 @@
 
               const otherCopyAcc = document.getElementById(`copy-acc-${id}`);
               const otherCopyPass = document.getElementById(`copy-pass-${id}`);
-              if(otherCopyAcc) otherCopyAcc.style.display = 'none';
-              if(otherCopyPass) otherCopyPass.style.display = 'none';
+              if(otherCopyAcc) otherCopyAcc.style.display = activeDEKKey ? '' : 'none';
+              if(otherCopyPass) otherCopyPass.style.display = activeDEKKey ? '' : 'none';
           }
       });
 
@@ -2035,18 +2113,24 @@
         const dekKey = await requireDEK('giải mã tài khoản này');
         if (!dekKey) return; 
 
+        btn = document.querySelector(`.action-toggle[data-id="${record_id}"]`) || btn;
+        accInp = document.getElementById(`acc-${record_id}`);
+        passInp = document.getElementById(`pass-${record_id}`);
+        copyAccBtn = document.getElementById(`copy-acc-${record_id}`);
+        copyPassBtn = document.getElementById(`copy-pass-${record_id}`);
+
         const entry = data.find(e => e.record_id === record_id);
         const decAcc = await SecureCrypto.decryptWithDEK(entry.account, dekKey);
         const decPass = await SecureCrypto.decryptWithDEK(entry.password, dekKey);
         
-        if(!decAcc || !decPass) return showAlert('Giải mã thất bại. Dữ liệu có thể đã bị hỏng trong quá trình đồng bộ hoặc sai Mật khẩu chính.', { title: 'Lỗi dữ liệu', type:'error' });
+        if(!decAcc || !decPass) return showAlert('Không thể giải mã. Mật khẩu chính không đúng hoặc dữ liệu đã bị hỏng.', { title: 'Lỗi dữ liệu', type:'error' });
 
         visible[record_id] = true; 
         accInp.value = decAcc; 
         passInp.value = decPass;
         
-        if(copyAccBtn) copyAccBtn.style.display = '';
-        if(copyPassBtn) copyPassBtn.style.display = '';
+        if(copyAccBtn) copyAccBtn.style.display = activeDEKKey ? '' : 'none';
+        if(copyPassBtn) copyPassBtn.style.display = activeDEKKey ? '' : 'none';
         
         let rem = 15; 
         btn.disabled = false; 
@@ -2078,27 +2162,52 @@
       }
     };
 
-    const showCopySuccess = (btn) => {
-        const origIcon = btn.innerHTML;
-        btn.innerHTML = '<i data-lucide="check" class="w-[16px] h-[16px] text-emerald-500 pointer-events-none"></i>';
-        lucide.createIcons({root: btn});
-        setTimeout(() => {
-            btn.innerHTML = origIcon;
-            lucide.createIcons({root: btn});
-        }, 2000);
-    };
-
     const copyToClipboard = async (record_id, type, btn) => {
       if (btn.disabled || btn.dataset.processing === "true") return;
-      if (!visible[record_id]) return;
+      if (!activeDEKKey) return; 
 
-      const inp = type === 'account' ? document.getElementById(`acc-${record_id}`) : document.getElementById(`pass-${record_id}`);
-      if (inp && inp.value && inp.value !== '•••••••') {
-          const success = await safeCopyToClipboard(inp.value);
-          if (success) {
-              showCopySuccess(btn);
+      btn.dataset.processing = "true";
+      const origIcon = btn.innerHTML;
+      
+      if (!visible[record_id]) {
+          btn.innerHTML = '<i data-lucide="loader-2" style="width: 18px; height: 18px;" class="animate-spin pointer-events-none text-slate-400"></i>';
+          lucide.createIcons({root: btn});
+      }
+
+      try {
+          const entry = data.find(e => e.record_id === record_id);
+          if (!entry) return;
+
+          let valToCopy = '';
+          if (visible[record_id]) {
+              const inp = type === 'account' ? document.getElementById(`acc-${record_id}`) : document.getElementById(`pass-${record_id}`);
+              valToCopy = inp ? inp.value : '';
           } else {
-              showAlert('Trình duyệt không hỗ trợ sao chép tự động.', {type: 'error'});
+              const cipher = type === 'account' ? entry.account : entry.password;
+              valToCopy = await SecureCrypto.decryptWithDEK(cipher, activeDEKKey);
+          }
+
+          if (valToCopy && valToCopy !== '•••••••') {
+              const success = await safeCopyToClipboard(valToCopy);
+              if (success) {
+                  btn.innerHTML = '<i data-lucide="check" style="width: 18px; height: 18px;" class="text-emerald-500 pointer-events-none"></i>';
+                  lucide.createIcons({root: btn});
+                  setTimeout(() => {
+                      btn.innerHTML = origIcon;
+                      lucide.createIcons({root: btn});
+                  }, 2000);
+                  return; 
+              } else {
+                  showAlert('Trình duyệt chặn quyền sao chép tự động.', {type: 'error'});
+              }
+          }
+      } catch(e) {
+          console.error(e);
+      } finally {
+          delete btn.dataset.processing;
+          if (btn.innerHTML.includes('loader-2')) {
+              btn.innerHTML = origIcon;
+              lucide.createIcons({root: btn});
           }
       }
     };
@@ -2175,57 +2284,6 @@
     el.fMaster.addEventListener('input', () => { updateStrength(); checkMasterMatch(); });
     el.fMasterConfirm.addEventListener('input', checkMasterMatch);
     
-    async function autoCloudBackup(dataToBackup = data) {
-      if (!navigator.onLine || !currentUserUid) return;
-
-      try {
-        const accountsToExport = dataToBackup.filter(e => !e[CHECK_KEY]);
-        if (accountsToExport.length === 0) return;
-
-        const exportList = dataToBackup.map(item => {
-          if (item[CHECK_KEY]) {
-            return { 
-              [CHECK_KEY]: item[CHECK_KEY], 
-              encrypted_dek: item.encrypted_dek
-            }; 
-          }
-          return {
-            record_id: item.record_id,
-            display: item.display,
-            account: item.account,
-            password: item.password,
-            update: item.update
-          };
-        });
-
-        const backupContent = {
-          metadata: {
-            app_name: "EncyPass",
-            version: APP_VERSION,
-            created_at: new Date().toISOString(),
-            total_accounts: accountsToExport.length
-          },
-          data: exportList
-        };
-
-        const jsonString = JSON.stringify(backupContent, null, 2);
-        const userEmailPrefix = auth.currentUser ? auth.currentUser.email.split('@')[0] : 'user';
-        const fileName = `EncyPass_AutoBackup_${userEmailPrefix}_${getTimestamp()}.json`;
-
-        const storageRef = ref(storage, `backups/shared/${fileName}`);
-        await uploadString(storageRef, jsonString, 'raw', {
-          contentType: 'application/json',
-          customMetadata: {
-            version: APP_VERSION,
-            total_accounts: String(backupContent.metadata.total_accounts)
-          }
-        });
-
-      } catch (err) {
-        console.warn("Lỗi khi tự động sao lưu lên Cloud:", err);
-      }
-    }
-
     el.btnSaveEdit.onclick = async () => {
       if(savingEdit) return; savingEdit=true; 
       
@@ -2244,8 +2302,14 @@
         let firstErrorInput = null;
 
         if(!d) { showInlineError(el.fDisplay, el.errDisplay, "Vui lòng nhập tên dịch vụ", false); isValid = false; firstErrorInput = firstErrorInput || el.fDisplay; }
+        else if(d.length > 200) { showInlineError(el.fDisplay, el.errDisplay, "Tên dịch vụ không được vượt quá 200 ký tự", false); isValid = false; firstErrorInput = firstErrorInput || el.fDisplay; }
+
         if(!a) { showInlineError(el.fAccount, el.errAccount, "Vui lòng nhập tài khoản", false); isValid = false; firstErrorInput = firstErrorInput || el.fAccount; }
+        else if(a.length > 200) { showInlineError(el.fAccount, el.errAccount, "Tài khoản không được vượt quá 200 ký tự", false); isValid = false; firstErrorInput = firstErrorInput || el.fAccount; }
+
         if(!p) { showInlineError(el.fPassword, el.errPassword, "Vui lòng nhập mật khẩu", false); isValid = false; firstErrorInput = firstErrorInput || el.fPassword; }
+        else if(p.length > 200) { showInlineError(el.fPassword, el.errPassword, "Mật khẩu không được vượt quá 200 ký tự", false); isValid = false; firstErrorInput = firstErrorInput || el.fPassword; }
+
         if(!isUnlocked && !m) { showInlineError(el.fMaster, el.errMaster, "Vui lòng nhập Mật khẩu chính", false); isValid = false; firstErrorInput = firstErrorInput || el.fMaster; }
 
         let dekKeyToUse = activeDEKKey;
@@ -2253,7 +2317,7 @@
         if(!verify){
           const masterRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
           if(m && !masterRegex.test(m)) { 
-              showInlineError(el.fMaster, el.errMaster, "Mật khẩu phải ≥ 12 ký tự, gồm chữ Hoa, thường, số và ký tự đặc biệt", false); 
+              showInlineError(el.fMaster, el.errMaster, "Mật khẩu cần tối thiểu 12 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.", false); 
               isValid = false; firstErrorInput = firstErrorInput || el.fMaster; 
           }
           if(el.fMasterConfirm.value !== m) {
@@ -2386,7 +2450,6 @@
 
         if (navigator.onLine) {
           showToast('Đã lưu dữ liệu thành công', 'success');
-          autoCloudBackup(updatedData); 
         } else {
           showToast('Đã lưu ngoại tuyến (tự động đồng bộ khi có mạng)', 'success');
         }
@@ -2417,7 +2480,7 @@
       const decA = await SecureCrypto.decryptWithDEK(cur.account, dekKey);
       const decP = await SecureCrypto.decryptWithDEK(cur.password, dekKey);
       
-      if(!decD || !decA || !decP) return showAlert('Giải mã thất bại. Dữ liệu có thể đã bị hỏng trong quá trình đồng bộ hoặc sai Mật khẩu chính.', { title: 'Lỗi dữ liệu', type:'error' });
+      if(!decD || !decA || !decP) return showAlert('Không thể giải mã. Mật khẩu chính không đúng hoặc dữ liệu đã bị hỏng.', { title: 'Lỗi dữ liệu', type:'error' });
       
       editingId = record_id; 
       el.editTitle.innerHTML = '<i data-lucide="edit-3" class="w-5 h-5 text-teal-600"></i> Sửa'; 
@@ -2429,6 +2492,8 @@
     };
 
     const deleteEntry = async (record_id) => {
+      if (currentUserRole !== 'ADMIN') return showAlert('Tài khoản của bạn không có quyền truy cập chức năng này.', { type: 'error' });
+      
       const dekKey = await requireDEK('xóa tài khoản');
       if (!dekKey) return;
       
@@ -2484,6 +2549,8 @@
     
     el.miChangeKey.onclick = () => { 
         closeMenuModal(); 
+        if (currentUserRole !== 'ADMIN') return showAlert('Tài khoản của bạn không có quyền truy cập chức năng này.', { type: 'error' });
+        
         if (!navigator.onLine) {
             showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để thực hiện đổi Mật khẩu chính!', { type: 'warning' });
             return;
@@ -2606,21 +2673,35 @@
     
     document.getElementById('btnOpenMenu').addEventListener('click', () => {
       const hasMasterKey = data.some(e => e[CHECK_KEY]);
-      if (el.miChangeKey) {
-        el.miChangeKey.style.display = hasMasterKey ? '' : 'none';
-      }
-      if (el.miExport) {
-        el.miExport.style.display = hasMasterKey ? '' : 'none';
-      }
-      if (el.miReset) {
-        el.miReset.style.display = hasMasterKey ? 'flex' : 'none';
-      }
+      const isAdmin = currentUserRole === 'ADMIN';
+
+      const setBtnState = (id, condition) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        
+        btn.style.display = condition ? (id === 'miReset' ? 'flex' : '') : 'none';
+        
+        if (!isAdmin) {
+          btn.classList.add('opacity-40', 'grayscale');
+        } else {
+          btn.classList.remove('opacity-40', 'grayscale');
+        }
+      };
+
+      setBtnState('miChangeKey', hasMasterKey);
+      setBtnState('miExport', hasMasterKey);
+      setBtnState('miImport', true); 
+      setBtnState('miCloudBackup', true);
+      setBtnState('miReset', hasMasterKey);
+
       $('#fab-menu-modal').classList.add('open');
     });
     
     document.getElementById('btnCloseMenu').addEventListener('click', closeMenuModal);
 
     const exportData = async () => {
+      if (currentUserRole !== 'ADMIN') return showAlert('Tài khoản của bạn không có quyền truy cập chức năng này.', { type: 'error' });
+
       const accountsToExport = data.filter(e => !e[CHECK_KEY]);
       if (accountsToExport.length === 0) {
         return showToast('Kho dữ liệu trống. Không có dữ liệu để sao lưu', 'warning');
@@ -2671,9 +2752,11 @@
           const downloadLocalFile = () => {
               const b = new Blob([jsonString], {type:'application/json'});
               const a = document.createElement('a'); 
-              a.href = URL.createObjectURL(b); 
+              const url = URL.createObjectURL(b); 
+              a.href = url; 
               a.download = fileName; 
               a.click(); 
+              setTimeout(() => URL.revokeObjectURL(url), 1000);
           };
 
           if (navigator.onLine && currentUserUid) {
@@ -2707,9 +2790,20 @@
     };
 
     el.miExport.onclick = () => { closeMenuModal(); exportData(); };
-    el.miImport.onclick = () => { closeMenuModal(); el.fileImport.click(); };
+    el.miImport.onclick = () => { 
+      closeMenuModal(); 
+      if (currentUserRole !== 'ADMIN') {
+          return showAlert('Tài khoản của bạn không có quyền truy cập chức năng này.', { type: 'error' });
+      }
+      el.fileImport.click(); 
+    };
     
     el.fileImport.onchange = (e) => {
+      if (currentUserRole !== 'ADMIN') {
+          e.target.value = '';
+          return showAlert('Tài khoản của bạn không có quyền truy cập chức năng này.', { type: 'error' });
+      }
+
       if (!navigator.onLine) {
         e.target.value = '';
         return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để khôi phục dữ liệu!', {type: 'warning'});
@@ -2784,7 +2878,7 @@
           } 
           resetMasterFail();
           
-          if(!await showConfirm('Dữ liệu khôi phục sẽ ghi đè và xóa hoàn toàn dữ liệu hiện tại trên thiết bị của bạn.\n\nBạn có chắc chắn muốn tiếp tục?', 'Cảnh báo ghi đè dữ liệu', 'warning')) { 
+          if(!await showConfirm('Quá trình này sẽ xóa và ghi đè toàn bộ dữ liệu hiện có trên thiết bị.\n\nBạn có chắc chắn muốn tiếp tục?', 'Cảnh báo ghi đè dữ liệu', 'warning')) { 
               e.target.value = ''; 
               return; 
           }
@@ -2886,6 +2980,11 @@
       elCloud.modal.classList.toggle('open', open);
       if (!open) return;
       
+      if (currentUserRole !== 'ADMIN') {
+          elCloud.modal.classList.remove('open');
+          return showAlert('Tài khoản của bạn không có quyền truy cập chức năng này.', { type: 'error' });
+      }
+
       if (!navigator.onLine) {
         elCloud.modal.classList.remove('open');
         return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để xem dữ liệu trên Cloud!', {type: 'warning'});
@@ -2934,6 +3033,10 @@
           const itemDiv = document.createElement('div');
           itemDiv.className = 'flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 mb-2';
           
+          const deleteBtnCloud = currentUserRole === 'ADMIN' 
+            ? `<button class="btn-delete p-2 text-slate-400 hover:text-rose-500 transition-colors" title="Xóa"><i data-lucide="trash-2" class="w-5 h-5 pointer-events-none"></i></button>` 
+            : '';
+
           itemDiv.innerHTML = `
             <div class="flex items-center gap-3 overflow-hidden">
               <div>
@@ -2944,7 +3047,7 @@
             <div class="flex items-center gap-1">
               <button class="btn-restore p-2 text-slate-400 hover:text-indigo-500 transition-colors" title="Khôi phục trực tiếp"><i data-lucide="upload-cloud" class="w-5 h-5 pointer-events-none"></i></button>
               <button class="btn-download p-2 text-slate-400 hover:text-emerald-500 transition-colors" title="Tải về"><i data-lucide="download" class="w-5 h-5 pointer-events-none"></i></button>
-              <button class="btn-delete p-2 text-slate-400 hover:text-rose-500 transition-colors" title="Xóa"><i data-lucide="trash-2" class="w-5 h-5 pointer-events-none"></i></button>
+              ${deleteBtnCloud}
             </div>
           `;
           
@@ -2990,7 +3093,7 @@
               } 
               resetMasterFail();
               
-              if(!await showConfirm('Dữ liệu khôi phục sẽ ghi đè và xóa hoàn toàn dữ liệu hiện tại trên thiết bị của bạn.\n\nBạn có chắc chắn muốn tiếp tục?', 'Cảnh báo ghi đè dữ liệu', 'warning')) { 
+              if(!await showConfirm('Quá trình này sẽ xóa và ghi đè toàn bộ dữ liệu hiện có trên thiết bị.\n\nBạn có chắc chắn muốn tiếp tục?', 'Cảnh báo ghi đè dữ liệu', 'warning')) { 
                   return; 
               }
               
@@ -3099,55 +3202,58 @@
             }
           };
 
-          itemDiv.querySelector('.btn-delete').onclick = async () => {
-            if (!navigator.onLine) {
-                return showAlert('Mất kết nối mạng. Vui lòng kết nối mạng (Wi-Fi/4G) để xóa.', {type: 'warning'});
-            }
-
-            const verify = data.find(e => e[CHECK_KEY]);
-            if (!verify) {
-                return showAlert('Hệ thống chưa thiết lập khóa bảo mật.', {type: 'error'});
-            }
-
-            const m = await showPrompt(
-                `Bạn đang muốn xóa bản sao lưu ngày:\n${displayTitle}\n\nVui lòng nhập Mật khẩu chính để xác nhận hành động này.`, 
-                'Nhập Mật khẩu chính...', 
-                'Xác thực xóa sao lưu', 
-                'password', 
-                'warning'
-            );
-            if (!m) return;
-
-            if (await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE) { 
-                registerMasterFail(); 
-                return showAlert('Mật khẩu chính không chính xác. Đã hủy thao tác xóa.', {type: 'error'}); 
-            } 
-            resetMasterFail();
-
-            if (!navigator.onLine) {
-                return showAlert('Kết nối mạng đã bị ngắt. Vui lòng thử lại sau.', {type: 'error'});
-            }
-
-            toggleLoader(true, 'del_cloud', 'Đang xóa bản sao lưu...');
-            try {
-              await withTimeout(deleteObject(itemRef), 15000);
-              itemDiv.remove(); 
-              
-              if (elCloud.list.children.length === 0) {
-                  elCloud.list.innerHTML = '<div class="text-center py-6 text-slate-400">Chưa có bản sao lưu nào.</div>';
+          const btnDeleteEl = itemDiv.querySelector('.btn-delete');
+          if (btnDeleteEl) {
+            btnDeleteEl.onclick = async () => {
+              if (!navigator.onLine) {
+                  return showAlert('Mất kết nối mạng. Vui lòng kết nối mạng (Wi-Fi/4G) để xóa.', {type: 'warning'});
               }
-              
-              showToast('Đã xóa bản sao lưu trên Cloud', 'success');
-            } catch (error) {
-              if (error.message === 'timeout_error') {
-                  showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
-              } else {
-                  showAlert('Lỗi khi xóa Tệp sao lưu. Vui lòng thử lại sau.', {type: 'error'});
+
+              const verify = data.find(e => e[CHECK_KEY]);
+              if (!verify) {
+                  return showAlert('Hệ thống chưa thiết lập khóa bảo mật.', {type: 'error'});
               }
-            } finally {
-              toggleLoader(false, 'del_cloud');
-            }
-          };
+
+              const m = await showPrompt(
+                  `Bạn đang muốn xóa bản sao lưu ngày:\n${displayTitle}\n\nVui lòng nhập Mật khẩu chính để xác nhận hành động này.`, 
+                  'Nhập Mật khẩu chính...', 
+                  'Xác thực xóa sao lưu', 
+                  'password', 
+                  'warning'
+              );
+              if (!m) return;
+
+              if (await SecureCrypto.decryptSafe(verify[CHECK_KEY], m) !== CHECK_VALUE) { 
+                  registerMasterFail(); 
+                  return showAlert('Mật khẩu chính không chính xác. Đã hủy thao tác xóa.', {type: 'error'}); 
+              } 
+              resetMasterFail();
+
+              if (!navigator.onLine) {
+                  return showAlert('Kết nối mạng đã bị ngắt. Vui lòng thử lại sau.', {type: 'error'});
+              }
+
+              toggleLoader(true, 'del_cloud', 'Đang xóa bản sao lưu...');
+              try {
+                await withTimeout(deleteObject(itemRef), 15000);
+                itemDiv.remove(); 
+                
+                if (elCloud.list.children.length === 0) {
+                    elCloud.list.innerHTML = '<div class="text-center py-6 text-slate-400">Chưa có bản sao lưu nào.</div>';
+                }
+                
+                showToast('Đã xóa bản sao lưu trên Cloud', 'success');
+              } catch (error) {
+                if (error.message === 'timeout_error') {
+                    showAlert('Hết thời gian chờ. Máy chủ không phản hồi, vui lòng kiểm tra lại mạng.', {title: 'Lỗi mạng', type: 'error'});
+                } else {
+                    showAlert('Lỗi khi xóa Tệp sao lưu. Vui lòng thử lại sau.', {type: 'error'});
+                }
+              } finally {
+                toggleLoader(false, 'del_cloud');
+              }
+            };
+          }
 
           elCloud.list.appendChild(itemDiv);
         });
@@ -3166,12 +3272,14 @@
 
     el.miReset.onclick = async () => {
       closeMenuModal(); 
+      if (currentUserRole !== 'ADMIN') return showAlert('Tài khoản của bạn không có quyền truy cập chức năng này.', { type: 'error' });
+      
       if (!navigator.onLine) return showAlert('Vui lòng kết nối mạng (Wi-Fi/4G) để xóa toàn bộ dữ liệu!', {type: 'warning'});
       
       const dekKey = await requireDEK('xóa TOÀN BỘ dữ liệu');
       if (!dekKey) return;
       
-      if(!await showConfirm('Hành động này sẽ xóa vĩnh viễn toàn bộ mật khẩu của bạn và không thể khôi phục.\n\nBạn có chắc chắn muốn xóa toàn bộ dữ liệu?', 'Xóa toàn bộ dữ liệu', 'error')) return;
+      if(!await showConfirm('Toàn bộ mật khẩu sẽ bị xóa vĩnh viễn và không thể khôi phục.\n\nBạn có chắc chắn muốn tiếp tục?', 'Xóa toàn bộ dữ liệu', 'error')) return;
       
       toggleLoader(true, 'reset', 'Đang xóa dữ liệu...');
       try {
@@ -3188,7 +3296,7 @@
           if (inactivityTimer) clearTimeout(inactivityTimer);
           if (lockoutInterval) clearInterval(lockoutInterval);
           if (searchT) clearTimeout(searchT);
-          if (shuffler) clearInterval(shuffler);
+          if (shuffler) clearTimeout(shuffler);
           if (genTimeout) clearTimeout(genTimeout);
           
           updateLockUI();
@@ -3205,7 +3313,7 @@
     
     function rand(max) { 
       if (max <= 0) return 0;
-      const maxUint32 = 4294967295;
+      const maxUint32 = 4294967296;
       const limit = maxUint32 - (maxUint32 % max); 
       const a = new Uint32Array(1); 
       
@@ -3343,7 +3451,7 @@
             lucide.createIcons({ root: el.btnCopyGen });
           }, 2000);
         } else {
-          showAlert('Trình duyệt không hỗ trợ sao chép tự động.', {type: 'error'});
+          showAlert('Trình duyệt chặn quyền sao chép tự động.', {type: 'error'});
         }
       };
     }
@@ -3366,7 +3474,7 @@
     const openInstallModal = (e) => {
       if (e) e.stopPropagation();
       closeMenuModal();
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const isIOS = (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
       
       if (isIOS) {
         el.installNow.style.display = 'none';
@@ -3450,7 +3558,7 @@
     });
 
     function runInitActions() {
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const isIOS = (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       
       if (isIOS && !isStandalone) {
