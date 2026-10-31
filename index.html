@@ -33,8 +33,8 @@
   <link rel="icon" type="image/png" href="/icons/icon-32.png" sizes="32x32">
   <link rel="preload" href="/icons/icon-192.png" as="image">
 
-  <link href="libs/tailwind.min.css" rel="stylesheet">
-  <script src="libs/lucide.min.js" defer></script>
+  <link href="/libs/tailwind.min.css" rel="stylesheet">
+  <script src="/libs/lucide.min.js" defer></script>
   
 </head>
 <body>
@@ -635,7 +635,7 @@
     // ----------------------------------------------------
     const firebaseConfig = {
       apiKey: "AIzaSyCY1dSogyXtxkO4dm4_5u4lurWz6-rHxX8",
-      authDomain: "encypass.web.app",
+      authDomain: "encypass.firebaseapp.com",
       projectId: "encypass",
       storageBucket: "encypass.firebasestorage.app",
       messagingSenderId: "101205529627",
@@ -1504,7 +1504,6 @@
           const userRef = doc(db, "users_list", user.email);
           const userDoc = await getDoc(userRef);
 
-          // Nếu đăng nhập lần đầu chưa tồn tại trong danh sách -> Tự động thêm với status = false
           if (!userDoc.exists()) {
             await setDoc(userRef, {
               email: user.email,
@@ -1516,18 +1515,17 @@
             await signOut(auth);
             toggleLoader(false, 'auth');
             toggleLoader(false, 'boot');
-            await showAlert("Tài khoản của bạn đã được đăng ký tự động vào hệ thống và hiện đang ở trạng thái chờ phê duyệt. Vui lòng liên hệ quản trị viên để kích hoạt.", { title: 'Tài khoản chờ phê duyệt', type: 'warning' });
+            await showAlert("Tài khoản của bạn đã được đăng ký tự động vào hệ thống và hiện đang ở trạng thái chờ phê duyệt. Vui lòng liên hệ Quản trị viên để kích hoạt.", { title: 'Tài khoản chờ phê duyệt', type: 'warning' });
             return;
           }
 
           const userData = userDoc.data();
           
-          // Nếu trạng thái chưa được bật (status = false) -> Chặn và thông báo chờ duyệt
           if (userData.status !== "true" && userData.status !== true) {
             await signOut(auth);
             toggleLoader(false, 'auth');
             toggleLoader(false, 'boot');
-            await showAlert("Tài khoản đang chờ quản trị viên phê duyệt. Vui lòng thử lại sau.", { title: 'Tài khoản chưa được duyệt', type: 'warning' });
+            await showAlert("Tài khoản đang chờ Quản trị viên phê duyệt. Vui lòng thử lại sau.", { title: 'Tài khoản chưa được duyệt', type: 'warning' });
             return;
           }
 
